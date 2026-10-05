@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System;
 using System.Windows.Forms;
+using tv_store.Modules._04_HeThong_BaoCao;
 
 namespace tv_store
 {
@@ -16,7 +14,12 @@ namespace tv_store
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+
+            frmDangNhap fLogin = new frmDangNhap();
+            if (fLogin.ShowDialog() == DialogResult.OK)
+            {
+                Application.Run(new frmMain());
+            }
         }
     }
 }

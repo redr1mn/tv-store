@@ -1,0 +1,145 @@
+-- ===================================================================
+-- BÀI TẬP LỚN LẬP TRÌNH TRỰC QUAN (LTTQ) - C# WINFORMS
+-- ĐỀ TÀI: HỆ THỐNG QUẢN LÝ BÁN TIVI (TV STORE)
+-- FILE 1: TẠO CƠ SỞ DỮ LIỆU VÀ CÁC BẢNG (CHUẨN THEO SƠ ĐỒ RM)
+-- ===================================================================
+
+CREATE DATABASE QLBanTivi;
+GO
+
+USE QLBanTivi;
+GO
+
+-- 1. BẢNG DANH MỤC THUỘC TÍNH TIVI (DANH MỤC PHỤ)
+CREATE TABLE tblHangSX (
+    MaHangSX NVARCHAR(20) PRIMARY KEY,
+    TenHangSX NVARCHAR(50) NOT NULL
+);
+
+CREATE TABLE tblKieuDang (
+    MaKieu NVARCHAR(20) PRIMARY KEY,
+    TenKieu NVARCHAR(50) NOT NULL
+);
+
+CREATE TABLE tblMauSac (
+    MaMau NVARCHAR(20) PRIMARY KEY,
+    TenMau NVARCHAR(50) NOT NULL
+);
+
+CREATE TABLE tblManHinh (
+    MaManHinh NVARCHAR(20) PRIMARY KEY,
+    TenManHinh NVARCHAR(50) NOT NULL
+);
+
+CREATE TABLE tblCoManHinh (
+    MaCo NVARCHAR(20) PRIMARY KEY,
+    TenCo NVARCHAR(50) NOT NULL -- VD: 32 inch, 43 inch, 55 inch, 65 inch
+);
+
+CREATE TABLE tblNuocSX (
+    MaNuocSX NVARCHAR(20) PRIMARY KEY,
+    TenNuocSX NVARCHAR(50) NOT NULL
+);
+
+-- 2. BẢNG TIVI (SẢN PHẨM) - THEO SƠ ĐỒ RM: MaTV, TenTV
+CREATE TABLE tblTV (
+    MaTV NVARCHAR(20) PRIMARY KEY,
+    TenTV NVARCHAR(100) NOT NULL,
+    MaHangSX NVARCHAR(20) FOREIGN KEY REFERENCES tblHangSX(MaHangSX),
+    MaKieu NVARCHAR(20) FOREIGN KEY REFERENCES tblKieuDang(MaKieu),
+    MaMau NVARCHAR(20) FOREIGN KEY REFERENCES tblMauSac(MaMau),
+    MaManHinh NVARCHAR(20) FOREIGN KEY REFERENCES tblManHinh(MaManHinh),
+    MaCo NVARCHAR(20) FOREIGN KEY REFERENCES tblCoManHinh(MaCo),
+    MaNuocSX NVARCHAR(20) FOREIGN KEY REFERENCES tblNuocSX(MaNuocSX),
+    SoLuong INT DEFAULT 0,
+    DonGiaNhap FLOAT DEFAULT 0,
+    DonGiaBan FLOAT DEFAULT 0,
+    Anh NVARCHAR(200),
+    ThoiGianBaoHanh INT DEFAULT 12, -- Tháng
+    GhiChu NVARCHAR(300)
+);
+
+-- 3. BẢNG NHÂN SỰ & CA LÀM
+CREATE TABLE tblCaLam (
+    MaCa NVARCHAR(20) PRIMARY KEY,
+    TenCa NVARCHAR(50) NOT NULL
+);
+
+CREATE TABLE tblCongViec (
+    MaCV NVARCHAR(20) PRIMARY KEY,
+    TenCV NVARCHAR(50) NOT NULL
+);
+
+CREATE TABLE tblNhanVien (
+    MaNV NVARCHAR(20) PRIMARY KEY,
+    TenNV NVARCHAR(50) NOT NULL,
+    GioiTinh NVARCHAR(10),
+    NgaySinh DATETIME,
+    DienThoai NVARCHAR(20),
+    DiaChi NVARCHAR(100),
+    MaCa NVARCHAR(20) FOREIGN KEY REFERENCES tblCaLam(MaCa),
+    MaCV NVARCHAR(20) FOREIGN KEY REFERENCES tblCongViec(MaCV)
+);
+
+-- BẢNG TÀI KHOẢN ĐĂNG NHẬP
+CREATE TABLE tblTaiKhoan (
+    TenDangNhap NVARCHAR(50) PRIMARY KEY,
+    MatKhau NVARCHAR(100) NOT NULL,
+    MaNV NVARCHAR(20) FOREIGN KEY REFERENCES tblNhanVien(MaNV),
+    Quyen NVARCHAR(20) DEFAULT N'Nhân viên' -- 'Admin' hoặc 'Nhân viên'
+);
+
+-- 4. BẢNG ĐỐI TÁC (KHÁCH HÀNG & NHÀ CUNG CẤP) - THEO SƠ ĐỒ RM: MaKhach, TenKhach
+CREATE TABLE tblKhachHang (
+    MaKhach NVARCHAR(20) PRIMARY KEY,
+    TenKhach NVARCHAR(50) NOT NULL,
+    DiaChi NVARCHAR(100),
+    DienThoai NVARCHAR(20)
+);
+
+CREATE TABLE tblNhaCungCap (
+    MaNCC NVARCHAR(20) PRIMARY KEY,
+    TenNCC NVARCHAR(100) NOT NULL,
+    DiaChi NVARCHAR(100),
+    DienThoai NVARCHAR(20)
+);
+
+-- 5. BẢNG HÓA ĐƠN NHẬP & CHI TIẾT HÓA ĐƠN NHẬP - THEO SƠ ĐỒ RM: SoHDN
+CREATE TABLE tblHoaDonNhap (
+    SoHDN NVARCHAR(30) PRIMARY KEY,
+    MaNV NVARCHAR(20) FOREIGN KEY REFERENCES tblNhanVien(MaNV),
+    NgayNhap DATETIME DEFAULT GETDATE(),
+    MaNCC NVARCHAR(20) FOREIGN KEY REFERENCES tblNhaCungCap(MaNCC),
+    TongTien FLOAT DEFAULT 0
+);
+
+CREATE TABLE tblChiTietHDN (
+    SoHDN NVARCHAR(30) FOREIGN KEY REFERENCES tblHoaDonNhap(SoHDN),
+    MaTV NVARCHAR(20) FOREIGN KEY REFERENCES tblTV(MaTV),
+    SoLuong INT NOT NULL,
+    DonGia FLOAT NOT NULL,
+    GiamGia FLOAT DEFAULT 0,
+    ThanhTien FLOAT NOT NULL,
+    PRIMARY KEY (SoHDN, MaTV)
+);
+
+-- 6. BẢNG HÓA ĐƠN BÁN & CHI TIẾT HÓA ĐƠN BÁN - THEO SƠ ĐỒ RM: SoHDB, Thue, DonGia
+CREATE TABLE tblHoaDonBan (
+    SoHDB NVARCHAR(30) PRIMARY KEY,
+    MaNV NVARCHAR(20) FOREIGN KEY REFERENCES tblNhanVien(MaNV),
+    NgayBan DATETIME DEFAULT GETDATE(),
+    MaKhach NVARCHAR(20) FOREIGN KEY REFERENCES tblKhachHang(MaKhach),
+    Thue FLOAT DEFAULT 0, -- Thuế VAT (%) theo sơ đồ RM
+    TongTien FLOAT DEFAULT 0
+);
+
+CREATE TABLE tblChiTietHDB (
+    SoHDB NVARCHAR(30) FOREIGN KEY REFERENCES tblHoaDonBan(SoHDB),
+    MaTV NVARCHAR(20) FOREIGN KEY REFERENCES tblTV(MaTV),
+    SoLuong INT NOT NULL,
+    DonGia FLOAT NOT NULL, -- Đơn giá theo sơ đồ chuẩn
+    GiamGia FLOAT DEFAULT 0,
+    ThanhTien FLOAT NOT NULL,
+    PRIMARY KEY (SoHDB, MaTV)
+);
+GO
