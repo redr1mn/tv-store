@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Windows.Forms;
 using tv_store.Helpers;
@@ -257,22 +257,25 @@ namespace tv_store.Modules._03_BanHang
             string maKH = cboKhachHang.SelectedValue.ToString();
             string ngayBan = dtpNgayBan.Value.ToString("yyyy-MM-dd HH:mm:ss");
 
+            double thue = 10; // Thuế VAT 10%
             double tongTien = 0;
             foreach (DataRow r in tblChiTietHDBData.Rows)
                 tongTien += Convert.ToDouble(r["ThanhTien"]);
 
+            tongTien = Math.Round(tongTien * (1.0 + thue / 100.0), 0);
+
             // 1. Thêm Hóa đơn bán
             string sqlHDB = string.Format(
                 "INSERT INTO tblHoaDonBan(SoHDB, MaNV, NgayBan, MaKhach, Thue, TongTien) VALUES('{0}', '{1}', '{2}', '{3}', {4}, {5})",
-                maHDB, maNV, ngayBan, maKH, tongTien);
+                maHDB, maNV, ngayBan, maKH, thue, tongTien);
 
             if (DatabaseHelper.RunSql(sqlHDB))
             {
-                // 2. Thêm Chi tiết HDB (Trigger SQL Server sẽ tự động trừ số lượng tồn kho trong tblTivi)
+                // 2. Thêm Chi tiết HDB (Trigger SQL Server sẽ tự động trừ số lượng tồn kho trong tblTV)
                 foreach (DataRow r in tblChiTietHDBData.Rows)
                 {
                     string sqlCT = string.Format(
-                        "INSERT INTO tblChiTietHDB(MaHDB, MaTivi, SoLuong, DonGia, GiamGia, ThanhTien) " +
+                        "INSERT INTO tblChiTietHDB(SoHDB, MaTV, SoLuong, DonGia, GiamGia, ThanhTien) " +
                         "VALUES('{0}', '{1}', {2}, {3}, {4}, {5})",
                         maHDB, r["MaTV"].ToString(), r["SoLuong"], r["DonGia"], r["GiamGia"], r["ThanhTien"]);
                     DatabaseHelper.RunSql(sqlCT);

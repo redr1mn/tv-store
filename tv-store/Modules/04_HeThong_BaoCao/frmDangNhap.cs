@@ -80,5 +80,10 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.DialogResult = DialogResult.Cancel;
             this.Close();
         }
+
+        private void pnlTop_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }

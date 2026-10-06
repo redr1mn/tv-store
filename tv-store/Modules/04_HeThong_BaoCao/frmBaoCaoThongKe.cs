@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Windows.Forms;
 using tv_store.Helpers;
@@ -39,7 +39,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
                 "SUM(ct.SoLuong) AS TongSoLuongMua, SUM(ct.ThanhTien) AS TongTienChi " +
                 "FROM tblChiTietHDB ct " +
                 "INNER JOIN tblHoaDonBan hdb ON ct.SoHDB = hdb.SoHDB " +
-                "INNER JOIN tblTivi tv ON ct.MaTV = tv.MaTV " +
+                "INNER JOIN tblTV tv ON ct.MaTV = tv.MaTV " +
                 "LEFT JOIN tblHangSX hsx ON tv.MaHangSX = hsx.MaHangSX " +
                 "LEFT JOIN tblManHinh mh ON tv.MaManHinh = mh.MaManHinh " +
                 "LEFT JOIN tblCoManHinh co ON tv.MaCo = co.MaCo " +
@@ -129,10 +129,10 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             if (rdoBanHang.Checked)
             {
                 sql = string.Format(
-                    "SELECT hdb.MaHDB AS MaHoaDon, hdb.NgayBan AS NgayLap, nv.TenNV, kh.TenKH AS DoiTac, hdb.TongTien " +
+                    "SELECT hdb.SoHDB AS MaHoaDon, hdb.NgayBan AS NgayLap, nv.TenNV, kh.TenKhach AS DoiTac, hdb.TongTien " +
                     "FROM tblHoaDonBan hdb " +
                     "INNER JOIN tblNhanVien nv ON hdb.MaNV = nv.MaNV " +
-                    "INNER JOIN tblKhachHang kh ON hdb.MaKH = kh.MaKH " +
+                    "INNER JOIN tblKhachHang kh ON hdb.MaKhach = kh.MaKhach " +
                     "WHERE DATEPART(QUARTER, hdb.NgayBan) = {0} AND YEAR(hdb.NgayBan) = {1} " +
                     "ORDER BY hdb.NgayBan DESC", quy, nam);
             }
@@ -191,7 +191,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
                 "SUM(ct.ThanhTien) AS TongGiaTriNhap " +
                 "FROM tblHoaDonNhap hdn " +
                 "INNER JOIN tblNhaCungCap ncc ON hdn.MaNCC = ncc.MaNCC " +
-                "INNER JOIN tblChiTietHDN ct ON hdn.SoHDN = ct.MaHDN " +
+                "INNER JOIN tblChiTietHDN ct ON hdn.SoHDN = ct.SoHDN " +
                 "WHERE MONTH(hdn.NgayNhap) = {0} AND YEAR(hdn.NgayNhap) = {1} " +
                 "GROUP BY ncc.MaNCC, ncc.TenNCC, ncc.DiaChi, ncc.DienThoai " +
                 "ORDER BY TongSoLuongGiao DESC", thang, nam);
@@ -222,6 +222,11 @@ namespace tv_store.Modules._04_HeThong_BaoCao
         private void btnDong_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void cboKhachHang_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

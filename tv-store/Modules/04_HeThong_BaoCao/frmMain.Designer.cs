@@ -52,7 +52,6 @@
             this.btnNavDanhMucPhu = new System.Windows.Forms.Button();
             this.btnNavSanPham = new System.Windows.Forms.Button();
             this.pnlLogo = new System.Windows.Forms.Panel();
-            this.lblSubLogo = new System.Windows.Forms.Label();
             this.lblLogo = new System.Windows.Forms.Label();
             this.statusStripMain = new System.Windows.Forms.StatusStrip();
             this.lblTrangThaiKetNoi = new System.Windows.Forms.ToolStripStatusLabel();
@@ -73,9 +72,6 @@
             this.pnlCard1 = new System.Windows.Forms.Panel();
             this.lblCard1Val = new System.Windows.Forms.Label();
             this.lblCard1Title = new System.Windows.Forms.Label();
-            this.pnlDashboard = new System.Windows.Forms.Panel();
-            this.lblDashDesc = new System.Windows.Forms.Label();
-            this.lblDashTitle = new System.Windows.Forms.Label();
             this.toolTipMain = new System.Windows.Forms.ToolTip(this.components);
             this.menuStripMain.SuspendLayout();
             this.pnlSidebar.SuspendLayout();
@@ -87,7 +83,6 @@
             this.pnlCard3.SuspendLayout();
             this.pnlCard2.SuspendLayout();
             this.pnlCard1.SuspendLayout();
-            this.pnlDashboard.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStripMain
@@ -471,7 +466,6 @@
             // pnlLogo
             // 
             this.pnlLogo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(29)))), ((int)(((byte)(49)))));
-            this.pnlLogo.Controls.Add(this.lblSubLogo);
             this.pnlLogo.Controls.Add(this.lblLogo);
             this.pnlLogo.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlLogo.Location = new System.Drawing.Point(0, 0);
@@ -479,27 +473,17 @@
             this.pnlLogo.Size = new System.Drawing.Size(220, 80);
             this.pnlLogo.TabIndex = 0;
             // 
-            // lblSubLogo
-            // 
-            this.lblSubLogo.AutoSize = true;
-            this.lblSubLogo.Font = new System.Drawing.Font("Segoe UI", 8.5F);
-            this.lblSubLogo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(160)))), ((int)(((byte)(180)))));
-            this.lblSubLogo.Location = new System.Drawing.Point(22, 45);
-            this.lblSubLogo.Name = "lblSubLogo";
-            this.lblSubLogo.Size = new System.Drawing.Size(219, 23);
-            this.lblSubLogo.TabIndex = 1;
-            this.lblSubLogo.Text = "MANAGEMENT SYSTEM 2.0";
-            // 
             // lblLogo
             // 
-            this.lblLogo.AutoSize = true;
+            this.lblLogo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblLogo.Font = new System.Drawing.Font("Segoe UI", 15F, System.Drawing.FontStyle.Bold);
             this.lblLogo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
-            this.lblLogo.Location = new System.Drawing.Point(20, 15);
+            this.lblLogo.Location = new System.Drawing.Point(0, 0);
             this.lblLogo.Name = "lblLogo";
-            this.lblLogo.Size = new System.Drawing.Size(158, 41);
+            this.lblLogo.Size = new System.Drawing.Size(220, 80);
             this.lblLogo.TabIndex = 0;
             this.lblLogo.Text = "TV STORE";
+            this.lblLogo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // statusStripMain
             // 
@@ -547,7 +531,6 @@
             // 
             this.pnlWorkspace.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(249)))), ((int)(((byte)(250)))));
             this.pnlWorkspace.Controls.Add(this.grpCards);
-            this.pnlWorkspace.Controls.Add(this.pnlDashboard);
             this.pnlWorkspace.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlWorkspace.Location = new System.Drawing.Point(220, 71);
             this.pnlWorkspace.Name = "pnlWorkspace";
@@ -564,7 +547,7 @@
             this.grpCards.Controls.Add(this.pnlCard1);
             this.grpCards.Font = new System.Drawing.Font("Segoe UI", 10.5F, System.Drawing.FontStyle.Bold);
             this.grpCards.ForeColor = System.Drawing.Color.Navy;
-            this.grpCards.Location = new System.Drawing.Point(30, 130);
+            this.grpCards.Location = new System.Drawing.Point(30, 20);
             this.grpCards.Name = "grpCards";
             this.grpCards.Size = new System.Drawing.Size(984, 150);
             this.grpCards.TabIndex = 1;
@@ -699,41 +682,6 @@
             this.lblCard1Title.TabIndex = 0;
             this.lblCard1Title.Text = "📺 Mẫu Tivi đang";
             // 
-            // pnlDashboard
-            // 
-            this.pnlDashboard.BackColor = System.Drawing.Color.White;
-            this.pnlDashboard.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pnlDashboard.Controls.Add(this.lblDashDesc);
-            this.pnlDashboard.Controls.Add(this.lblDashTitle);
-            this.pnlDashboard.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlDashboard.Location = new System.Drawing.Point(0, 0);
-            this.pnlDashboard.Name = "pnlDashboard";
-            this.pnlDashboard.Size = new System.Drawing.Size(1044, 110);
-            this.pnlDashboard.TabIndex = 0;
-            // 
-            // lblDashDesc
-            // 
-            this.lblDashDesc.AutoSize = true;
-            this.lblDashDesc.Font = new System.Drawing.Font("Segoe UI", 10.5F);
-            this.lblDashDesc.ForeColor = System.Drawing.Color.DimGray;
-            this.lblDashDesc.Location = new System.Drawing.Point(30, 60);
-            this.lblDashDesc.Name = "lblDashDesc";
-            this.lblDashDesc.Size = new System.Drawing.Size(1048, 30);
-            this.lblDashDesc.TabIndex = 1;
-            this.lblDashDesc.Text = "Chào mừng bạn đến với hệ thống. Vui lòng sử dụng menu hoặc thanh điều hướng bên t" +
-    "rái để bắt đầu làm việc.";
-            // 
-            // lblDashTitle
-            // 
-            this.lblDashTitle.AutoSize = true;
-            this.lblDashTitle.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold);
-            this.lblDashTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(43)))), ((int)(((byte)(73)))));
-            this.lblDashTitle.Location = new System.Drawing.Point(28, 20);
-            this.lblDashTitle.Name = "lblDashTitle";
-            this.lblDashTitle.Size = new System.Drawing.Size(650, 48);
-            this.lblDashTitle.TabIndex = 0;
-            this.lblDashTitle.Text = "HỆ THỐNG QUẢN LÝ CỬA HÀNG TIVI";
-            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
@@ -769,8 +717,6 @@
             this.pnlCard2.PerformLayout();
             this.pnlCard1.ResumeLayout(false);
             this.pnlCard1.PerformLayout();
-            this.pnlDashboard.ResumeLayout(false);
-            this.pnlDashboard.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -804,7 +750,6 @@
         private System.Windows.Forms.Panel pnlSidebar;
         private System.Windows.Forms.Panel pnlLogo;
         private System.Windows.Forms.Label lblLogo;
-        private System.Windows.Forms.Label lblSubLogo;
         private System.Windows.Forms.Button btnNavSanPham;
         private System.Windows.Forms.Button btnNavDanhMucPhu;
         private System.Windows.Forms.Button btnNavBanHang;
@@ -820,9 +765,6 @@
         private System.Windows.Forms.ToolStripStatusLabel lblDongHo;
         private System.Windows.Forms.Timer timerDongHo;
         private System.Windows.Forms.Panel pnlWorkspace;
-        private System.Windows.Forms.Panel pnlDashboard;
-        private System.Windows.Forms.Label lblDashTitle;
-        private System.Windows.Forms.Label lblDashDesc;
         private System.Windows.Forms.GroupBox grpCards;
         private System.Windows.Forms.Panel pnlCard1;
         private System.Windows.Forms.Label lblCard1Title;

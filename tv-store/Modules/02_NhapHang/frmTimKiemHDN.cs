@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Windows.Forms;
 using tv_store.Helpers;
@@ -30,8 +30,8 @@ namespace tv_store.Modules._02_NhapHang
             string sql = "SELECT hdn.SoHDN, hdn.NgayNhap, ncc.TenNCC, nv.TenNV, " +
                          "ct.MaTV, tv.TenTV, ct.SoLuong AS SoLuongNhap, ct.DonGia, ct.ThanhTien " +
                          "FROM tblChiTietHDN ct " +
-                         "INNER JOIN tblHoaDonNhap hdn ON ct.MaHDN = hdn.SoHDN " +
-                         "INNER JOIN tblTV tv ON ct.MaTV = tv.MaTivi " +
+                         "INNER JOIN tblHoaDonNhap hdn ON ct.SoHDN = hdn.SoHDN " +
+                         "INNER JOIN tblTV tv ON ct.MaTV = tv.MaTV " +
                          "INNER JOIN tblNhaCungCap ncc ON hdn.MaNCC = ncc.MaNCC " +
                          "INNER JOIN tblNhanVien nv ON hdn.MaNV = nv.MaNV " +
                          "WHERE 1=1 ";

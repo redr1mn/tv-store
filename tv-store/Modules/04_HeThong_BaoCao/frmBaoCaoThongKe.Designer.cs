@@ -99,7 +99,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.lblTieuDe.ForeColor = System.Drawing.Color.White;
             this.lblTieuDe.Location = new System.Drawing.Point(340, 10);
             this.lblTieuDe.Name = "lblTieuDe";
-            this.lblTieuDe.Size = new System.Drawing.Size(354, 30);
+            this.lblTieuDe.Size = new System.Drawing.Size(542, 45);
             this.lblTieuDe.TabIndex = 0;
             this.lblTieuDe.Text = "BÁO CÁO THỐNG KÊ (YC 6, 7, 8, 9)";
             // 
@@ -140,6 +140,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.dgvBaoCao1.Location = new System.Drawing.Point(3, 63);
             this.dgvBaoCao1.Name = "dgvBaoCao1";
             this.dgvBaoCao1.ReadOnly = true;
+            this.dgvBaoCao1.RowHeadersWidth = 62;
             this.dgvBaoCao1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvBaoCao1.Size = new System.Drawing.Size(1020, 400);
             this.dgvBaoCao1.TabIndex = 1;
@@ -191,8 +192,9 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.cboKhachHang.FormattingEnabled = true;
             this.cboKhachHang.Location = new System.Drawing.Point(150, 18);
             this.cboKhachHang.Name = "cboKhachHang";
-            this.cboKhachHang.Size = new System.Drawing.Size(300, 25);
+            this.cboKhachHang.Size = new System.Drawing.Size(300, 33);
             this.cboKhachHang.TabIndex = 1;
+            this.cboKhachHang.SelectedIndexChanged += new System.EventHandler(this.cboKhachHang_SelectedIndexChanged);
             // 
             // lblKhachHang
             // 
@@ -200,7 +202,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.lblKhachHang.ForeColor = System.Drawing.Color.Navy;
             this.lblKhachHang.Location = new System.Drawing.Point(20, 21);
             this.lblKhachHang.Name = "lblKhachHang";
-            this.lblKhachHang.Size = new System.Drawing.Size(121, 17);
+            this.lblKhachHang.Size = new System.Drawing.Size(172, 25);
             this.lblKhachHang.TabIndex = 0;
             this.lblKhachHang.Text = "Chọn Khách hàng:";
             // 
@@ -227,6 +229,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.dgvBaoCao2.Location = new System.Drawing.Point(3, 63);
             this.dgvBaoCao2.Name = "dgvBaoCao2";
             this.dgvBaoCao2.ReadOnly = true;
+            this.dgvBaoCao2.RowHeadersWidth = 62;
             this.dgvBaoCao2.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvBaoCao2.Size = new System.Drawing.Size(1020, 360);
             this.dgvBaoCao2.TabIndex = 1;
@@ -249,7 +252,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.lblTongTienBaoCao2.ForeColor = System.Drawing.Color.DarkRed;
             this.lblTongTienBaoCao2.Location = new System.Drawing.Point(680, 10);
             this.lblTongTienBaoCao2.Name = "lblTongTienBaoCao2";
-            this.lblTongTienBaoCao2.Size = new System.Drawing.Size(199, 20);
+            this.lblTongTienBaoCao2.Size = new System.Drawing.Size(307, 30);
             this.lblTongTienBaoCao2.TabIndex = 0;
             this.lblTongTienBaoCao2.Text = "Tổng tiền nhập hàng: 0 VNĐ";
             // 
@@ -298,7 +301,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.cboNCC.FormattingEnabled = true;
             this.cboNCC.Location = new System.Drawing.Point(160, 18);
             this.cboNCC.Name = "cboNCC";
-            this.cboNCC.Size = new System.Drawing.Size(320, 25);
+            this.cboNCC.Size = new System.Drawing.Size(320, 33);
             this.cboNCC.TabIndex = 1;
             // 
             // lblNCC
@@ -307,7 +310,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.lblNCC.ForeColor = System.Drawing.Color.Navy;
             this.lblNCC.Location = new System.Drawing.Point(20, 21);
             this.lblNCC.Name = "lblNCC";
-            this.lblNCC.Size = new System.Drawing.Size(133, 17);
+            this.lblNCC.Size = new System.Drawing.Size(191, 25);
             this.lblNCC.TabIndex = 0;
             this.lblNCC.Text = "Chọn Nhà cung cấp:";
             // 
@@ -333,6 +336,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.dgvBaoCao3.Location = new System.Drawing.Point(0, 60);
             this.dgvBaoCao3.Name = "dgvBaoCao3";
             this.dgvBaoCao3.ReadOnly = true;
+            this.dgvBaoCao3.RowHeadersWidth = 62;
             this.dgvBaoCao3.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvBaoCao3.Size = new System.Drawing.Size(1026, 366);
             this.dgvBaoCao3.TabIndex = 1;
@@ -355,7 +359,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.lblTongTienBaoCao3.ForeColor = System.Drawing.Color.DarkRed;
             this.lblTongTienBaoCao3.Location = new System.Drawing.Point(680, 10);
             this.lblTongTienBaoCao3.Name = "lblTongTienBaoCao3";
-            this.lblTongTienBaoCao3.Size = new System.Drawing.Size(193, 20);
+            this.lblTongTienBaoCao3.Size = new System.Drawing.Size(292, 30);
             this.lblTongTienBaoCao3.TabIndex = 0;
             this.lblTongTienBaoCao3.Text = "Tổng tiền theo Quý: 0 VNĐ";
             // 
@@ -382,7 +386,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.rdoNhapHang.ForeColor = System.Drawing.Color.Black;
             this.rdoNhapHang.Location = new System.Drawing.Point(450, 20);
             this.rdoNhapHang.Name = "rdoNhapHang";
-            this.rdoNhapHang.Size = new System.Drawing.Size(117, 21);
+            this.rdoNhapHang.Size = new System.Drawing.Size(169, 29);
             this.rdoNhapHang.TabIndex = 7;
             this.rdoNhapHang.Text = "HĐ Nhập hàng";
             this.rdoNhapHang.UseVisualStyleBackColor = true;
@@ -394,7 +398,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.rdoBanHang.ForeColor = System.Drawing.Color.Black;
             this.rdoBanHang.Location = new System.Drawing.Point(335, 20);
             this.rdoBanHang.Name = "rdoBanHang";
-            this.rdoBanHang.Size = new System.Drawing.Size(107, 21);
+            this.rdoBanHang.Size = new System.Drawing.Size(155, 29);
             this.rdoBanHang.TabIndex = 6;
             this.rdoBanHang.TabStop = true;
             this.rdoBanHang.Text = "HĐ Bán hàng";
@@ -404,7 +408,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             // 
             this.txtNamQuy.Location = new System.Drawing.Point(235, 18);
             this.txtNamQuy.Name = "txtNamQuy";
-            this.txtNamQuy.Size = new System.Drawing.Size(75, 24);
+            this.txtNamQuy.Size = new System.Drawing.Size(75, 33);
             this.txtNamQuy.TabIndex = 5;
             this.txtNamQuy.Text = "2026";
             // 
@@ -414,7 +418,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.lblNamQuy.ForeColor = System.Drawing.Color.Navy;
             this.lblNamQuy.Location = new System.Drawing.Point(190, 21);
             this.lblNamQuy.Name = "lblNamQuy";
-            this.lblNamQuy.Size = new System.Drawing.Size(41, 17);
+            this.lblNamQuy.Size = new System.Drawing.Size(59, 25);
             this.lblNamQuy.TabIndex = 4;
             this.lblNamQuy.Text = "Năm:";
             // 
@@ -429,7 +433,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             "Quý 4"});
             this.cboQuy.Location = new System.Drawing.Point(95, 18);
             this.cboQuy.Name = "cboQuy";
-            this.cboQuy.Size = new System.Drawing.Size(80, 25);
+            this.cboQuy.Size = new System.Drawing.Size(80, 33);
             this.cboQuy.TabIndex = 1;
             // 
             // lblQuy
@@ -438,7 +442,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.lblQuy.ForeColor = System.Drawing.Color.Navy;
             this.lblQuy.Location = new System.Drawing.Point(20, 21);
             this.lblQuy.Name = "lblQuy";
-            this.lblQuy.Size = new System.Drawing.Size(71, 17);
+            this.lblQuy.Size = new System.Drawing.Size(105, 25);
             this.lblQuy.TabIndex = 0;
             this.lblQuy.Text = "Chọn Quý:";
             // 
@@ -489,6 +493,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.dgvBaoCao4.Location = new System.Drawing.Point(0, 60);
             this.dgvBaoCao4.Name = "dgvBaoCao4";
             this.dgvBaoCao4.ReadOnly = true;
+            this.dgvBaoCao4.RowHeadersWidth = 62;
             this.dgvBaoCao4.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvBaoCao4.Size = new System.Drawing.Size(1026, 406);
             this.dgvBaoCao4.TabIndex = 1;
@@ -512,7 +517,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             // 
             this.txtNamThang.Location = new System.Drawing.Point(260, 18);
             this.txtNamThang.Name = "txtNamThang";
-            this.txtNamThang.Size = new System.Drawing.Size(85, 24);
+            this.txtNamThang.Size = new System.Drawing.Size(85, 33);
             this.txtNamThang.TabIndex = 5;
             this.txtNamThang.Text = "2026";
             // 
@@ -522,7 +527,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.lblNamThang.ForeColor = System.Drawing.Color.Navy;
             this.lblNamThang.Location = new System.Drawing.Point(215, 21);
             this.lblNamThang.Name = "lblNamThang";
-            this.lblNamThang.Size = new System.Drawing.Size(41, 17);
+            this.lblNamThang.Size = new System.Drawing.Size(59, 25);
             this.lblNamThang.TabIndex = 4;
             this.lblNamThang.Text = "Năm:";
             // 
@@ -545,7 +550,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             "Tháng 12"});
             this.cboThang.Location = new System.Drawing.Point(105, 18);
             this.cboThang.Name = "cboThang";
-            this.cboThang.Size = new System.Drawing.Size(95, 25);
+            this.cboThang.Size = new System.Drawing.Size(95, 33);
             this.cboThang.TabIndex = 1;
             // 
             // lblThang
@@ -554,7 +559,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.lblThang.ForeColor = System.Drawing.Color.Navy;
             this.lblThang.Location = new System.Drawing.Point(20, 21);
             this.lblThang.Name = "lblThang";
-            this.lblThang.Size = new System.Drawing.Size(84, 17);
+            this.lblThang.Size = new System.Drawing.Size(125, 25);
             this.lblThang.TabIndex = 0;
             this.lblThang.Text = "Chọn Tháng:";
             // 
@@ -612,7 +617,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             // 
             // frmBaoCaoThongKe
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1034, 606);

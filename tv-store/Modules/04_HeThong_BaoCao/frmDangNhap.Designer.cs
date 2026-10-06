@@ -1,4 +1,4 @@
-namespace tv_store.Modules._04_HeThong_BaoCao
+﻿namespace tv_store.Modules._04_HeThong_BaoCao
 {
     partial class frmDangNhap
     {
@@ -19,7 +19,6 @@ namespace tv_store.Modules._04_HeThong_BaoCao
         {
             this.components = new System.ComponentModel.Container();
             this.pnlTop = new System.Windows.Forms.Panel();
-            this.lblSubTitle = new System.Windows.Forms.Label();
             this.lblTitle = new System.Windows.Forms.Label();
             this.lblTenDangNhap = new System.Windows.Forms.Label();
             this.txtTenDangNhap = new System.Windows.Forms.TextBox();
@@ -37,35 +36,25 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             // pnlTop
             // 
             this.pnlTop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(43)))), ((int)(((byte)(73)))));
-            this.pnlTop.Controls.Add(this.lblSubTitle);
             this.pnlTop.Controls.Add(this.lblTitle);
             this.pnlTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlTop.Location = new System.Drawing.Point(0, 0);
             this.pnlTop.Name = "pnlTop";
             this.pnlTop.Size = new System.Drawing.Size(434, 75);
             this.pnlTop.TabIndex = 0;
-            // 
-            // lblSubTitle
-            // 
-            this.lblSubTitle.AutoSize = true;
-            this.lblSubTitle.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSubTitle.ForeColor = System.Drawing.Color.Gainsboro;
-            this.lblSubTitle.Location = new System.Drawing.Point(120, 44);
-            this.lblSubTitle.Name = "lblSubTitle";
-            this.lblSubTitle.Size = new System.Drawing.Size(193, 15);
-            this.lblSubTitle.TabIndex = 1;
-            this.lblSubTitle.Text = "Hệ thống Quản lý Cửa hàng TV Store";
+            this.pnlTop.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlTop_Paint);
             // 
             // lblTitle
             // 
-            this.lblTitle.AutoSize = true;
+            this.lblTitle.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTitle.ForeColor = System.Drawing.Color.White;
-            this.lblTitle.Location = new System.Drawing.Point(145, 12);
+            this.lblTitle.Location = new System.Drawing.Point(0, 0);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(144, 30);
+            this.lblTitle.Size = new System.Drawing.Size(434, 75);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "ĐĂNG NHẬP";
+            this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblTenDangNhap
             // 
@@ -74,7 +63,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.lblTenDangNhap.ForeColor = System.Drawing.Color.Navy;
             this.lblTenDangNhap.Location = new System.Drawing.Point(45, 105);
             this.lblTenDangNhap.Name = "lblTenDangNhap";
-            this.lblTenDangNhap.Size = new System.Drawing.Size(111, 19);
+            this.lblTenDangNhap.Size = new System.Drawing.Size(157, 28);
             this.lblTenDangNhap.TabIndex = 1;
             this.lblTenDangNhap.Text = "Tên đăng nhập:";
             // 
@@ -83,7 +72,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.txtTenDangNhap.Font = new System.Drawing.Font("Segoe UI", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtTenDangNhap.Location = new System.Drawing.Point(48, 128);
             this.txtTenDangNhap.Name = "txtTenDangNhap";
-            this.txtTenDangNhap.Size = new System.Drawing.Size(335, 26);
+            this.txtTenDangNhap.Size = new System.Drawing.Size(335, 35);
             this.txtTenDangNhap.TabIndex = 2;
             this.txtTenDangNhap.Text = "admin";
             // 
@@ -94,7 +83,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.lblMatKhau.ForeColor = System.Drawing.Color.Navy;
             this.lblMatKhau.Location = new System.Drawing.Point(45, 170);
             this.lblMatKhau.Name = "lblMatKhau";
-            this.lblMatKhau.Size = new System.Drawing.Size(75, 19);
+            this.lblMatKhau.Size = new System.Drawing.Size(107, 28);
             this.lblMatKhau.TabIndex = 3;
             this.lblMatKhau.Text = "Mật khẩu:";
             // 
@@ -103,7 +92,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.txtMatKhau.Font = new System.Drawing.Font("Segoe UI", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtMatKhau.Location = new System.Drawing.Point(48, 193);
             this.txtMatKhau.Name = "txtMatKhau";
-            this.txtMatKhau.Size = new System.Drawing.Size(335, 26);
+            this.txtMatKhau.Size = new System.Drawing.Size(335, 35);
             this.txtMatKhau.TabIndex = 4;
             this.txtMatKhau.Text = "123456";
             this.txtMatKhau.UseSystemPasswordChar = true;
@@ -114,7 +103,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.chkHienMatKhau.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chkHienMatKhau.Location = new System.Drawing.Point(49, 230);
             this.chkHienMatKhau.Name = "chkHienMatKhau";
-            this.chkHienMatKhau.Size = new System.Drawing.Size(121, 19);
+            this.chkHienMatKhau.Size = new System.Drawing.Size(178, 29);
             this.chkHienMatKhau.TabIndex = 5;
             this.chkHienMatKhau.Text = "Hiển thị mật khẩu";
             this.chkHienMatKhau.UseVisualStyleBackColor = true;
@@ -158,7 +147,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             // frmDangNhap
             // 
             this.AcceptButton = this.btnDangNhap;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.CancelButton = this.btnThoat;
@@ -190,7 +179,6 @@ namespace tv_store.Modules._04_HeThong_BaoCao
         #endregion
 
         private System.Windows.Forms.Panel pnlTop;
-        private System.Windows.Forms.Label lblSubTitle;
         private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.Label lblTenDangNhap;
         private System.Windows.Forms.TextBox txtTenDangNhap;
