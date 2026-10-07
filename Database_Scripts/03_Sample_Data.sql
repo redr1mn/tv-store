@@ -7,6 +7,11 @@
 USE QLBanTivi;
 GO
 
+-- Tạm thời vô hiệu hóa trigger trong lúc nạp seed data để giữ đúng các số liệu tồn kho ban đầu
+IF OBJECT_ID('trg_ChiTietHDN_CapNhat', 'TR') IS NOT NULL ALTER TABLE tblChiTietHDN DISABLE TRIGGER trg_ChiTietHDN_CapNhat;
+IF OBJECT_ID('trg_ChiTietHDB_CapNhat', 'TR') IS NOT NULL ALTER TABLE tblChiTietHDB DISABLE TRIGGER trg_ChiTietHDB_CapNhat;
+GO
+
 -- 1. HÃNG SẢN XUẤT
 INSERT INTO tblHangSX (MaHangSX, TenHangSX) VALUES
 ('HSX01', N'Sony'),
@@ -128,4 +133,9 @@ INSERT INTO tblChiTietHDB (SoHDB, MaTV, SoLuong, DonGia, GiamGia, ThanhTien) VAL
 ('HDB003', 'TV03', 1, 28600000, 0, 28600000),
 ('HDB004', 'TV01', 1, 12650000, 0, 12650000),
 ('HDB005', 'TV02', 1, 25300000, 0, 25300000);
+GO
+
+-- Bật lại Trigger sau khi đã nạp xong toàn bộ dữ liệu mẫu
+IF OBJECT_ID('trg_ChiTietHDN_CapNhat', 'TR') IS NOT NULL ALTER TABLE tblChiTietHDN ENABLE TRIGGER trg_ChiTietHDN_CapNhat;
+IF OBJECT_ID('trg_ChiTietHDB_CapNhat', 'TR') IS NOT NULL ALTER TABLE tblChiTietHDB ENABLE TRIGGER trg_ChiTietHDB_CapNhat;
 GO

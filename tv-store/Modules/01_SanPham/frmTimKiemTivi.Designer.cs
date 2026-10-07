@@ -66,9 +66,9 @@ namespace tv_store.Modules._01_SanPham
             this.lblTieuDe.ForeColor = System.Drawing.Color.White;
             this.lblTieuDe.Location = new System.Drawing.Point(340, 11);
             this.lblTieuDe.Name = "lblTieuDe";
-            this.lblTieuDe.Size = new System.Drawing.Size(304, 28);
+            this.lblTieuDe.Size = new System.Drawing.Size(392, 41);
             this.lblTieuDe.TabIndex = 0;
-            this.lblTieuDe.Text = "TÌM KIẾM SẢN PHẨM TIVI (YC 4)";
+            this.lblTieuDe.Text = "TÌM KIẾM SẢN PHẨM TIVI";
             // 
             // grpTieuChi
             // 
@@ -146,7 +146,7 @@ namespace tv_store.Modules._01_SanPham
             // 
             this.txtGiaDen.Location = new System.Drawing.Point(400, 109);
             this.txtGiaDen.Name = "txtGiaDen";
-            this.txtGiaDen.Size = new System.Drawing.Size(180, 24);
+            this.txtGiaDen.Size = new System.Drawing.Size(180, 33);
             this.txtGiaDen.TabIndex = 11;
             // 
             // lblGiaDen
@@ -155,7 +155,7 @@ namespace tv_store.Modules._01_SanPham
             this.lblGiaDen.ForeColor = System.Drawing.Color.Black;
             this.lblGiaDen.Location = new System.Drawing.Point(325, 112);
             this.lblGiaDen.Name = "lblGiaDen";
-            this.lblGiaDen.Size = new System.Drawing.Size(65, 17);
+            this.lblGiaDen.Size = new System.Drawing.Size(106, 25);
             this.lblGiaDen.TabIndex = 10;
             this.lblGiaDen.Text = "Đến (VNĐ):";
             // 
@@ -163,7 +163,7 @@ namespace tv_store.Modules._01_SanPham
             // 
             this.txtGiaTu.Location = new System.Drawing.Point(125, 109);
             this.txtGiaTu.Name = "txtGiaTu";
-            this.txtGiaTu.Size = new System.Drawing.Size(180, 24);
+            this.txtGiaTu.Size = new System.Drawing.Size(180, 33);
             this.txtGiaTu.TabIndex = 9;
             // 
             // lblGiaTu
@@ -172,7 +172,7 @@ namespace tv_store.Modules._01_SanPham
             this.lblGiaTu.ForeColor = System.Drawing.Color.Black;
             this.lblGiaTu.Location = new System.Drawing.Point(25, 112);
             this.lblGiaTu.Name = "lblGiaTu";
-            this.lblGiaTu.Size = new System.Drawing.Size(89, 17);
+            this.lblGiaTu.Size = new System.Drawing.Size(122, 25);
             this.lblGiaTu.TabIndex = 8;
             this.lblGiaTu.Text = "Giá từ (VNĐ):";
             // 
@@ -180,7 +180,7 @@ namespace tv_store.Modules._01_SanPham
             // 
             this.txtTuKhoa.Location = new System.Drawing.Point(125, 30);
             this.txtTuKhoa.Name = "txtTuKhoa";
-            this.txtTuKhoa.Size = new System.Drawing.Size(455, 24);
+            this.txtTuKhoa.Size = new System.Drawing.Size(455, 33);
             this.txtTuKhoa.TabIndex = 1;
             // 
             // lblTuKhoa
@@ -189,7 +189,7 @@ namespace tv_store.Modules._01_SanPham
             this.lblTuKhoa.ForeColor = System.Drawing.Color.Black;
             this.lblTuKhoa.Location = new System.Drawing.Point(25, 33);
             this.lblTuKhoa.Name = "lblTuKhoa";
-            this.lblTuKhoa.Size = new System.Drawing.Size(88, 17);
+            this.lblTuKhoa.Size = new System.Drawing.Size(117, 25);
             this.lblTuKhoa.TabIndex = 0;
             this.lblTuKhoa.Text = "Từ khóa Tivi:";
             // 
@@ -199,7 +199,7 @@ namespace tv_store.Modules._01_SanPham
             this.cboCoManHinh.FormattingEnabled = true;
             this.cboCoManHinh.Location = new System.Drawing.Point(740, 68);
             this.cboCoManHinh.Name = "cboCoManHinh";
-            this.cboCoManHinh.Size = new System.Drawing.Size(215, 25);
+            this.cboCoManHinh.Size = new System.Drawing.Size(215, 33);
             this.cboCoManHinh.TabIndex = 7;
             // 
             // lblCoManHinh
@@ -208,7 +208,7 @@ namespace tv_store.Modules._01_SanPham
             this.lblCoManHinh.ForeColor = System.Drawing.Color.Black;
             this.lblCoManHinh.Location = new System.Drawing.Point(650, 71);
             this.lblCoManHinh.Name = "lblCoManHinh";
-            this.lblCoManHinh.Size = new System.Drawing.Size(84, 17);
+            this.lblCoManHinh.Size = new System.Drawing.Size(124, 25);
             this.lblCoManHinh.TabIndex = 6;
             this.lblCoManHinh.Text = "Cỡ màn hình:";
             // 
@@ -218,7 +218,7 @@ namespace tv_store.Modules._01_SanPham
             this.cboManHinh.FormattingEnabled = true;
             this.cboManHinh.Location = new System.Drawing.Point(400, 68);
             this.cboManHinh.Name = "cboManHinh";
-            this.cboManHinh.Size = new System.Drawing.Size(225, 25);
+            this.cboManHinh.Size = new System.Drawing.Size(225, 33);
             this.cboManHinh.TabIndex = 5;
             // 
             // lblManHinh
@@ -227,7 +227,7 @@ namespace tv_store.Modules._01_SanPham
             this.lblManHinh.ForeColor = System.Drawing.Color.Black;
             this.lblManHinh.Location = new System.Drawing.Point(325, 71);
             this.lblManHinh.Name = "lblManHinh";
-            this.lblManHinh.Size = new System.Drawing.Size(66, 17);
+            this.lblManHinh.Size = new System.Drawing.Size(97, 25);
             this.lblManHinh.TabIndex = 4;
             this.lblManHinh.Text = "Màn hình:";
             // 
@@ -237,7 +237,7 @@ namespace tv_store.Modules._01_SanPham
             this.cboHangSX.FormattingEnabled = true;
             this.cboHangSX.Location = new System.Drawing.Point(125, 68);
             this.cboHangSX.Name = "cboHangSX";
-            this.cboHangSX.Size = new System.Drawing.Size(180, 25);
+            this.cboHangSX.Size = new System.Drawing.Size(180, 33);
             this.cboHangSX.TabIndex = 3;
             // 
             // lblHangSX
@@ -246,7 +246,7 @@ namespace tv_store.Modules._01_SanPham
             this.lblHangSX.ForeColor = System.Drawing.Color.Black;
             this.lblHangSX.Location = new System.Drawing.Point(25, 71);
             this.lblHangSX.Name = "lblHangSX";
-            this.lblHangSX.Size = new System.Drawing.Size(61, 17);
+            this.lblHangSX.Size = new System.Drawing.Size(87, 25);
             this.lblHangSX.TabIndex = 2;
             this.lblHangSX.Text = "Hãng SX:";
             // 
@@ -272,12 +272,13 @@ namespace tv_store.Modules._01_SanPham
             this.dgvKetQua.BackgroundColor = System.Drawing.Color.White;
             this.dgvKetQua.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvKetQua.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvKetQua.Location = new System.Drawing.Point(3, 20);
+            this.dgvKetQua.Location = new System.Drawing.Point(3, 29);
             this.dgvKetQua.MultiSelect = false;
             this.dgvKetQua.Name = "dgvKetQua";
             this.dgvKetQua.ReadOnly = true;
+            this.dgvKetQua.RowHeadersWidth = 62;
             this.dgvKetQua.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvKetQua.Size = new System.Drawing.Size(978, 318);
+            this.dgvKetQua.Size = new System.Drawing.Size(978, 309);
             this.dgvKetQua.TabIndex = 0;
             // 
             // pnlThongKe
@@ -297,13 +298,13 @@ namespace tv_store.Modules._01_SanPham
             this.lblSoLuongKetQua.ForeColor = System.Drawing.Color.DarkGreen;
             this.lblSoLuongKetQua.Location = new System.Drawing.Point(15, 9);
             this.lblSoLuongKetQua.Name = "lblSoLuongKetQua";
-            this.lblSoLuongKetQua.Size = new System.Drawing.Size(125, 17);
+            this.lblSoLuongKetQua.Size = new System.Drawing.Size(181, 25);
             this.lblSoLuongKetQua.TabIndex = 0;
             this.lblSoLuongKetQua.Text = "Tìm thấy: 0 kết quả";
             // 
             // frmTimKiemTivi
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(984, 581);

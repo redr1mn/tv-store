@@ -81,33 +81,45 @@ namespace tv_store.Modules._02_NhapHang
             if (string.IsNullOrEmpty(ma))
                 ma = "NCC" + DateTime.Now.ToString("yyMMddHHmmss");
 
+            bool success = false;
             if (DatabaseHelper.CheckKey("SELECT MaNCC FROM tblNhaCungCap WHERE MaNCC='" + ma + "'"))
             {
                 string sqlUpdate = string.Format("UPDATE tblNhaCungCap SET TenNCC=N'{0}', DiaChi=N'{1}', DienThoai='{2}' WHERE MaNCC='{3}'",
-                    txtTenNCC.Text.Trim(), txtDiaChi.Text.Trim(), txtDienThoai.Text.Trim(), ma);
-                DatabaseHelper.RunSql(sqlUpdate);
-                MessageBox.Show("Cập nhật Nhà cung cấp thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    txtTenNCC.Text.Trim().Replace("'", "''"), txtDiaChi.Text.Trim().Replace("'", "''"), txtDienThoai.Text.Trim().Replace("'", "''"), ma);
+                if (DatabaseHelper.RunSql(sqlUpdate))
+                {
+                    MessageBox.Show("Cập nhật Nhà cung cấp thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    success = true;
+                }
             }
             else
             {
                 string sqlInsert = string.Format("INSERT INTO tblNhaCungCap(MaNCC, TenNCC, DiaChi, DienThoai) VALUES('{0}', N'{1}', N'{2}', '{3}')",
-                    ma, txtTenNCC.Text.Trim(), txtDiaChi.Text.Trim(), txtDienThoai.Text.Trim());
-                DatabaseHelper.RunSql(sqlInsert);
-                MessageBox.Show("Thêm mới Nhà cung cấp thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ma, txtTenNCC.Text.Trim().Replace("'", "''"), txtDiaChi.Text.Trim().Replace("'", "''"), txtDienThoai.Text.Trim().Replace("'", "''"));
+                if (DatabaseHelper.RunSql(sqlInsert))
+                {
+                    MessageBox.Show("Thêm mới Nhà cung cấp thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    success = true;
+                }
             }
 
-            LoadDataGridView();
-            ResetValues();
-            btnThem.Enabled = true;
-            btnSua.Enabled = false;
-            btnXoa.Enabled = false;
-            btnLuu.Enabled = false;
-            btnBoQua.Enabled = false;
+            if (success)
+            {
+                LoadDataGridView();
+                ResetValues();
+                btnThem.Enabled = true;
+                btnSua.Enabled = false;
+                btnXoa.Enabled = false;
+                btnLuu.Enabled = false;
+                btnBoQua.Enabled = false;
+                txtMaNCC.ReadOnly = false;
+            }
         }
 
         private void btnSua_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txtMaNCC.Text)) return;
+            txtMaNCC.ReadOnly = true;
             btnLuu.Enabled = true;
             btnBoQua.Enabled = true;
             btnThem.Enabled = false;

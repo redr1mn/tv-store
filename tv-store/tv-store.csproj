@@ -128,6 +128,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Modules\01_SanPham\frmTimKiemTivi.resx">
+      <DependentUpon>frmTimKiemTivi.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\02_NhapHang\frmTimKiemHDN.resx">
+      <DependentUpon>frmTimKiemHDN.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Modules\04_HeThong_BaoCao\frmBaoCaoThongKe.resx">
       <DependentUpon>frmBaoCaoThongKe.cs</DependentUpon>
     </EmbeddedResource>

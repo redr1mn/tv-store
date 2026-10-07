@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Windows.Forms;
 using tv_store.Helpers;
@@ -81,33 +81,45 @@ namespace tv_store.Modules._03_BanHang
             if (string.IsNullOrEmpty(ma))
                 ma = "KH" + DateTime.Now.ToString("yyMMddHHmmss");
 
+            bool success = false;
             if (DatabaseHelper.CheckKey("SELECT MaKhach FROM tblKhachHang WHERE MaKhach='" + ma + "'"))
             {
                 string sqlUpdate = string.Format("UPDATE tblKhachHang SET TenKhach=N'{0}', DiaChi=N'{1}', DienThoai='{2}' WHERE MaKhach='{3}'",
-                    txtTenKH.Text.Trim(), txtDiaChi.Text.Trim(), txtDienThoai.Text.Trim(), ma);
-                DatabaseHelper.RunSql(sqlUpdate);
-                MessageBox.Show("Cập nhật Khách hàng thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    txtTenKH.Text.Trim().Replace("'", "''"), txtDiaChi.Text.Trim().Replace("'", "''"), txtDienThoai.Text.Trim().Replace("'", "''"), ma);
+                if (DatabaseHelper.RunSql(sqlUpdate))
+                {
+                    MessageBox.Show("Cập nhật Khách hàng thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    success = true;
+                }
             }
             else
             {
                 string sqlInsert = string.Format("INSERT INTO tblKhachHang(MaKhach, TenKhach, DiaChi, DienThoai) VALUES('{0}', N'{1}', N'{2}', '{3}')",
-                    ma, txtTenKH.Text.Trim(), txtDiaChi.Text.Trim(), txtDienThoai.Text.Trim());
-                DatabaseHelper.RunSql(sqlInsert);
-                MessageBox.Show("Thêm mới Khách hàng thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ma, txtTenKH.Text.Trim().Replace("'", "''"), txtDiaChi.Text.Trim().Replace("'", "''"), txtDienThoai.Text.Trim().Replace("'", "''"));
+                if (DatabaseHelper.RunSql(sqlInsert))
+                {
+                    MessageBox.Show("Thêm mới Khách hàng thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    success = true;
+                }
             }
 
-            LoadDataGridView();
-            ResetValues();
-            btnThem.Enabled = true;
-            btnSua.Enabled = false;
-            btnXoa.Enabled = false;
-            btnLuu.Enabled = false;
-            btnBoQua.Enabled = false;
+            if (success)
+            {
+                LoadDataGridView();
+                ResetValues();
+                btnThem.Enabled = true;
+                btnSua.Enabled = false;
+                btnXoa.Enabled = false;
+                btnLuu.Enabled = false;
+                btnBoQua.Enabled = false;
+                txtMaKH.ReadOnly = false;
+            }
         }
 
         private void btnSua_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txtMaKH.Text)) return;
+            txtMaKH.ReadOnly = true;
             btnLuu.Enabled = true;
             btnBoQua.Enabled = true;
             btnThem.Enabled = false;

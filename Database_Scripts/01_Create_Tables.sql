@@ -4,7 +4,10 @@
 -- FILE 1: TẠO CƠ SỞ DỮ LIỆU VÀ CÁC BẢNG (CHUẨN THEO SƠ ĐỒ RM)
 -- ===================================================================
 
-CREATE DATABASE QLBanTivi;
+IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'QLBanTivi')
+BEGIN
+    CREATE DATABASE QLBanTivi;
+END
 GO
 
 USE QLBanTivi;

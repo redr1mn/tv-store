@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Windows.Forms;
 using tv_store.Helpers;
@@ -26,17 +26,10 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             lblNguoiDung.Text = "👤 Người dùng: " + frmDangNhap.CurrentUser + " (" + frmDangNhap.CurrentRole + ")";
             lblDongHo.Text = "⏰ " + DateTime.Now.ToString("HH:mm:ss - dd/MM/yyyy");
 
-            // Phân quyền cơ bản
-            if (frmDangNhap.CurrentRole == "Nhân viên")
-            {
-                btnNavNhanVien.Enabled = false;
-                mnuDMNhanVien.Enabled = false;
-            }
-            else
-            {
-                btnNavNhanVien.Enabled = true;
-                mnuDMNhanVien.Enabled = true;
-            }
+            // Phân quyền cơ bản: Chỉ người dùng có quyền Admin mới được quản lý Nhân viên
+            bool isAdmin = string.Equals(frmDangNhap.CurrentRole, "Admin", StringComparison.OrdinalIgnoreCase);
+            btnNavNhanVien.Enabled = isAdmin;
+            mnuDMNhanVien.Enabled = isAdmin;
         }
 
         private void LoadDashboardStats()
@@ -159,6 +152,11 @@ namespace tv_store.Modules._04_HeThong_BaoCao
                 {
                     UpdateStatusBar();
                     LoadDashboardStats();
+                }
+                else
+                {
+                    // Nếu người dùng hủy form đăng nhập sau khi đã chọn Đăng xuất, đóng màn hình chính
+                    this.Close();
                 }
             }
         }

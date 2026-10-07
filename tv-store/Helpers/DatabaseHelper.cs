@@ -44,6 +44,12 @@ namespace tv_store.Helpers
             if (Con != null && Con.State == ConnectionState.Open)
                 return;
 
+            if (Con != null)
+            {
+                try { Con.Dispose(); } catch { }
+                Con = null;
+            }
+
             string initialConn = ConnectionString;
             try
             {
@@ -81,9 +87,10 @@ namespace tv_store.Helpers
         {
             try
             {
-                if (Con != null && Con.State == ConnectionState.Open)
+                if (Con != null)
                 {
-                    Con.Close();
+                    if (Con.State == ConnectionState.Open)
+                        Con.Close();
                     Con.Dispose();
                     Con = null;
                 }
@@ -95,6 +102,8 @@ namespace tv_store.Helpers
         {
             Connect();
             DataTable table = new DataTable();
+            if (Con == null || Con.State != ConnectionState.Open) return table;
+
             try
             {
                 using (SqlCommand cmd = new SqlCommand(sql, Con))
@@ -113,6 +122,8 @@ namespace tv_store.Helpers
         public static bool RunSql(string sql)
         {
             Connect();
+            if (Con == null || Con.State != ConnectionState.Open) return false;
+
             try
             {
                 using (SqlCommand cmd = new SqlCommand(sql, Con))
@@ -128,9 +139,45 @@ namespace tv_store.Helpers
             }
         }
 
+        public static bool RunSqlTransaction(System.Collections.Generic.IEnumerable<string> sqlQueries)
+        {
+            Connect();
+            if (Con == null || Con.State != ConnectionState.Open)
+            {
+                MessageBox.Show("Không thể kết nối CSDL để thực hiện giao dịch!", "Lỗi kết nối", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            using (SqlTransaction tran = Con.BeginTransaction())
+            {
+                try
+                {
+                    foreach (string sql in sqlQueries)
+                    {
+                        if (string.IsNullOrWhiteSpace(sql)) continue;
+                        using (SqlCommand cmd = new SqlCommand(sql, Con, tran))
+                        {
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                    tran.Commit();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    try { tran.Rollback(); } catch { }
+                    MessageBox.Show("Lỗi thực thi giao dịch SQL (Đã hủy toàn bộ thay đổi):\n" + ex.Message, 
+                        "Lỗi giao dịch", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+            }
+        }
+
         public static bool CheckKey(string sql)
         {
             Connect();
+            if (Con == null || Con.State != ConnectionState.Open) return false;
+
             try
             {
                 using (SqlDataAdapter dap = new SqlDataAdapter(sql, Con))
@@ -149,6 +196,8 @@ namespace tv_store.Helpers
         public static string GetFieldValue(string sql)
         {
             Connect();
+            if (Con == null || Con.State != ConnectionState.Open) return "";
+
             string val = "";
             try
             {
@@ -168,6 +217,8 @@ namespace tv_store.Helpers
         public static void FillCombo(string sql, ComboBox cbo, string ma, string ten)
         {
             Connect();
+            if (Con == null || Con.State != ConnectionState.Open) return;
+
             try
             {
                 using (SqlDataAdapter dap = new SqlDataAdapter(sql, Con))
@@ -188,79 +239,78 @@ namespace tv_store.Helpers
             return string.Format("{0:N0} VNĐ", tien);
         }
 
-        public static string ChuyenSoSangChu(double number)
-        {
-            string[] unitNumbers = { "không", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín" };
-            string[] placeValues = { "", "nghìn", "triệu", "tỷ" };
-            bool isNegative = false;
+        private static readonly string[] ChuSo = { "không", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín" };
+        private static readonly string[] DonViTien = { "", "nghìn", "triệu", "tỷ", "nghìn tỷ", "triệu tỷ", "tỷ tỷ" };
 
-            if (number < 0)
+        private static string Doc3So(int baso, bool isFirstGroup)
+        {
+            int tram = baso / 100;
+            int chuc = (baso % 100) / 10;
+            int donvi = baso % 10;
+            string res = "";
+
+            if (tram == 0 && isFirstGroup)
             {
-                number = -number;
-                isNegative = true;
+                // Nhóm đầu tiên nhỏ hơn 100 thì không đọc "không trăm"
+            }
+            else
+            {
+                res += ChuSo[tram] + " trăm ";
             }
 
-            if (number == 0) return "Không đồng";
-
-            string sNumber = number.ToString("#");
-            int positionDigit = sNumber.Length;
-            int totalTens = 0;
-            string result = "";
-
-            int[] tens = new int[4];
-            int groupCount = (int)Math.Ceiling(sNumber.Length / 3.0);
-
-            for (int i = groupCount - 1; i >= 0; i--)
+            if (chuc > 1)
             {
-                int len = positionDigit >= 3 ? 3 : positionDigit;
-                string sub = sNumber.Substring(positionDigit - len, len);
-                positionDigit -= len;
-
-                int num = int.Parse(sub);
-                tens[0] = num / 100;
-                tens[1] = (num % 100) / 10;
-                tens[2] = num % 10;
-
-                string groupResult = "";
-                if (tens[0] > 0 || (result != "" && (tens[1] > 0 || tens[2] > 0)))
+                res += ChuSo[chuc] + " mươi ";
+                if (donvi == 1) res += "mốt ";
+                else if (donvi == 5) res += "lăm ";
+                else if (donvi > 0) res += ChuSo[donvi] + " ";
+            }
+            else if (chuc == 1)
+            {
+                res += "mười ";
+                if (donvi == 1) res += "một ";
+                else if (donvi == 5) res += "lăm ";
+                else if (donvi > 0) res += ChuSo[donvi] + " ";
+            }
+            else // chuc == 0
+            {
+                if (donvi > 0)
                 {
-                    groupResult += unitNumbers[tens[0]] + " trăm ";
+                    if (tram > 0 || !isFirstGroup) res += "lẻ ";
+                    res += ChuSo[donvi] + " ";
                 }
+            }
+            return res.Trim();
+        }
 
-                if (tens[1] > 1)
-                {
-                    groupResult += unitNumbers[tens[1]] + " mươi ";
-                    if (tens[2] == 1) groupResult += "mốt ";
-                    else if (tens[2] == 5) groupResult += "lăm ";
-                    else if (tens[2] > 0) groupResult += unitNumbers[tens[2]] + " ";
-                }
-                else if (tens[1] == 1)
-                {
-                    groupResult += "mười ";
-                    if (tens[2] == 5) groupResult += "lăm ";
-                    else if (tens[2] > 0) groupResult += unitNumbers[tens[2]] + " ";
-                }
-                else if (tens[2] > 0)
-                {
-                    if (tens[0] > 0 || result != "") groupResult += "lẻ ";
-                    groupResult += unitNumbers[tens[2]] + " ";
-                }
+        public static string ChuyenSoSangChu(double number)
+        {
+            if (number == 0) return "Không đồng chẵn.";
+            long n = (long)Math.Round(Math.Abs(number));
+            if (n == 0) return "Không đồng chẵn.";
 
-                if (groupResult != "")
-                {
-                    groupResult += placeValues[totalTens] + " ";
-                }
+            System.Collections.Generic.List<int> groups = new System.Collections.Generic.List<int>();
+            while (n > 0)
+            {
+                groups.Add((int)(n % 1000));
+                n /= 1000;
+            }
 
-                result = groupResult + result;
-                totalTens++;
+            string result = "";
+            for (int i = groups.Count - 1; i >= 0; i--)
+            {
+                int g = groups[i];
+                if (g == 0) continue;
+                bool isFirst = (i == groups.Count - 1);
+                string gText = Doc3So(g, isFirst);
+                string scale = (i < DonViTien.Length) ? DonViTien[i] : "tỷ";
+                result += gText + " " + scale + " ";
             }
 
             result = result.Trim();
-            if (result.Length > 0)
-            {
-                result = char.ToUpper(result[0]) + result.Substring(1) + " đồng chẵn.";
-            }
-            if (isNegative) result = "Âm " + result;
+            if (string.IsNullOrEmpty(result)) return "Không đồng chẵn.";
+            result = char.ToUpper(result[0]) + result.Substring(1) + " đồng chẵn.";
+            if (number < 0) result = "Âm " + result;
 
             return result;
         }

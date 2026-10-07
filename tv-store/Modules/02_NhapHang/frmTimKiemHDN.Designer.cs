@@ -60,9 +60,9 @@ namespace tv_store.Modules._02_NhapHang
             this.lblTieuDe.ForeColor = System.Drawing.Color.White;
             this.lblTieuDe.Location = new System.Drawing.Point(290, 11);
             this.lblTieuDe.Name = "lblTieuDe";
-            this.lblTieuDe.Size = new System.Drawing.Size(404, 28);
+            this.lblTieuDe.Size = new System.Drawing.Size(557, 41);
             this.lblTieuDe.TabIndex = 0;
-            this.lblTieuDe.Text = "TÌM KIẾM HÓA ĐƠN NHẬP THEO TIVI (YC 5)";
+            this.lblTieuDe.Text = "TÌM KIẾM HÓA ĐƠN NHẬP THEO TIVI";
             // 
             // grpTieuChi
             // 
@@ -91,7 +91,7 @@ namespace tv_store.Modules._02_NhapHang
             this.cboNCC.FormattingEnabled = true;
             this.cboNCC.Location = new System.Drawing.Point(145, 75);
             this.cboNCC.Name = "cboNCC";
-            this.cboNCC.Size = new System.Drawing.Size(320, 25);
+            this.cboNCC.Size = new System.Drawing.Size(320, 33);
             this.cboNCC.TabIndex = 5;
             // 
             // lblNCC
@@ -100,7 +100,7 @@ namespace tv_store.Modules._02_NhapHang
             this.lblNCC.ForeColor = System.Drawing.Color.Black;
             this.lblNCC.Location = new System.Drawing.Point(30, 78);
             this.lblNCC.Name = "lblNCC";
-            this.lblNCC.Size = new System.Drawing.Size(91, 17);
+            this.lblNCC.Size = new System.Drawing.Size(133, 25);
             this.lblNCC.TabIndex = 4;
             this.lblNCC.Text = "Nhà cung cấp:";
             // 
@@ -153,7 +153,7 @@ namespace tv_store.Modules._02_NhapHang
             // 
             this.txtSoLuongNhap.Location = new System.Drawing.Point(630, 27);
             this.txtSoLuongNhap.Name = "txtSoLuongNhap";
-            this.txtSoLuongNhap.Size = new System.Drawing.Size(160, 24);
+            this.txtSoLuongNhap.Size = new System.Drawing.Size(160, 33);
             this.txtSoLuongNhap.TabIndex = 3;
             // 
             // lblSoLuongNhap
@@ -162,7 +162,7 @@ namespace tv_store.Modules._02_NhapHang
             this.lblSoLuongNhap.ForeColor = System.Drawing.Color.Black;
             this.lblSoLuongNhap.Location = new System.Drawing.Point(510, 30);
             this.lblSoLuongNhap.Name = "lblSoLuongNhap";
-            this.lblSoLuongNhap.Size = new System.Drawing.Size(114, 17);
+            this.lblSoLuongNhap.Size = new System.Drawing.Size(170, 25);
             this.lblSoLuongNhap.TabIndex = 2;
             this.lblSoLuongNhap.Text = "Số lượng nhập >=:";
             // 
@@ -172,7 +172,7 @@ namespace tv_store.Modules._02_NhapHang
             this.cboMaTivi.FormattingEnabled = true;
             this.cboMaTivi.Location = new System.Drawing.Point(145, 27);
             this.cboMaTivi.Name = "cboMaTivi";
-            this.cboMaTivi.Size = new System.Drawing.Size(320, 25);
+            this.cboMaTivi.Size = new System.Drawing.Size(320, 33);
             this.cboMaTivi.TabIndex = 1;
             // 
             // lblMaTivi
@@ -181,7 +181,7 @@ namespace tv_store.Modules._02_NhapHang
             this.lblMaTivi.ForeColor = System.Drawing.Color.Black;
             this.lblMaTivi.Location = new System.Drawing.Point(30, 30);
             this.lblMaTivi.Name = "lblMaTivi";
-            this.lblMaTivi.Size = new System.Drawing.Size(89, 17);
+            this.lblMaTivi.Size = new System.Drawing.Size(134, 25);
             this.lblMaTivi.TabIndex = 0;
             this.lblMaTivi.Text = "Sản phẩm Tivi:";
             // 
@@ -207,12 +207,13 @@ namespace tv_store.Modules._02_NhapHang
             this.dgvKetQuaHDN.BackgroundColor = System.Drawing.Color.White;
             this.dgvKetQuaHDN.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvKetQuaHDN.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvKetQuaHDN.Location = new System.Drawing.Point(3, 20);
+            this.dgvKetQuaHDN.Location = new System.Drawing.Point(3, 29);
             this.dgvKetQuaHDN.MultiSelect = false;
             this.dgvKetQuaHDN.Name = "dgvKetQuaHDN";
             this.dgvKetQuaHDN.ReadOnly = true;
+            this.dgvKetQuaHDN.RowHeadersWidth = 62;
             this.dgvKetQuaHDN.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvKetQuaHDN.Size = new System.Drawing.Size(978, 343);
+            this.dgvKetQuaHDN.Size = new System.Drawing.Size(978, 334);
             this.dgvKetQuaHDN.TabIndex = 0;
             // 
             // pnlThongKe
@@ -232,13 +233,13 @@ namespace tv_store.Modules._02_NhapHang
             this.lblSoLuongKetQua.ForeColor = System.Drawing.Color.DarkGreen;
             this.lblSoLuongKetQua.Location = new System.Drawing.Point(15, 9);
             this.lblSoLuongKetQua.Name = "lblSoLuongKetQua";
-            this.lblSoLuongKetQua.Size = new System.Drawing.Size(125, 17);
+            this.lblSoLuongKetQua.Size = new System.Drawing.Size(181, 25);
             this.lblSoLuongKetQua.TabIndex = 0;
             this.lblSoLuongKetQua.Text = "Tìm thấy: 0 kết quả";
             // 
             // frmTimKiemHDN
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(984, 581);

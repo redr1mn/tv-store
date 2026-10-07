@@ -45,7 +45,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
                 "LEFT JOIN tblCoManHinh co ON tv.MaCo = co.MaCo " +
                 "WHERE hdb.MaKhach = '{0}' " +
                 "GROUP BY tv.MaTV, tv.TenTV, hsx.TenHangSX, mh.TenManHinh, co.TenCo " +
-                "ORDER BY TongSoLuongMua DESC", maKH);
+                "ORDER BY TongSoLuongMua DESC, tv.MaTV ASC", maKH);
 
             DataTable dt = DatabaseHelper.GetDataToTable(sql);
             dgvBaoCao1.DataSource = dt;
@@ -122,8 +122,12 @@ namespace tv_store.Modules._04_HeThong_BaoCao
         private void btnXemBaoCao3_Click(object sender, EventArgs e)
         {
             int quy = cboQuy.SelectedIndex + 1;
-            int.TryParse(txtNamQuy.Text.Trim(), out int nam);
-            if (nam <= 2000) nam = DateTime.Now.Year;
+            if (!int.TryParse(txtNamQuy.Text.Trim(), out int nam) || nam < 1900 || nam > 2100)
+            {
+                MessageBox.Show("Vui lòng nhập năm hợp lệ (ví dụ: 2026)!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtNamQuy.Focus();
+                return;
+            }
 
             string sql = "";
             if (rdoBanHang.Checked)
@@ -181,8 +185,12 @@ namespace tv_store.Modules._04_HeThong_BaoCao
         private void btnXemBaoCao4_Click(object sender, EventArgs e)
         {
             int thang = cboThang.SelectedIndex + 1;
-            int.TryParse(txtNamThang.Text.Trim(), out int nam);
-            if (nam <= 2000) nam = DateTime.Now.Year;
+            if (!int.TryParse(txtNamThang.Text.Trim(), out int nam) || nam < 1900 || nam > 2100)
+            {
+                MessageBox.Show("Vui lòng nhập năm hợp lệ (ví dụ: 2026)!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtNamThang.Focus();
+                return;
+            }
 
             string sql = string.Format(
                 "SELECT TOP 5 ncc.MaNCC, ncc.TenNCC, ncc.DiaChi, ncc.DienThoai, " +
@@ -194,7 +202,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
                 "INNER JOIN tblChiTietHDN ct ON hdn.SoHDN = ct.SoHDN " +
                 "WHERE MONTH(hdn.NgayNhap) = {0} AND YEAR(hdn.NgayNhap) = {1} " +
                 "GROUP BY ncc.MaNCC, ncc.TenNCC, ncc.DiaChi, ncc.DienThoai " +
-                "ORDER BY TongSoLuongGiao DESC", thang, nam);
+                "ORDER BY TongSoLuongGiao DESC, ncc.MaNCC ASC", thang, nam);
 
             DataTable dt = DatabaseHelper.GetDataToTable(sql);
             dgvBaoCao4.DataSource = dt;

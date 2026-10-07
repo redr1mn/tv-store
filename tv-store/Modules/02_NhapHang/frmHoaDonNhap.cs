@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Windows.Forms;
 using tv_store.Helpers;
@@ -195,10 +195,21 @@ namespace tv_store.Modules._02_NhapHang
             }
         }
 
+        private string SinhMaHDNMoi()
+        {
+            string ma = "HDN" + DateTime.Now.ToString("yyMMddHHmmss");
+            int counter = 1;
+            while (DatabaseHelper.CheckKey("SELECT SoHDN FROM tblHoaDonNhap WHERE SoHDN='" + ma + "'"))
+            {
+                ma = "HDN" + DateTime.Now.ToString("yyMMddHHmmss") + "_" + counter++;
+            }
+            return ma;
+        }
+
         private void btnThemHD_Click(object sender, EventArgs e)
         {
             ResetForm();
-            txtMaHDN.Text = "HDN" + DateTime.Now.ToString("yyMMddHHmmss");
+            txtMaHDN.Text = SinhMaHDNMoi();
             btnThemHD.Enabled = false;
             btnLuuHD.Enabled = true;
             btnHuyHD.Enabled = true;
@@ -206,9 +217,18 @@ namespace tv_store.Modules._02_NhapHang
 
         private void btnLuuHD_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtMaHDN.Text))
+            string maHDN = txtMaHDN.Text.Trim();
+            if (string.IsNullOrWhiteSpace(maHDN))
             {
-                txtMaHDN.Text = "HDN" + DateTime.Now.ToString("yyMMddHHmmss");
+                maHDN = SinhMaHDNMoi();
+                txtMaHDN.Text = maHDN;
+            }
+            else if (DatabaseHelper.CheckKey("SELECT SoHDN FROM tblHoaDonNhap WHERE SoHDN='" + maHDN + "'"))
+            {
+                MessageBox.Show(string.Format("Mã hóa đơn nhập '{0}' đã tồn tại! Vui lòng nhập mã khác.", maHDN), 
+                    "Trùng mã hóa đơn", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtMaHDN.Focus();
+                return;
             }
 
             if (cboNhanVien.SelectedIndex == -1)
@@ -231,7 +251,6 @@ namespace tv_store.Modules._02_NhapHang
                 return;
             }
 
-            string maHDN = txtMaHDN.Text.Trim();
             string maNV = cboNhanVien.SelectedValue.ToString();
             string maNCC = cboNCC.SelectedValue.ToString();
             string ngayNhap = dtpNgayNhap.Value.ToString("yyyy-MM-dd HH:mm:ss");
@@ -240,23 +259,32 @@ namespace tv_store.Modules._02_NhapHang
             foreach (DataRow r in tblChiTietHDNData.Rows)
                 tongTien += Convert.ToDouble(r["ThanhTien"]);
 
-            // 1. Thêm Hóa đơn nhập
+            var ci = System.Globalization.CultureInfo.InvariantCulture;
+            System.Collections.Generic.List<string> sqlList = new System.Collections.Generic.List<string>();
+
+            // 1. Thêm Hóa đơn nhập (Header)
             string sqlHDN = string.Format(
                 "INSERT INTO tblHoaDonNhap(SoHDN, MaNV, NgayNhap, MaNCC, TongTien) VALUES('{0}', '{1}', '{2}', '{3}', {4})",
-                maHDN, maNV, ngayNhap, maNCC, tongTien);
-            
-            if (DatabaseHelper.RunSql(sqlHDN))
-            {
-                // 2. Thêm Chi tiết HDN (Trigger SQL Server sẽ tự động cập nhật số lượng tồn kho và cập nhật giá bán = 1.1 * giá nhập)
-                foreach (DataRow r in tblChiTietHDNData.Rows)
-                {
-                    string sqlCT = string.Format(
-                        "INSERT INTO tblChiTietHDN(SoHDN, MaTV, SoLuong, DonGia, GiamGia, ThanhTien) " +
-                        "VALUES('{0}', '{1}', {2}, {3}, {4}, {5})",
-                        maHDN, r["MaTV"].ToString(), r["SoLuong"], r["DonGia"], r["GiamGia"], r["ThanhTien"]);
-                    DatabaseHelper.RunSql(sqlCT);
-                }
+                maHDN, maNV, ngayNhap, maNCC, tongTien.ToString(ci));
+            sqlList.Add(sqlHDN);
 
+            // 2. Thêm Chi tiết HDN (Trigger SQL Server sẽ tự động cập nhật số lượng tồn kho và cập nhật giá bán = 1.1 * giá nhập)
+            foreach (DataRow r in tblChiTietHDNData.Rows)
+            {
+                double donGia = Convert.ToDouble(r["DonGia"]);
+                double giamGia = Convert.ToDouble(r["GiamGia"]);
+                double thanhTien = Convert.ToDouble(r["ThanhTien"]);
+
+                string sqlCT = string.Format(
+                    "INSERT INTO tblChiTietHDN(SoHDN, MaTV, SoLuong, DonGia, GiamGia, ThanhTien) " +
+                    "VALUES('{0}', '{1}', {2}, {3}, {4}, {5})",
+                    maHDN, r["MaTV"].ToString(), r["SoLuong"], 
+                    donGia.ToString(ci), giamGia.ToString(ci), thanhTien.ToString(ci));
+                sqlList.Add(sqlCT);
+            }
+
+            if (DatabaseHelper.RunSqlTransaction(sqlList))
+            {
                 MessageBox.Show("Lưu Hóa đơn nhập thành công!\nSố lượng tồn và đơn giá Tivi đã được cập nhật tự động.", 
                     "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 btnInHD.Enabled = true;

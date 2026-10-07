@@ -119,37 +119,57 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             string maCa = cboCaLam.SelectedValue != null ? cboCaLam.SelectedValue.ToString() : "";
             string maCV = cboCongViec.SelectedValue != null ? cboCongViec.SelectedValue.ToString() : "";
 
+            bool success = false;
             if (DatabaseHelper.CheckKey("SELECT MaNV FROM tblNhanVien WHERE MaNV='" + ma + "'"))
             {
                 string sqlUpdate = string.Format(
                     "UPDATE tblNhanVien SET TenNV=N'{0}', GioiTinh=N'{1}', NgaySinh='{2}', DienThoai='{3}', " +
-                    "DiaChi=N'{4}', MaCa='{5}', MaCV='{6}' WHERE MaNV='{7}'",
-                    txtTenNV.Text.Trim(), gt, ngaySinh, txtDienThoai.Text.Trim(), txtDiaChi.Text.Trim(), maCa, maCV, ma);
-                DatabaseHelper.RunSql(sqlUpdate);
-                MessageBox.Show("Cập nhật Nhân viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    "DiaChi=N'{4}', MaCa={5}, MaCV={6} WHERE MaNV='{7}'",
+                    txtTenNV.Text.Trim().Replace("'", "''"), gt, ngaySinh, 
+                    txtDienThoai.Text.Trim().Replace("'", "''"), txtDiaChi.Text.Trim().Replace("'", "''"), 
+                    string.IsNullOrEmpty(maCa) ? "NULL" : "'" + maCa + "'", 
+                    string.IsNullOrEmpty(maCV) ? "NULL" : "'" + maCV + "'", ma);
+
+                if (DatabaseHelper.RunSql(sqlUpdate))
+                {
+                    MessageBox.Show("Cập nhật Nhân viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    success = true;
+                }
             }
             else
             {
                 string sqlInsert = string.Format(
                     "INSERT INTO tblNhanVien(MaNV, TenNV, GioiTinh, NgaySinh, DienThoai, DiaChi, MaCa, MaCV) " +
-                    "VALUES('{0}', N'{1}', N'{2}', '{3}', '{4}', N'{5}', '{6}', '{7}')",
-                    ma, txtTenNV.Text.Trim(), gt, ngaySinh, txtDienThoai.Text.Trim(), txtDiaChi.Text.Trim(), maCa, maCV);
-                DatabaseHelper.RunSql(sqlInsert);
-                MessageBox.Show("Thêm mới Nhân viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    "VALUES('{0}', N'{1}', N'{2}', '{3}', '{4}', N'{5}', {6}, {7})",
+                    ma, txtTenNV.Text.Trim().Replace("'", "''"), gt, ngaySinh, 
+                    txtDienThoai.Text.Trim().Replace("'", "''"), txtDiaChi.Text.Trim().Replace("'", "''"), 
+                    string.IsNullOrEmpty(maCa) ? "NULL" : "'" + maCa + "'", 
+                    string.IsNullOrEmpty(maCV) ? "NULL" : "'" + maCV + "'");
+
+                if (DatabaseHelper.RunSql(sqlInsert))
+                {
+                    MessageBox.Show("Thêm mới Nhân viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    success = true;
+                }
             }
 
-            LoadDataGridView();
-            ResetValues();
-            btnThem.Enabled = true;
-            btnSua.Enabled = false;
-            btnXoa.Enabled = false;
-            btnLuu.Enabled = false;
-            btnBoQua.Enabled = false;
+            if (success)
+            {
+                LoadDataGridView();
+                ResetValues();
+                btnThem.Enabled = true;
+                btnSua.Enabled = false;
+                btnXoa.Enabled = false;
+                btnLuu.Enabled = false;
+                btnBoQua.Enabled = false;
+                txtMaNV.ReadOnly = false;
+            }
         }
 
         private void btnSua_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txtMaNV.Text)) return;
+            txtMaNV.ReadOnly = true;
             btnLuu.Enabled = true;
             btnBoQua.Enabled = true;
             btnThem.Enabled = false;

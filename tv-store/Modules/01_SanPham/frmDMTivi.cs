@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Drawing;
 using System.IO;
@@ -211,19 +211,33 @@ namespace tv_store.Modules._01_SanPham
             string maCo = cboCoManHinh.SelectedValue != null ? cboCoManHinh.SelectedValue.ToString() : "";
             string maNuoc = cboNuocSX.SelectedValue != null ? cboNuocSX.SelectedValue.ToString() : "";
 
+            Func<string, string> toSqlFk = val => string.IsNullOrEmpty(val) ? "NULL" : "'" + val.Replace("'", "''") + "'";
+
+            string fkHang = toSqlFk(maHang);
+            string fkKieu = toSqlFk(maKieu);
+            string fkMau = toSqlFk(maMau);
+            string fkMH = toSqlFk(maMH);
+            string fkCo = toSqlFk(maCo);
+            string fkNuoc = toSqlFk(maNuoc);
+
+            var ci = System.Globalization.CultureInfo.InvariantCulture;
+            bool success = false;
+
             if (DatabaseHelper.CheckKey("SELECT MaTV FROM tblTV WHERE MaTV = '" + maTivi + "'"))
             {
                 // Cập nhật
                 string sqlUpdate = string.Format(
-                    "UPDATE tblTV SET TenTV=N'{0}', MaHangSX='{1}', MaKieu='{2}', MaMau='{3}', " +
-                    "MaManHinh='{4}', MaCo='{5}', MaNuocSX='{6}', SoLuong={7}, DonGiaNhap={8}, " +
+                    "UPDATE tblTV SET TenTV=N'{0}', MaHangSX={1}, MaKieu={2}, MaMau={3}, " +
+                    "MaManHinh={4}, MaCo={5}, MaNuocSX={6}, SoLuong={7}, DonGiaNhap={8}, " +
                     "DonGiaBan={9}, ThoiGianBaoHanh={10}, Anh=N'{11}', GhiChu=N'{12}' WHERE MaTV='{13}'",
-                    txtTenTivi.Text.Trim(), maHang, maKieu, maMau, maMH, maCo, maNuoc,
-                    soLuong, giaNhap, giaBan, baoHanh, txtAnh.Text.Trim(), txtGhiChu.Text.Trim(), maTivi);
+                    txtTenTivi.Text.Trim().Replace("'", "''"), fkHang, fkKieu, fkMau, fkMH, fkCo, fkNuoc,
+                    soLuong, giaNhap.ToString(ci), giaBan.ToString(ci), baoHanh, 
+                    txtAnh.Text.Trim().Replace("'", "''"), txtGhiChu.Text.Trim().Replace("'", "''"), maTivi);
                 
                 if (DatabaseHelper.RunSql(sqlUpdate))
                 {
                     MessageBox.Show("Cập nhật Tivi thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    success = true;
                 }
             }
             else
@@ -231,23 +245,28 @@ namespace tv_store.Modules._01_SanPham
                 // Thêm mới
                 string sqlInsert = string.Format(
                     "INSERT INTO tblTV(MaTV, TenTV, MaHangSX, MaKieu, MaMau, MaManHinh, MaCo, MaNuocSX, SoLuong, DonGiaNhap, DonGiaBan, ThoiGianBaoHanh, Anh, GhiChu) " +
-                    "VALUES('{0}', N'{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', {8}, {9}, {10}, {11}, N'{12}', N'{13}')",
-                    maTivi, txtTenTivi.Text.Trim(), maHang, maKieu, maMau, maMH, maCo, maNuoc,
-                    soLuong, giaNhap, giaBan, baoHanh, txtAnh.Text.Trim(), txtGhiChu.Text.Trim());
+                    "VALUES('{0}', N'{1}', {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, N'{12}', N'{13}')",
+                    maTivi, txtTenTivi.Text.Trim().Replace("'", "''"), fkHang, fkKieu, fkMau, fkMH, fkCo, fkNuoc,
+                    soLuong, giaNhap.ToString(ci), giaBan.ToString(ci), baoHanh, 
+                    txtAnh.Text.Trim().Replace("'", "''"), txtGhiChu.Text.Trim().Replace("'", "''"));
 
                 if (DatabaseHelper.RunSql(sqlInsert))
                 {
                     MessageBox.Show("Thêm mới Tivi thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    success = true;
                 }
             }
 
-            LoadDataGridView();
-            ResetValues();
-            btnThem.Enabled = true;
-            btnSua.Enabled = false;
-            btnXoa.Enabled = false;
-            btnLuu.Enabled = false;
-            btnBoQua.Enabled = false;
+            if (success)
+            {
+                LoadDataGridView();
+                ResetValues();
+                btnThem.Enabled = true;
+                btnSua.Enabled = false;
+                btnXoa.Enabled = false;
+                btnLuu.Enabled = false;
+                btnBoQua.Enabled = false;
+            }
         }
 
         private void btnSua_Click(object sender, EventArgs e)

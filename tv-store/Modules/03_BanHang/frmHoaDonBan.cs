@@ -192,16 +192,30 @@ namespace tv_store.Modules._03_BanHang
             btnLuuHDB.Enabled = true;
         }
 
+        private string SinhMaHDBMoi()
+        {
+            string ma = "HDB" + DateTime.Now.ToString("yyMMddHHmmss");
+            int counter = 1;
+            while (DatabaseHelper.CheckKey("SELECT SoHDB FROM tblHoaDonBan WHERE SoHDB='" + ma + "'"))
+            {
+                ma = "HDB" + DateTime.Now.ToString("yyMMddHHmmss") + "_" + counter++;
+            }
+            return ma;
+        }
+
         private void CapNhatTongTien()
         {
-            double tongTien = 0;
+            double tienHang = 0;
             foreach (DataRow r in tblChiTietHDBData.Rows)
             {
-                tongTien += Convert.ToDouble(r["ThanhTien"]);
+                tienHang += Convert.ToDouble(r["ThanhTien"]);
             }
 
-            lblTongTien.Text = DatabaseHelper.FormatTien(tongTien);
-            lblBangChu.Text = "Bằng chữ: " + DatabaseHelper.ChuyenSoSangChu(tongTien);
+            double thue = 10; // Thuế VAT 10% theo quy định
+            double tongThanhToan = Math.Round(tienHang * (1.0 + thue / 100.0), 0);
+
+            lblTongTien.Text = DatabaseHelper.FormatTien(tongThanhToan);
+            lblBangChu.Text = "Bằng chữ (đã gồm VAT 10%): " + DatabaseHelper.ChuyenSoSangChu(tongThanhToan);
         }
 
         private void dgvChiTietHDB_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -219,7 +233,7 @@ namespace tv_store.Modules._03_BanHang
         private void btnThemHDB_Click(object sender, EventArgs e)
         {
             ResetForm();
-            txtMaHDB.Text = "HDB" + DateTime.Now.ToString("yyMMddHHmmss");
+            txtMaHDB.Text = SinhMaHDBMoi();
             btnThemHDB.Enabled = false;
             btnLuuHDB.Enabled = true;
             btnHuyHDB.Enabled = true;
@@ -227,9 +241,18 @@ namespace tv_store.Modules._03_BanHang
 
         private void btnLuuHDB_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtMaHDB.Text))
+            string maHDB = txtMaHDB.Text.Trim();
+            if (string.IsNullOrWhiteSpace(maHDB))
             {
-                txtMaHDB.Text = "HDB" + DateTime.Now.ToString("yyMMddHHmmss");
+                maHDB = SinhMaHDBMoi();
+                txtMaHDB.Text = maHDB;
+            }
+            else if (DatabaseHelper.CheckKey("SELECT SoHDB FROM tblHoaDonBan WHERE SoHDB='" + maHDB + "'"))
+            {
+                MessageBox.Show(string.Format("Mã hóa đơn '{0}' đã tồn tại! Vui lòng nhập mã khác.", maHDB), 
+                    "Trùng mã hóa đơn", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtMaHDB.Focus();
+                return;
             }
 
             if (cboNhanVien.SelectedIndex == -1)
@@ -252,35 +275,44 @@ namespace tv_store.Modules._03_BanHang
                 return;
             }
 
-            string maHDB = txtMaHDB.Text.Trim();
             string maNV = cboNhanVien.SelectedValue.ToString();
             string maKH = cboKhachHang.SelectedValue.ToString();
             string ngayBan = dtpNgayBan.Value.ToString("yyyy-MM-dd HH:mm:ss");
 
             double thue = 10; // Thuế VAT 10%
-            double tongTien = 0;
+            double tienHang = 0;
             foreach (DataRow r in tblChiTietHDBData.Rows)
-                tongTien += Convert.ToDouble(r["ThanhTien"]);
+                tienHang += Convert.ToDouble(r["ThanhTien"]);
 
-            tongTien = Math.Round(tongTien * (1.0 + thue / 100.0), 0);
+            double tongTien = Math.Round(tienHang * (1.0 + thue / 100.0), 0);
 
-            // 1. Thêm Hóa đơn bán
+            var ci = System.Globalization.CultureInfo.InvariantCulture;
+            System.Collections.Generic.List<string> sqlList = new System.Collections.Generic.List<string>();
+
+            // 1. Lệnh thêm Hóa đơn bán (Header)
             string sqlHDB = string.Format(
                 "INSERT INTO tblHoaDonBan(SoHDB, MaNV, NgayBan, MaKhach, Thue, TongTien) VALUES('{0}', '{1}', '{2}', '{3}', {4}, {5})",
-                maHDB, maNV, ngayBan, maKH, thue, tongTien);
+                maHDB, maNV, ngayBan, maKH, thue.ToString(ci), tongTien.ToString(ci));
+            sqlList.Add(sqlHDB);
 
-            if (DatabaseHelper.RunSql(sqlHDB))
+            // 2. Lệnh thêm từng dòng Chi tiết HDB (Trigger SQL Server sẽ tự động cập nhật tồn kho)
+            foreach (DataRow r in tblChiTietHDBData.Rows)
             {
-                // 2. Thêm Chi tiết HDB (Trigger SQL Server sẽ tự động trừ số lượng tồn kho trong tblTV)
-                foreach (DataRow r in tblChiTietHDBData.Rows)
-                {
-                    string sqlCT = string.Format(
-                        "INSERT INTO tblChiTietHDB(SoHDB, MaTV, SoLuong, DonGia, GiamGia, ThanhTien) " +
-                        "VALUES('{0}', '{1}', {2}, {3}, {4}, {5})",
-                        maHDB, r["MaTV"].ToString(), r["SoLuong"], r["DonGia"], r["GiamGia"], r["ThanhTien"]);
-                    DatabaseHelper.RunSql(sqlCT);
-                }
+                double donGia = Convert.ToDouble(r["DonGia"]);
+                double giamGia = Convert.ToDouble(r["GiamGia"]);
+                double thanhTien = Convert.ToDouble(r["ThanhTien"]);
 
+                string sqlCT = string.Format(
+                    "INSERT INTO tblChiTietHDB(SoHDB, MaTV, SoLuong, DonGia, GiamGia, ThanhTien) " +
+                    "VALUES('{0}', '{1}', {2}, {3}, {4}, {5})",
+                    maHDB, r["MaTV"].ToString(), r["SoLuong"], 
+                    donGia.ToString(ci), giamGia.ToString(ci), thanhTien.ToString(ci));
+                sqlList.Add(sqlCT);
+            }
+
+            // Thực thi toàn bộ lệnh trong 1 Transaction duy nhất (Atomic Save)
+            if (DatabaseHelper.RunSqlTransaction(sqlList))
+            {
                 MessageBox.Show("Lập Hóa đơn bán thành công!\nTồn kho Tivi đã được tự động trừ tương ứng.", 
                     "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 btnInHDB.Enabled = true;

@@ -43,7 +43,9 @@ namespace tv_store.Modules._04_HeThong_BaoCao
 
             // Kiểm tra trong CSDL SQL Server hoặc fallback mặc định
             bool isValid = false;
-            string sql = string.Format("SELECT TenDangNhap, Quyen FROM tblTaiKhoan WHERE TenDangNhap='{0}' AND MatKhau='{1}'", user, pass);
+            string safeUser = user.Replace("'", "''");
+            string safePass = pass.Replace("'", "''");
+            string sql = string.Format("SELECT TenDangNhap, Quyen FROM tblTaiKhoan WHERE TenDangNhap='{0}' AND MatKhau='{1}'", safeUser, safePass);
             DataTable dt = DatabaseHelper.GetDataToTable(sql);
 
             if (dt.Rows.Count > 0)
@@ -52,12 +54,18 @@ namespace tv_store.Modules._04_HeThong_BaoCao
                 CurrentUser = dt.Rows[0]["TenDangNhap"].ToString();
                 CurrentRole = dt.Rows[0]["Quyen"].ToString();
             }
-            else if (user == "admin" && pass == "123456")
+            else
             {
-                // Fallback nếu CSDL chưa có dữ liệu tài khoản
-                isValid = true;
-                CurrentUser = "admin";
-                CurrentRole = "Admin";
+                // Chỉ Fallback nếu CSDL thực sự chưa có dữ liệu tài khoản nào (bảng rỗng hoặc vừa mới tạo DB)
+                string countStr = DatabaseHelper.GetFieldValue("SELECT COUNT(*) FROM tblTaiKhoan");
+                bool isTableEmpty = string.IsNullOrEmpty(countStr) || countStr == "0";
+
+                if (isTableEmpty && user == "admin" && pass == "123456")
+                {
+                    isValid = true;
+                    CurrentUser = "admin";
+                    CurrentRole = "Admin";
+                }
             }
 
             if (isValid)

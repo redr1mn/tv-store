@@ -24,7 +24,6 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.tpTop3KhachHang = new System.Windows.Forms.TabPage();
             this.dgvBaoCao1 = new System.Windows.Forms.DataGridView();
             this.pnlTop1 = new System.Windows.Forms.Panel();
-            this.btnXuatExcel1 = new System.Windows.Forms.Button();
             this.btnXemBaoCao1 = new System.Windows.Forms.Button();
             this.cboKhachHang = new System.Windows.Forms.ComboBox();
             this.lblKhachHang = new System.Windows.Forms.Label();
@@ -62,6 +61,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.pnlBottom = new System.Windows.Forms.Panel();
             this.btnDong = new System.Windows.Forms.Button();
             this.toolTipMain = new System.Windows.Forms.ToolTip(this.components);
+            this.btnXuatExcel1 = new System.Windows.Forms.Button();
             this.pnlTop.SuspendLayout();
             this.tbcBaoCao.SuspendLayout();
             this.tpTop3KhachHang.SuspendLayout();
@@ -99,9 +99,9 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.lblTieuDe.ForeColor = System.Drawing.Color.White;
             this.lblTieuDe.Location = new System.Drawing.Point(340, 10);
             this.lblTieuDe.Name = "lblTieuDe";
-            this.lblTieuDe.Size = new System.Drawing.Size(542, 45);
+            this.lblTieuDe.Size = new System.Drawing.Size(336, 45);
             this.lblTieuDe.TabIndex = 0;
-            this.lblTieuDe.Text = "BÁO CÁO THỐNG KÊ (YC 6, 7, 8, 9)";
+            this.lblTieuDe.Text = "BÁO CÁO THỐNG KÊ";
             // 
             // tbcBaoCao
             // 
@@ -127,7 +127,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.tpTop3KhachHang.Padding = new System.Windows.Forms.Padding(3);
             this.tpTop3KhachHang.Size = new System.Drawing.Size(1026, 466);
             this.tpTop3KhachHang.TabIndex = 0;
-            this.tpTop3KhachHang.Text = "1. Top 3 Tivi theo Khách hàng (YC 6)";
+            this.tpTop3KhachHang.Text = "1. Top 3 Tivi theo Khách hàng";
             this.tpTop3KhachHang.UseVisualStyleBackColor = true;
             // 
             // dgvBaoCao1
@@ -157,20 +157,6 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.pnlTop1.Name = "pnlTop1";
             this.pnlTop1.Size = new System.Drawing.Size(1020, 60);
             this.pnlTop1.TabIndex = 0;
-            // 
-            // btnXuatExcel1
-            // 
-            this.btnXuatExcel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(167)))), ((int)(((byte)(69)))));
-            this.btnXuatExcel1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnXuatExcel1.ForeColor = System.Drawing.Color.White;
-            this.btnXuatExcel1.Location = new System.Drawing.Point(620, 13);
-            this.btnXuatExcel1.Name = "btnXuatExcel1";
-            this.btnXuatExcel1.Size = new System.Drawing.Size(120, 34);
-            this.btnXuatExcel1.TabIndex = 3;
-            this.btnXuatExcel1.Text = "&Xuất Excel";
-            this.toolTipMain.SetToolTip(this.btnXuatExcel1, "Xuất kết quả ra file Excel (Alt+X)");
-            this.btnXuatExcel1.UseVisualStyleBackColor = false;
-            this.btnXuatExcel1.Click += new System.EventHandler(this.btnXuatExcel1_Click);
             // 
             // btnXemBaoCao1
             // 
@@ -216,7 +202,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.tpNhapHangNCC.Padding = new System.Windows.Forms.Padding(3);
             this.tpNhapHangNCC.Size = new System.Drawing.Size(1026, 466);
             this.tpNhapHangNCC.TabIndex = 1;
-            this.tpNhapHangNCC.Text = "2. Báo cáo Nhập hàng theo NCC (YC 7)";
+            this.tpNhapHangNCC.Text = "2. Báo cáo Nhập hàng theo NCC";
             this.tpNhapHangNCC.UseVisualStyleBackColor = true;
             // 
             // dgvBaoCao2
@@ -323,7 +309,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.tpDoanhThuQuy.Name = "tpDoanhThuQuy";
             this.tpDoanhThuQuy.Size = new System.Drawing.Size(1026, 466);
             this.tpDoanhThuQuy.TabIndex = 2;
-            this.tpDoanhThuQuy.Text = "3. Hóa đơn & Tổng tiền theo Quý (YC 8)";
+            this.tpDoanhThuQuy.Text = "3. Hóa đơn & Tổng tiền theo Quý";
             this.tpDoanhThuQuy.UseVisualStyleBackColor = true;
             // 
             // dgvBaoCao3
@@ -480,7 +466,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.tpTop5NCC.Name = "tpTop5NCC";
             this.tpTop5NCC.Size = new System.Drawing.Size(1026, 466);
             this.tpTop5NCC.TabIndex = 3;
-            this.tpTop5NCC.Text = "4. Top 5 NCC giao hàng nhiều nhất (YC 9)";
+            this.tpTop5NCC.Text = "4. Top 5 NCC giao hàng nhiều nhất";
             this.tpTop5NCC.UseVisualStyleBackColor = true;
             // 
             // dgvBaoCao4
@@ -615,6 +601,20 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.btnDong.UseVisualStyleBackColor = false;
             this.btnDong.Click += new System.EventHandler(this.btnDong_Click);
             // 
+            // btnXuatExcel1
+            // 
+            this.btnXuatExcel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(167)))), ((int)(((byte)(69)))));
+            this.btnXuatExcel1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnXuatExcel1.ForeColor = System.Drawing.Color.White;
+            this.btnXuatExcel1.Location = new System.Drawing.Point(620, 13);
+            this.btnXuatExcel1.Name = "btnXuatExcel1";
+            this.btnXuatExcel1.Size = new System.Drawing.Size(120, 34);
+            this.btnXuatExcel1.TabIndex = 3;
+            this.btnXuatExcel1.Text = "&Xuất Excel";
+            this.toolTipMain.SetToolTip(this.btnXuatExcel1, "Xuất kết quả ra file Excel (Alt+X)");
+            this.btnXuatExcel1.UseVisualStyleBackColor = false;
+            this.btnXuatExcel1.Click += new System.EventHandler(this.btnXuatExcel1_Click);
+            // 
             // frmBaoCaoThongKe
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
@@ -669,7 +669,6 @@ namespace tv_store.Modules._04_HeThong_BaoCao
         private System.Windows.Forms.TabPage tpDoanhThuQuy;
         private System.Windows.Forms.TabPage tpTop5NCC;
         private System.Windows.Forms.Panel pnlTop1;
-        private System.Windows.Forms.Button btnXuatExcel1;
         private System.Windows.Forms.Button btnXemBaoCao1;
         private System.Windows.Forms.ComboBox cboKhachHang;
         private System.Windows.Forms.Label lblKhachHang;
@@ -705,5 +704,6 @@ namespace tv_store.Modules._04_HeThong_BaoCao
         private System.Windows.Forms.Panel pnlBottom;
         private System.Windows.Forms.Button btnDong;
         private System.Windows.Forms.ToolTip toolTipMain;
+        private System.Windows.Forms.Button btnXuatExcel1;
     }
 }

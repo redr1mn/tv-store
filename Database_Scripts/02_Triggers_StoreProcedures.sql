@@ -25,32 +25,38 @@ BEGIN
     IF EXISTS (SELECT * FROM deleted)
     BEGIN
         UPDATE tblTV
-        SET SoLuong = tblTV.SoLuong - d.SoLuong
+        SET SoLuong = tblTV.SoLuong - d.TongSL
         FROM tblTV
-        INNER JOIN deleted d ON tblTV.MaTV = d.MaTV;
+        INNER JOIN (
+            SELECT MaTV, SUM(SoLuong) AS TongSL
+            FROM deleted
+            GROUP BY MaTV
+        ) d ON tblTV.MaTV = d.MaTV;
 
         -- Cập nhật lại tổng tiền hóa đơn nhập
         UPDATE tblHoaDonNhap
-        SET TongTien = ISNULL((SELECT SUM(ThanhTien) FROM tblChiTietHDN WHERE tblChiTietHDN.SoHDN = d.SoHDN), 0)
-        FROM tblHoaDonNhap
-        INNER JOIN deleted d ON tblHoaDonNhap.SoHDN = d.SoHDN;
+        SET TongTien = ISNULL((SELECT SUM(ThanhTien) FROM tblChiTietHDN WHERE tblChiTietHDN.SoHDN = tblHoaDonNhap.SoHDN), 0)
+        WHERE tblHoaDonNhap.SoHDN IN (SELECT DISTINCT SoHDN FROM deleted);
     END
 
     -- Xử lý khi THÊM hoặc CẬP NHẬT (cộng số lượng mới, cập nhật giá nhập và giá bán = 1.1 * giá nhập)
     IF EXISTS (SELECT * FROM inserted)
     BEGIN
         UPDATE tblTV
-        SET SoLuong = tblTV.SoLuong + i.SoLuong,
-            DonGiaNhap = i.DonGia,
-            DonGiaBan = ROUND(i.DonGia * 1.1, 0) -- Yêu cầu 3: Đơn giá bán = 110% giá nhập
+        SET SoLuong = tblTV.SoLuong + i.TongSL,
+            DonGiaNhap = i.DonGiaMoiNhat,
+            DonGiaBan = ROUND(i.DonGiaMoiNhat * 1.1, 0) -- Yêu cầu 3: Đơn giá bán = 110% giá nhập
         FROM tblTV
-        INNER JOIN inserted i ON tblTV.MaTV = i.MaTV;
+        INNER JOIN (
+            SELECT MaTV, SUM(SoLuong) AS TongSL, MAX(DonGia) AS DonGiaMoiNhat
+            FROM inserted
+            GROUP BY MaTV
+        ) i ON tblTV.MaTV = i.MaTV;
 
         -- Cập nhật lại tổng tiền hóa đơn nhập
         UPDATE tblHoaDonNhap
-        SET TongTien = ISNULL((SELECT SUM(ThanhTien) FROM tblChiTietHDN WHERE tblChiTietHDN.SoHDN = i.SoHDN), 0)
-        FROM tblHoaDonNhap
-        INNER JOIN inserted i ON tblHoaDonNhap.SoHDN = i.SoHDN;
+        SET TongTien = ISNULL((SELECT SUM(ThanhTien) FROM tblChiTietHDN WHERE tblChiTietHDN.SoHDN = tblHoaDonNhap.SoHDN), 0)
+        WHERE tblHoaDonNhap.SoHDN IN (SELECT DISTINCT SoHDN FROM inserted);
     END
 END;
 GO
@@ -71,36 +77,58 @@ BEGIN
     IF EXISTS (SELECT * FROM deleted)
     BEGIN
         UPDATE tblTV
-        SET SoLuong = tblTV.SoLuong + d.SoLuong
+        SET SoLuong = tblTV.SoLuong + d.TongSL
         FROM tblTV
-        INNER JOIN deleted d ON tblTV.MaTV = d.MaTV;
+        INNER JOIN (
+            SELECT MaTV, SUM(SoLuong) AS TongSL
+            FROM deleted
+            GROUP BY MaTV
+        ) d ON tblTV.MaTV = d.MaTV;
 
         UPDATE tblHoaDonBan
         SET TongTien = ISNULL((
-            SELECT SUM(ThanhTien) * (1.0 + ISNULL(tblHoaDonBan.Thue, 0) / 100.0)
+            SELECT ROUND(SUM(ThanhTien) * (1.0 + ISNULL(tblHoaDonBan.Thue, 0) / 100.0), 0)
             FROM tblChiTietHDB 
-            WHERE tblChiTietHDB.SoHDB = d.SoHDB
+            WHERE tblChiTietHDB.SoHDB = tblHoaDonBan.SoHDB
         ), 0)
-        FROM tblHoaDonBan
-        INNER JOIN deleted d ON tblHoaDonBan.SoHDB = d.SoHDB;
+        WHERE tblHoaDonBan.SoHDB IN (SELECT DISTINCT SoHDB FROM deleted);
     END
 
     -- Xử lý khi THÊM hoặc CẬP NHẬT (trừ số lượng bán)
     IF EXISTS (SELECT * FROM inserted)
     BEGIN
+        -- Chống âm tồn kho khi bán
+        IF EXISTS (
+            SELECT 1 FROM tblTV
+            INNER JOIN (
+                SELECT MaTV, SUM(SoLuong) AS TongSL
+                FROM inserted
+                GROUP BY MaTV
+            ) i ON tblTV.MaTV = i.MaTV
+            WHERE tblTV.SoLuong < i.TongSL
+        )
+        BEGIN
+            RAISERROR(N'Số lượng bán vượt quá số lượng tồn kho khả dụng!', 16, 1);
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
+
         UPDATE tblTV
-        SET SoLuong = tblTV.SoLuong - i.SoLuong
+        SET SoLuong = tblTV.SoLuong - i.TongSL
         FROM tblTV
-        INNER JOIN inserted i ON tblTV.MaTV = i.MaTV;
+        INNER JOIN (
+            SELECT MaTV, SUM(SoLuong) AS TongSL
+            FROM inserted
+            GROUP BY MaTV
+        ) i ON tblTV.MaTV = i.MaTV;
 
         UPDATE tblHoaDonBan
         SET TongTien = ISNULL((
-            SELECT SUM(ThanhTien) * (1.0 + ISNULL(tblHoaDonBan.Thue, 0) / 100.0)
+            SELECT ROUND(SUM(ThanhTien) * (1.0 + ISNULL(tblHoaDonBan.Thue, 0) / 100.0), 0)
             FROM tblChiTietHDB 
-            WHERE tblChiTietHDB.SoHDB = i.SoHDB
+            WHERE tblChiTietHDB.SoHDB = tblHoaDonBan.SoHDB
         ), 0)
-        FROM tblHoaDonBan
-        INNER JOIN inserted i ON tblHoaDonBan.SoHDB = i.SoHDB;
+        WHERE tblHoaDonBan.SoHDB IN (SELECT DISTINCT SoHDB FROM inserted);
     END
 END;
 GO
