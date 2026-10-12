@@ -55,6 +55,7 @@ namespace tv_store.Modules._01_SanPham
             this.dgvTivi = new System.Windows.Forms.DataGridView();
             this.pnlChucNang = new System.Windows.Forms.Panel();
             this.btnDong = new System.Windows.Forms.Button();
+            this.btnXuatExcel = new System.Windows.Forms.Button();
             this.btnTimKiem = new System.Windows.Forms.Button();
             this.btnBoQua = new System.Windows.Forms.Button();
             this.btnXoa = new System.Windows.Forms.Button();
@@ -264,6 +265,8 @@ namespace tv_store.Modules._01_SanPham
             this.txtSoLuong.Size = new System.Drawing.Size(285, 24);
             this.txtSoLuong.TabIndex = 16;
             this.txtSoLuong.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.txtSoLuong.ReadOnly = true;
+            this.txtSoLuong.BackColor = System.Drawing.Color.WhiteSmoke;
             // 
             // lblSoLuong
             // 
@@ -460,6 +463,7 @@ namespace tv_store.Modules._01_SanPham
             // 
             this.pnlChucNang.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(247)))), ((int)(((byte)(250)))));
             this.pnlChucNang.Controls.Add(this.btnDong);
+            this.pnlChucNang.Controls.Add(this.btnXuatExcel);
             this.pnlChucNang.Controls.Add(this.btnTimKiem);
             this.pnlChucNang.Controls.Add(this.btnBoQua);
             this.pnlChucNang.Controls.Add(this.btnXoa);
@@ -482,11 +486,26 @@ namespace tv_store.Modules._01_SanPham
             this.btnDong.Location = new System.Drawing.Point(950, 10);
             this.btnDong.Name = "btnDong";
             this.btnDong.Size = new System.Drawing.Size(105, 35);
-            this.btnDong.TabIndex = 6;
+            this.btnDong.TabIndex = 7;
             this.btnDong.Text = "Đó&ng";
             this.toolTipMain.SetToolTip(this.btnDong, "Đóng màn hình (Alt+N)");
             this.btnDong.UseVisualStyleBackColor = false;
             this.btnDong.Click += new System.EventHandler(this.btnDong_Click);
+            // 
+            // btnXuatExcel
+            // 
+            this.btnXuatExcel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(167)))), ((int)(((byte)(69)))));
+            this.btnXuatExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnXuatExcel.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnXuatExcel.ForeColor = System.Drawing.Color.White;
+            this.btnXuatExcel.Location = new System.Drawing.Point(710, 10);
+            this.btnXuatExcel.Name = "btnXuatExcel";
+            this.btnXuatExcel.Size = new System.Drawing.Size(110, 35);
+            this.btnXuatExcel.TabIndex = 6;
+            this.btnXuatExcel.Text = "Xuất &Excel";
+            this.toolTipMain.SetToolTip(this.btnXuatExcel, "Xuất danh mục Tivi ra Excel (Alt+E)");
+            this.btnXuatExcel.UseVisualStyleBackColor = false;
+            this.btnXuatExcel.Click += new System.EventHandler(this.btnXuatExcel_Click);
             // 
             // btnTimKiem
             // 
@@ -656,6 +675,7 @@ namespace tv_store.Modules._01_SanPham
         private System.Windows.Forms.DataGridView dgvTivi;
         private System.Windows.Forms.Panel pnlChucNang;
         private System.Windows.Forms.Button btnDong;
+        private System.Windows.Forms.Button btnXuatExcel;
         private System.Windows.Forms.Button btnTimKiem;
         private System.Windows.Forms.Button btnBoQua;
         private System.Windows.Forms.Button btnXoa;

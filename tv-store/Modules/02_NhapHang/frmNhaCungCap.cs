@@ -128,11 +128,26 @@ namespace tv_store.Modules._02_NhapHang
         private void btnXoa_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txtMaNCC.Text)) return;
+            string maNCC = txtMaNCC.Text.Trim();
+
+            // Kiểm tra ràng buộc trước khi xóa
+            if (DatabaseHelper.CheckKey("SELECT TOP 1 MaNCC FROM tblHoaDonNhap WHERE MaNCC = '" + maNCC + "'"))
+            {
+                MessageBox.Show(
+                    "Không thể xóa Nhà cung cấp này vì đã có lịch sử Hóa đơn Nhập hàng trong hệ thống!\n" +
+                    "Để bảo toàn số liệu kho vận và chi phí, không thể xóa nhà cung cấp đã từng giao dịch.",
+                    "Không thể xóa", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             if (MessageBox.Show("Bạn có muốn xóa Nhà cung cấp này?", "Xác nhận xóa", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                DatabaseHelper.RunSql("DELETE FROM tblNhaCungCap WHERE MaNCC='" + txtMaNCC.Text.Trim() + "'");
-                LoadDataGridView();
-                ResetValues();
+                if (DatabaseHelper.RunSql("DELETE FROM tblNhaCungCap WHERE MaNCC='" + maNCC + "'"))
+                {
+                    MessageBox.Show("Xóa Nhà cung cấp thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    LoadDataGridView();
+                    ResetValues();
+                }
             }
         }
 

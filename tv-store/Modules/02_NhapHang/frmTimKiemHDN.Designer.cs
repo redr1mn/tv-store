@@ -204,7 +204,7 @@ namespace tv_store.Modules._02_NhapHang
             // 
             this.dgvKetQuaHDN.AllowUserToAddRows = false;
             this.dgvKetQuaHDN.AllowUserToDeleteRows = false;
-            this.dgvKetQuaHDN.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvKetQuaHDN.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.None;
             this.dgvKetQuaHDN.BackgroundColor = System.Drawing.Color.White;
             this.dgvKetQuaHDN.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvKetQuaHDN.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -212,7 +212,8 @@ namespace tv_store.Modules._02_NhapHang
             this.dgvKetQuaHDN.MultiSelect = false;
             this.dgvKetQuaHDN.Name = "dgvKetQuaHDN";
             this.dgvKetQuaHDN.ReadOnly = true;
-            this.dgvKetQuaHDN.RowHeadersWidth = 62;
+            this.dgvKetQuaHDN.RowHeadersWidth = 35;
+            this.dgvKetQuaHDN.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.dgvKetQuaHDN.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvKetQuaHDN.Size = new System.Drawing.Size(978, 334);
             this.dgvKetQuaHDN.TabIndex = 0;

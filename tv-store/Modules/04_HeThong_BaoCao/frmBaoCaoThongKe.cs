@@ -66,7 +66,9 @@ namespace tv_store.Modules._04_HeThong_BaoCao
 
         private void btnXuatExcel1_Click(object sender, EventArgs e)
         {
-            ExcelExportHelper.ExportToCSV(dgvBaoCao1, "BaoCao_Top3Tivi_KhachHang");
+            string khName = cboKhachHang.Text.Trim();
+            string title = string.IsNullOrEmpty(khName) ? "BÁO CÁO TOP 3 TIVI BÁN CHẠY THEO KHÁCH HÀNG" : "TOP 3 TIVI MUA NHIỀU NHẤT - KHÁCH HÀNG " + khName.ToUpper();
+            ExcelExportHelper.ExportDataGridViewToExcel(dgvBaoCao1, title, "BaoCao_Top3Tivi_KhachHang", "Top3Tivi");
         }
         #endregion
 
@@ -114,7 +116,9 @@ namespace tv_store.Modules._04_HeThong_BaoCao
 
         private void btnXuatExcel2_Click(object sender, EventArgs e)
         {
-            ExcelExportHelper.ExportToCSV(dgvBaoCao2, "BaoCao_NhapHang_NCC");
+            string nccName = cboNCC.Text.Trim();
+            string title = string.IsNullOrEmpty(nccName) ? "BÁO CÁO NHẬP HÀNG THEO NHÀ CUNG CẤP" : "BÁO CÁO NHẬP HÀNG - NCC " + nccName.ToUpper();
+            ExcelExportHelper.ExportDataGridViewToExcel(dgvBaoCao2, title, "BaoCao_NhapHang_NCC", "NhapHangNCC");
         }
         #endregion
 
@@ -177,7 +181,11 @@ namespace tv_store.Modules._04_HeThong_BaoCao
 
         private void btnXuatExcel3_Click(object sender, EventArgs e)
         {
-            ExcelExportHelper.ExportToCSV(dgvBaoCao3, "BaoCao_DoanhThu_Quy");
+            int quy = cboQuy.SelectedIndex + 1;
+            string nam = txtNamQuy.Text.Trim();
+            string loai = rdoBanHang.Checked ? "BÁN HÀNG" : "NHẬP HÀNG";
+            string title = string.Format("BÁO CÁO DOANH THU {0} - QUÝ {1}/{2}", loai, quy, nam);
+            ExcelExportHelper.ExportDataGridViewToExcel(dgvBaoCao3, title, "BaoCao_DoanhThu_Quy", "DoanhThuQuy");
         }
         #endregion
 
@@ -223,7 +231,10 @@ namespace tv_store.Modules._04_HeThong_BaoCao
 
         private void btnXuatExcel4_Click(object sender, EventArgs e)
         {
-            ExcelExportHelper.ExportToCSV(dgvBaoCao4, "BaoCao_Top5NCC_Thang");
+            int thang = cboThang.SelectedIndex + 1;
+            string nam = txtNamThang.Text.Trim();
+            string title = string.Format("BÁO CÁO TOP 5 NHÀ CUNG CẤP GIAO NHIỀU HÀNG - THÁNG {0}/{1}", thang, nam);
+            ExcelExportHelper.ExportDataGridViewToExcel(dgvBaoCao4, title, "BaoCao_Top5NCC_Thang", "Top5NCC");
         }
         #endregion
 

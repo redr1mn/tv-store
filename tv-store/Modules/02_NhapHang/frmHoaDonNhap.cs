@@ -169,11 +169,22 @@ namespace tv_store.Modules._02_NhapHang
                 if (r["MaTV"].ToString() == maTivi)
                 {
                     int oldSl = Convert.ToInt32(r["SoLuong"]);
-                    r["SoLuong"] = oldSl + sl;
-                    r["DonGia"] = gia;
-                    r["GiamGia"] = gg;
-                    r["ThanhTien"] = (oldSl + sl) * gia * (1 - gg / 100.0);
-                    CapNhatTongTien();
+                    double oldGia = Convert.ToDouble(r["DonGia"]);
+
+                    string msg = string.Format(
+                        "Sản phẩm '{0}' đã có trong hóa đơn nhập với số lượng {1} chiếc (Đơn giá: {2}).\n" +
+                        "Bạn có muốn cộng thêm {3} chiếc vào hóa đơn nhập không?", 
+                        tenTivi, oldSl, DatabaseHelper.FormatTien(oldGia), sl);
+
+                    if (MessageBox.Show(msg, "Xác nhận cộng dồn", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        int newSl = oldSl + sl;
+                        r["SoLuong"] = newSl;
+                        r["DonGia"] = gia;
+                        r["GiamGia"] = gg;
+                        r["ThanhTien"] = Math.Round(newSl * gia * (1 - gg / 100.0), 0);
+                        CapNhatTongTien();
+                    }
                     return;
                 }
             }
@@ -209,11 +220,11 @@ namespace tv_store.Modules._02_NhapHang
 
         private string SinhMaHDNMoi()
         {
-            string ma = "HDN" + DateTime.Now.ToString("yyMMddHHmmss");
+            string ma = "HDN" + DateTime.Now.ToString("yyMMddHHmmssfff");
             int counter = 1;
             while (DatabaseHelper.CheckKey("SELECT SoHDN FROM tblHoaDonNhap WHERE SoHDN='" + ma + "'"))
             {
-                ma = "HDN" + DateTime.Now.ToString("yyMMddHHmmss") + "_" + counter++;
+                ma = "HDN" + DateTime.Now.ToString("yyMMddHHmmssfff") + "_" + counter++;
             }
             return ma;
         }
@@ -316,7 +327,34 @@ namespace tv_store.Modules._02_NhapHang
 
         private void btnInHD_Click(object sender, EventArgs e)
         {
-            ExcelExportHelper.ExportToCSV(dgvChiTietHDN, "HoaDonNhap_" + txtMaHDN.Text.Trim());
+            if (dgvChiTietHDN.Rows.Count == 0)
+            {
+                MessageBox.Show("Hóa đơn nhập chưa có sản phẩm nào để xuất!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            decimal tongTien = 0;
+            foreach (DataGridViewRow r in dgvChiTietHDN.Rows)
+            {
+                if (!r.IsNewRow && r.Cells["colThanhTien"].Value != null)
+                {
+                    decimal.TryParse(r.Cells["colThanhTien"].Value.ToString(), out decimal tt);
+                    tongTien += tt;
+                }
+            }
+            string bangChu = DatabaseHelper.ChuyenSoSangChu(tongTien);
+
+            ExcelExportHelper.ExportHoaDonNhapToExcel(
+                txtMaHDN.Text.Trim(),
+                dtpNgayNhap.Value,
+                txtTenNV.Text.Trim(),
+                txtTenNCC.Text.Trim(),
+                txtDiaChiNCC.Text.Trim(),
+                txtDienThoaiNCC.Text.Trim(),
+                dgvChiTietHDN,
+                tongTien,
+                bangChu
+            );
         }
 
         private void btnTimKiem_Click(object sender, EventArgs e)

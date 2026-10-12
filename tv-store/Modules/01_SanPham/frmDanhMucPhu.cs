@@ -118,9 +118,17 @@ namespace tv_store.Modules._01_SanPham
         private void btnXoa1_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txtMaHangSX.Text)) return;
+            string ma = txtMaHangSX.Text.Trim();
+
+            if (DatabaseHelper.CheckKey("SELECT TOP 1 MaTV FROM tblTV WHERE MaHangSX = '" + ma + "'"))
+            {
+                MessageBox.Show("Không thể xóa Hãng sản xuất này vì đang có sản phẩm Tivi liên kết!", "Không thể xóa", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             if (MessageBox.Show("Bạn có muốn xóa hãng này?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                if (DatabaseHelper.RunSql("DELETE FROM tblHangSX WHERE MaHangSX='" + txtMaHangSX.Text.Trim() + "'"))
+                if (DatabaseHelper.RunSql("DELETE FROM tblHangSX WHERE MaHangSX='" + ma + "'"))
                 {
                     LoadDataHangSX();
                     txtMaHangSX.Text = "";
@@ -222,9 +230,17 @@ namespace tv_store.Modules._01_SanPham
         private void btnXoa2_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txtMaKieu.Text)) return;
+            string ma = txtMaKieu.Text.Trim();
+
+            if (DatabaseHelper.CheckKey("SELECT TOP 1 MaTV FROM tblTV WHERE MaKieu = '" + ma + "'"))
+            {
+                MessageBox.Show("Không thể xóa Kiểu dáng này vì đang có sản phẩm Tivi liên kết!", "Không thể xóa", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             if (MessageBox.Show("Bạn có muốn xóa kiểu dáng này?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                if (DatabaseHelper.RunSql("DELETE FROM tblKieuDang WHERE MaKieu='" + txtMaKieu.Text.Trim() + "'"))
+                if (DatabaseHelper.RunSql("DELETE FROM tblKieuDang WHERE MaKieu='" + ma + "'"))
                 {
                     LoadDataKieuDang();
                     txtMaKieu.Text = "";
@@ -326,9 +342,17 @@ namespace tv_store.Modules._01_SanPham
         private void btnXoa3_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txtMaMau.Text)) return;
+            string ma = txtMaMau.Text.Trim();
+
+            if (DatabaseHelper.CheckKey("SELECT TOP 1 MaTV FROM tblTV WHERE MaMau = '" + ma + "'"))
+            {
+                MessageBox.Show("Không thể xóa Màu sắc này vì đang có sản phẩm Tivi liên kết!", "Không thể xóa", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             if (MessageBox.Show("Bạn có muốn xóa màu sắc này?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                if (DatabaseHelper.RunSql("DELETE FROM tblMauSac WHERE MaMau='" + txtMaMau.Text.Trim() + "'"))
+                if (DatabaseHelper.RunSql("DELETE FROM tblMauSac WHERE MaMau='" + ma + "'"))
                 {
                     LoadDataMauSac();
                     txtMaMau.Text = "";
@@ -430,9 +454,17 @@ namespace tv_store.Modules._01_SanPham
         private void btnXoa4_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txtMaManHinh.Text)) return;
+            string ma = txtMaManHinh.Text.Trim();
+
+            if (DatabaseHelper.CheckKey("SELECT TOP 1 MaTV FROM tblTV WHERE MaManHinh = '" + ma + "'"))
+            {
+                MessageBox.Show("Không thể xóa Loại màn hình này vì đang có sản phẩm Tivi liên kết!", "Không thể xóa", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             if (MessageBox.Show("Bạn có muốn xóa màn hình này?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                if (DatabaseHelper.RunSql("DELETE FROM tblManHinh WHERE MaManHinh='" + txtMaManHinh.Text.Trim() + "'"))
+                if (DatabaseHelper.RunSql("DELETE FROM tblManHinh WHERE MaManHinh='" + ma + "'"))
                 {
                     LoadDataManHinh();
                     txtMaManHinh.Text = "";
@@ -534,9 +566,17 @@ namespace tv_store.Modules._01_SanPham
         private void btnXoa5_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txtMaCo.Text)) return;
+            string ma = txtMaCo.Text.Trim();
+
+            if (DatabaseHelper.CheckKey("SELECT TOP 1 MaTV FROM tblTV WHERE MaCo = '" + ma + "'"))
+            {
+                MessageBox.Show("Không thể xóa Cỡ màn hình này vì đang có sản phẩm Tivi liên kết!", "Không thể xóa", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             if (MessageBox.Show("Bạn có muốn xóa cỡ màn hình này?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                if (DatabaseHelper.RunSql("DELETE FROM tblCoManHinh WHERE MaCo='" + txtMaCo.Text.Trim() + "'"))
+                if (DatabaseHelper.RunSql("DELETE FROM tblCoManHinh WHERE MaCo='" + ma + "'"))
                 {
                     LoadDataCoManHinh();
                     txtMaCo.Text = "";
@@ -638,9 +678,17 @@ namespace tv_store.Modules._01_SanPham
         private void btnXoa6_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txtMaNuocSX.Text)) return;
+            string ma = txtMaNuocSX.Text.Trim();
+
+            if (DatabaseHelper.CheckKey("SELECT TOP 1 MaTV FROM tblTV WHERE MaNuocSX = '" + ma + "'"))
+            {
+                MessageBox.Show("Không thể xóa Nước sản xuất này vì đang có sản phẩm Tivi liên kết!", "Không thể xóa", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             if (MessageBox.Show("Bạn có muốn xóa nước sản xuất này?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                if (DatabaseHelper.RunSql("DELETE FROM tblNuocSX WHERE MaNuocSX='" + txtMaNuocSX.Text.Trim() + "'"))
+                if (DatabaseHelper.RunSql("DELETE FROM tblNuocSX WHERE MaNuocSX='" + ma + "'"))
                 {
                     LoadDataNuocSX();
                     txtMaNuocSX.Text = "";

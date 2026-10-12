@@ -128,11 +128,26 @@ namespace tv_store.Modules._03_BanHang
         private void btnXoa_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txtMaKH.Text)) return;
+            string maKH = txtMaKH.Text.Trim();
+
+            // Kiểm tra ràng buộc khóa ngoại trước khi xóa
+            if (DatabaseHelper.CheckKey("SELECT TOP 1 MaKhach FROM tblHoaDonBan WHERE MaKhach = '" + maKH + "'"))
+            {
+                MessageBox.Show(
+                    "Không thể xóa Khách hàng này vì đã có lịch sử Hóa đơn Bán trong hệ thống!\n" +
+                    "Để bảo toàn số liệu doanh thu và kế toán, không thể xóa khách hàng đã từng mua hàng.",
+                    "Không thể xóa", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             if (MessageBox.Show("Bạn có muốn xóa Khách hàng này?", "Xác nhận xóa", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                DatabaseHelper.RunSql("DELETE FROM tblKhachHang WHERE MaKhach='" + txtMaKH.Text.Trim() + "'");
-                LoadDataGridView();
-                ResetValues();
+                if (DatabaseHelper.RunSql("DELETE FROM tblKhachHang WHERE MaKhach='" + maKH + "'"))
+                {
+                    MessageBox.Show("Xóa Khách hàng thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    LoadDataGridView();
+                    ResetValues();
+                }
             }
         }
 

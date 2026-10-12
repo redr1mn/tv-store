@@ -74,6 +74,17 @@ namespace tv_store.Modules._02_NhapHang
                 dgvKetQuaHDN.Columns["SoLuongNhap"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                 dgvKetQuaHDN.Columns["DonGia"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                 dgvKetQuaHDN.Columns["ThanhTien"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+
+                // Đặt độ rộng cột phù hợp để không bị cắt chữ '...'
+                dgvKetQuaHDN.Columns["SoHDN"].Width = 110;
+                dgvKetQuaHDN.Columns["NgayNhap"].Width = 130;
+                dgvKetQuaHDN.Columns["TenNCC"].Width = 220;
+                dgvKetQuaHDN.Columns["TenNV"].Width = 140;
+                dgvKetQuaHDN.Columns["MaTV"].Width = 75;
+                dgvKetQuaHDN.Columns["TenTV"].Width = 240;
+                dgvKetQuaHDN.Columns["SoLuongNhap"].Width = 70;
+                dgvKetQuaHDN.Columns["DonGia"].Width = 110;
+                dgvKetQuaHDN.Columns["ThanhTien"].Width = 120;
             }
 
             lblSoLuongKetQua.Text = string.Format("Tìm thấy: {0} hóa đơn / mặt hàng nhập phù hợp", dt.Rows.Count);

@@ -256,13 +256,13 @@ namespace tv_store.Modules._01_SanPham
 
             if (DatabaseHelper.CheckKey("SELECT MaTV FROM tblTV WHERE MaTV = '" + maTivi + "'"))
             {
-                // Cập nhật
+                // Cập nhật: Không cập nhật cột SoLuong tồn kho, tồn kho được quản lý qua Hóa đơn Nhập / Hóa đơn Bán
                 string sqlUpdate = string.Format(
                     "UPDATE tblTV SET TenTV=N'{0}', MaHangSX={1}, MaKieu={2}, MaMau={3}, " +
-                    "MaManHinh={4}, MaCo={5}, MaNuocSX={6}, SoLuong={7}, DonGiaNhap={8}, " +
-                    "DonGiaBan={9}, ThoiGianBaoHanh={10}, Anh=N'{11}', GhiChu=N'{12}' WHERE MaTV='{13}'",
+                    "MaManHinh={4}, MaCo={5}, MaNuocSX={6}, DonGiaNhap={7}, " +
+                    "DonGiaBan={8}, ThoiGianBaoHanh={9}, Anh=N'{10}', GhiChu=N'{11}' WHERE MaTV='{12}'",
                     txtTenTivi.Text.Trim().Replace("'", "''"), fkHang, fkKieu, fkMau, fkMH, fkCo, fkNuoc,
-                    soLuong, giaNhap.ToString(ci), giaBan.ToString(ci), baoHanh, 
+                    giaNhap.ToString(ci), giaBan.ToString(ci), baoHanh, 
                     txtAnh.Text.Trim().Replace("'", "''"), txtGhiChu.Text.Trim().Replace("'", "''"), maTivi);
                 
                 if (DatabaseHelper.RunSql(sqlUpdate))
@@ -273,12 +273,12 @@ namespace tv_store.Modules._01_SanPham
             }
             else
             {
-                // Thêm mới
+                // Thêm mới: Tồn kho khởi tạo mặc định là 0, chỉ tăng lên khi lập Hóa đơn Nhập
                 string sqlInsert = string.Format(
                     "INSERT INTO tblTV(MaTV, TenTV, MaHangSX, MaKieu, MaMau, MaManHinh, MaCo, MaNuocSX, SoLuong, DonGiaNhap, DonGiaBan, ThoiGianBaoHanh, Anh, GhiChu) " +
-                    "VALUES('{0}', N'{1}', {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, N'{12}', N'{13}')",
+                    "VALUES('{0}', N'{1}', {2}, {3}, {4}, {5}, {6}, {7}, 0, {8}, {9}, {10}, N'{11}', N'{12}')",
                     maTivi, txtTenTivi.Text.Trim().Replace("'", "''"), fkHang, fkKieu, fkMau, fkMH, fkCo, fkNuoc,
-                    soLuong, giaNhap.ToString(ci), giaBan.ToString(ci), baoHanh, 
+                    giaNhap.ToString(ci), giaBan.ToString(ci), baoHanh, 
                     txtAnh.Text.Trim().Replace("'", "''"), txtGhiChu.Text.Trim().Replace("'", "''"));
 
                 if (DatabaseHelper.RunSql(sqlInsert))
@@ -320,10 +320,24 @@ namespace tv_store.Modules._01_SanPham
                 return;
             }
 
+            string maTivi = txtMaTivi.Text.Trim();
+
+            // Kiểm tra ràng buộc trước khi xóa để tránh lỗi khóa ngoại không thân thiện
+            bool hasHDN = DatabaseHelper.CheckKey("SELECT TOP 1 MaTV FROM tblChiTietHDN WHERE MaTV = '" + maTivi + "'");
+            bool hasHDB = DatabaseHelper.CheckKey("SELECT TOP 1 MaTV FROM tblChiTietHDB WHERE MaTV = '" + maTivi + "'");
+            if (hasHDN || hasHDB)
+            {
+                MessageBox.Show(
+                    "Không thể xóa sản phẩm Tivi này vì đã phát sinh giao dịch trong Hóa đơn Nhập hoặc Hóa đơn Bán!\n" +
+                    "Để bảo toàn số liệu kế toán và lịch sử kho, không thể xóa sản phẩm đã có giao dịch.", 
+                    "Không thể xóa", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             if (MessageBox.Show("Bạn có chắc chắn muốn xóa sản phẩm Tivi này?", "Xác nhận xóa", 
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                string sql = "DELETE FROM tblTV WHERE MaTV = '" + txtMaTivi.Text.Trim() + "'";
+                string sql = "DELETE FROM tblTV WHERE MaTV = '" + maTivi + "'";
                 if (DatabaseHelper.RunSql(sql))
                 {
                     MessageBox.Show("Xóa Tivi thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -345,8 +359,15 @@ namespace tv_store.Modules._01_SanPham
 
         private void btnTimKiem_Click(object sender, EventArgs e)
         {
-            frmTimKiemTivi frm = new frmTimKiemTivi();
-            frm.ShowDialog();
+            using (frmTimKiemTivi frm = new frmTimKiemTivi())
+            {
+                frm.ShowDialog();
+            }
+        }
+
+        private void btnXuatExcel_Click(object sender, EventArgs e)
+        {
+            ExcelExportHelper.ExportDataGridViewToExcel(dgvTivi, "DANH SÁCH SẢN PHẨM TIVI", "DanhSachTivi", "DSTivi");
         }
 
         private void btnDong_Click(object sender, EventArgs e)

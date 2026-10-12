@@ -37,6 +37,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.mnuTimKiem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuTimKiemTivi = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuTimKiemHDN = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuTimKiemHDB = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuBaoCao = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuBaoCaoTongHop = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuTroGiup = new System.Windows.Forms.ToolStripMenuItem();
@@ -61,18 +62,18 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.pnlWorkspace = new System.Windows.Forms.Panel();
             this.grpCards = new System.Windows.Forms.GroupBox();
             this.tblCards = new System.Windows.Forms.TableLayoutPanel();
-            this.pnlCard4 = new System.Windows.Forms.Panel();
-            this.lblCard4Val = new System.Windows.Forms.Label();
-            this.lblCard4Title = new System.Windows.Forms.Label();
-            this.pnlCard3 = new System.Windows.Forms.Panel();
-            this.lblCard3Val = new System.Windows.Forms.Label();
-            this.lblCard3Title = new System.Windows.Forms.Label();
-            this.pnlCard2 = new System.Windows.Forms.Panel();
-            this.lblCard2Val = new System.Windows.Forms.Label();
-            this.lblCard2Title = new System.Windows.Forms.Label();
             this.pnlCard1 = new System.Windows.Forms.Panel();
             this.lblCard1Val = new System.Windows.Forms.Label();
             this.lblCard1Title = new System.Windows.Forms.Label();
+            this.pnlCard2 = new System.Windows.Forms.Panel();
+            this.lblCard2Val = new System.Windows.Forms.Label();
+            this.lblCard2Title = new System.Windows.Forms.Label();
+            this.pnlCard3 = new System.Windows.Forms.Panel();
+            this.lblCard3Val = new System.Windows.Forms.Label();
+            this.lblCard3Title = new System.Windows.Forms.Label();
+            this.pnlCard4 = new System.Windows.Forms.Panel();
+            this.lblCard4Val = new System.Windows.Forms.Label();
+            this.lblCard4Title = new System.Windows.Forms.Label();
             this.toolTipMain = new System.Windows.Forms.ToolTip(this.components);
             this.menuStripMain.SuspendLayout();
             this.pnlSidebar.SuspendLayout();
@@ -81,10 +82,10 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.pnlWorkspace.SuspendLayout();
             this.grpCards.SuspendLayout();
             this.tblCards.SuspendLayout();
-            this.pnlCard4.SuspendLayout();
-            this.pnlCard3.SuspendLayout();
-            this.pnlCard2.SuspendLayout();
             this.pnlCard1.SuspendLayout();
+            this.pnlCard2.SuspendLayout();
+            this.pnlCard3.SuspendLayout();
+            this.pnlCard4.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStripMain
@@ -114,7 +115,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.toolStripSeparator1,
             this.mnuThoat});
             this.mnuHeThong.Name = "mnuHeThong";
-            this.mnuHeThong.Size = new System.Drawing.Size(106, 30);
+            this.mnuHeThong.Size = new System.Drawing.Size(106, 29);
             this.mnuHeThong.Text = "&Hệ thống";
             // 
             // mnuDangNhap
@@ -155,7 +156,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.mnuDMNhaCungCap,
             this.mnuDMNhanVien});
             this.mnuDanhMuc.Name = "mnuDanhMuc";
-            this.mnuDanhMuc.Size = new System.Drawing.Size(114, 30);
+            this.mnuDanhMuc.Size = new System.Drawing.Size(114, 29);
             this.mnuDanhMuc.Text = "&Danh mục";
             // 
             // mnuDMTivi
@@ -209,7 +210,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.mnuHoaDonNhap,
             this.mnuHoaDonBan});
             this.mnuHoaDon.Name = "mnuHoaDon";
-            this.mnuHoaDon.Size = new System.Drawing.Size(100, 30);
+            this.mnuHoaDon.Size = new System.Drawing.Size(100, 29);
             this.mnuHoaDon.Text = "&Hóa đơn";
             // 
             // mnuHoaDonNhap
@@ -232,41 +233,50 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             // 
             this.mnuTimKiem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuTimKiemTivi,
-            this.mnuTimKiemHDN});
+            this.mnuTimKiemHDN,
+            this.mnuTimKiemHDB});
             this.mnuTimKiem.Name = "mnuTimKiem";
-            this.mnuTimKiem.Size = new System.Drawing.Size(104, 30);
+            this.mnuTimKiem.Size = new System.Drawing.Size(104, 29);
             this.mnuTimKiem.Text = "&Tìm kiếm";
             // 
             // mnuTimKiemTivi
             // 
             this.mnuTimKiemTivi.Name = "mnuTimKiemTivi";
             this.mnuTimKiemTivi.ShortcutKeys = System.Windows.Forms.Keys.F3;
-            this.mnuTimKiemTivi.Size = new System.Drawing.Size(357, 34);
-            this.mnuTimKiemTivi.Text = "Tìm kiếm &Tivi (YC 4)";
+            this.mnuTimKiemTivi.Size = new System.Drawing.Size(303, 34);
+            this.mnuTimKiemTivi.Text = "Tìm kiếm &Tivi";
             this.mnuTimKiemTivi.Click += new System.EventHandler(this.mnuTimKiemTivi_Click);
             // 
             // mnuTimKiemHDN
             // 
             this.mnuTimKiemHDN.Name = "mnuTimKiemHDN";
             this.mnuTimKiemHDN.ShortcutKeys = System.Windows.Forms.Keys.F4;
-            this.mnuTimKiemHDN.Size = new System.Drawing.Size(357, 34);
-            this.mnuTimKiemHDN.Text = "Tìm kiếm HĐ &Nhập (YC 5)";
+            this.mnuTimKiemHDN.Size = new System.Drawing.Size(303, 34);
+            this.mnuTimKiemHDN.Text = "Tìm kiếm HĐ &Nhập";
             this.mnuTimKiemHDN.Click += new System.EventHandler(this.mnuTimKiemHDN_Click);
+            // 
+            // mnuTimKiemHDB
+            // 
+            this.mnuTimKiemHDB.Name = "mnuTimKiemHDB";
+            this.mnuTimKiemHDB.ShortcutKeys = System.Windows.Forms.Keys.F5;
+            this.mnuTimKiemHDB.Size = new System.Drawing.Size(303, 34);
+            this.mnuTimKiemHDB.Text = "Tìm kiếm HĐ &Bán";
+            this.mnuTimKiemHDB.Click += new System.EventHandler(this.mnuTimKiemHDB_Click);
             // 
             // mnuBaoCao
             // 
             this.mnuBaoCao.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuBaoCaoTongHop});
             this.mnuBaoCao.Name = "mnuBaoCao";
-            this.mnuBaoCao.Size = new System.Drawing.Size(95, 30);
+            this.mnuBaoCao.Size = new System.Drawing.Size(95, 29);
             this.mnuBaoCao.Text = "&Báo cáo";
             // 
             // mnuBaoCaoTongHop
             // 
             this.mnuBaoCaoTongHop.Name = "mnuBaoCaoTongHop";
             this.mnuBaoCaoTongHop.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-            this.mnuBaoCaoTongHop.Size = new System.Drawing.Size(401, 34);
-            this.mnuBaoCaoTongHop.Text = "&Báo cáo tổng hợp (YC 6-9)";
+            this.mnuBaoCaoTongHop.Size = new System.Drawing.Size(329, 34);
+            this.mnuBaoCaoTongHop.Text = "&Báo cáo tổng hợp";
             this.mnuBaoCaoTongHop.Click += new System.EventHandler(this.btnNavBaoCao_Click);
             // 
             // mnuTroGiup
@@ -274,7 +284,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.mnuTroGiup.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuThongTin});
             this.mnuTroGiup.Name = "mnuTroGiup";
-            this.mnuTroGiup.Size = new System.Drawing.Size(97, 30);
+            this.mnuTroGiup.Size = new System.Drawing.Size(97, 29);
             this.mnuTroGiup.Text = "Trợ &giúp";
             // 
             // mnuThongTin
@@ -300,7 +310,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.pnlSidebar.Dock = System.Windows.Forms.DockStyle.Left;
             this.pnlSidebar.Location = new System.Drawing.Point(0, 33);
             this.pnlSidebar.Name = "pnlSidebar";
-            this.pnlSidebar.Size = new System.Drawing.Size(220, 588);
+            this.pnlSidebar.Size = new System.Drawing.Size(220, 626);
             this.pnlSidebar.TabIndex = 2;
             // 
             // btnNavThoat
@@ -310,14 +320,13 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.btnNavThoat.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnNavThoat.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnNavThoat.ForeColor = System.Drawing.Color.Tomato;
-            this.btnNavThoat.Location = new System.Drawing.Point(0, 543);
+            this.btnNavThoat.Location = new System.Drawing.Point(0, 581);
             this.btnNavThoat.Name = "btnNavThoat";
             this.btnNavThoat.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
             this.btnNavThoat.Size = new System.Drawing.Size(220, 45);
             this.btnNavThoat.TabIndex = 9;
             this.btnNavThoat.Text = "🚪 Đăng &xuất / Thoát";
             this.btnNavThoat.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.toolTipMain.SetToolTip(this.btnNavThoat, "Thoát chương trình (Alt+X)");
             this.btnNavThoat.UseVisualStyleBackColor = true;
             this.btnNavThoat.Click += new System.EventHandler(this.mnuThoat_Click);
             // 
@@ -335,7 +344,6 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.btnNavBaoCao.TabIndex = 8;
             this.btnNavBaoCao.Text = "📊 Báo &cáo Thống kê";
             this.btnNavBaoCao.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.toolTipMain.SetToolTip(this.btnNavBaoCao, "Báo cáo thống kê tổng hợp (Alt+C)");
             this.btnNavBaoCao.UseVisualStyleBackColor = true;
             this.btnNavBaoCao.Click += new System.EventHandler(this.btnNavBaoCao_Click);
             // 
@@ -353,7 +361,6 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.btnNavNhanVien.TabIndex = 7;
             this.btnNavNhanVien.Text = "👔 Quản lý Nhân &sự";
             this.btnNavNhanVien.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.toolTipMain.SetToolTip(this.btnNavNhanVien, "Quản lý nhân viên (Alt+S)");
             this.btnNavNhanVien.UseVisualStyleBackColor = true;
             this.btnNavNhanVien.Click += new System.EventHandler(this.btnNavNhanVien_Click);
             // 
@@ -371,7 +378,6 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.btnNavNCC.TabIndex = 6;
             this.btnNavNCC.Text = "🏢 Nhà &cung cấp";
             this.btnNavNCC.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.toolTipMain.SetToolTip(this.btnNavNCC, "Quản lý Nhà cung cấp (Alt+C)");
             this.btnNavNCC.UseVisualStyleBackColor = true;
             this.btnNavNCC.Click += new System.EventHandler(this.btnNavNCC_Click);
             // 
@@ -389,7 +395,6 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.btnNavKhachHang.TabIndex = 5;
             this.btnNavKhachHang.Text = "👥 &Khách hàng";
             this.btnNavKhachHang.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.toolTipMain.SetToolTip(this.btnNavKhachHang, "Quản lý Khách hàng (Alt+K)");
             this.btnNavKhachHang.UseVisualStyleBackColor = true;
             this.btnNavKhachHang.Click += new System.EventHandler(this.btnNavKhachHang_Click);
             // 
@@ -407,7 +412,6 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.btnNavNhapHang.TabIndex = 4;
             this.btnNavNhapHang.Text = "📦 &Nhập hàng (HDN)";
             this.btnNavNhapHang.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.toolTipMain.SetToolTip(this.btnNavNhapHang, "Quản lý Hóa đơn nhập (Alt+N)");
             this.btnNavNhapHang.UseVisualStyleBackColor = true;
             this.btnNavNhapHang.Click += new System.EventHandler(this.btnNavNhapHang_Click);
             // 
@@ -425,7 +429,6 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.btnNavBanHang.TabIndex = 3;
             this.btnNavBanHang.Text = "🛒 &Bán hàng (HDB)";
             this.btnNavBanHang.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.toolTipMain.SetToolTip(this.btnNavBanHang, "Quản lý Hóa đơn bán (Alt+B)");
             this.btnNavBanHang.UseVisualStyleBackColor = true;
             this.btnNavBanHang.Click += new System.EventHandler(this.btnNavBanHang_Click);
             // 
@@ -443,7 +446,6 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.btnNavDanhMucPhu.TabIndex = 2;
             this.btnNavDanhMucPhu.Text = "⚙️ Thuộc &tính Tivi";
             this.btnNavDanhMucPhu.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.toolTipMain.SetToolTip(this.btnNavDanhMucPhu, "Quản lý Hãng, Màn hình, Cỡ màn... (Alt+T)");
             this.btnNavDanhMucPhu.UseVisualStyleBackColor = true;
             this.btnNavDanhMucPhu.Click += new System.EventHandler(this.btnNavDanhMucPhu_Click);
             // 
@@ -461,7 +463,6 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.btnNavSanPham.TabIndex = 1;
             this.btnNavSanPham.Text = "📺 &Sản phẩm Tivi";
             this.btnNavSanPham.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.toolTipMain.SetToolTip(this.btnNavSanPham, "Quản lý Danh mục Tivi (Alt+S)");
             this.btnNavSanPham.UseVisualStyleBackColor = true;
             this.btnNavSanPham.Click += new System.EventHandler(this.btnNavSanPham_Click);
             // 
@@ -534,9 +535,9 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.pnlWorkspace.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(249)))), ((int)(((byte)(250)))));
             this.pnlWorkspace.Controls.Add(this.grpCards);
             this.pnlWorkspace.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlWorkspace.Location = new System.Drawing.Point(220, 71);
+            this.pnlWorkspace.Location = new System.Drawing.Point(220, 33);
             this.pnlWorkspace.Name = "pnlWorkspace";
-            this.pnlWorkspace.Size = new System.Drawing.Size(1044, 556);
+            this.pnlWorkspace.Size = new System.Drawing.Size(1044, 594);
             this.pnlWorkspace.TabIndex = 4;
             // 
             // grpCards
@@ -566,111 +567,12 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.tblCards.Controls.Add(this.pnlCard3, 2, 0);
             this.tblCards.Controls.Add(this.pnlCard4, 3, 0);
             this.tblCards.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tblCards.Location = new System.Drawing.Point(10, 25);
+            this.tblCards.Location = new System.Drawing.Point(10, 53);
             this.tblCards.Name = "tblCards";
             this.tblCards.RowCount = 1;
             this.tblCards.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tblCards.Size = new System.Drawing.Size(964, 125);
+            this.tblCards.Size = new System.Drawing.Size(964, 97);
             this.tblCards.TabIndex = 0;
-            // 
-            // pnlCard4
-            // 
-            this.pnlCard4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(53)))), ((int)(((byte)(69)))));
-            this.pnlCard4.Controls.Add(this.lblCard4Val);
-            this.pnlCard4.Controls.Add(this.lblCard4Title);
-            this.pnlCard4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlCard4.Margin = new System.Windows.Forms.Padding(6, 4, 6, 6);
-            this.pnlCard4.Name = "pnlCard4";
-            this.pnlCard4.Size = new System.Drawing.Size(229, 115);
-            this.pnlCard4.TabIndex = 3;
-            // 
-            // lblCard4Val
-            // 
-            this.lblCard4Val.AutoSize = true;
-            this.lblCard4Val.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold);
-            this.lblCard4Val.ForeColor = System.Drawing.Color.White;
-            this.lblCard4Val.Location = new System.Drawing.Point(15, 45);
-            this.lblCard4Val.Name = "lblCard4Val";
-            this.lblCard4Val.Size = new System.Drawing.Size(41, 48);
-            this.lblCard4Val.TabIndex = 1;
-            this.lblCard4Val.Text = "2";
-            // 
-            // lblCard4Title
-            // 
-            this.lblCard4Title.AutoSize = true;
-            this.lblCard4Title.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.lblCard4Title.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.lblCard4Title.Location = new System.Drawing.Point(15, 15);
-            this.lblCard4Title.Name = "lblCard4Title";
-            this.lblCard4Title.Size = new System.Drawing.Size(181, 25);
-            this.lblCard4Title.TabIndex = 0;
-            this.lblCard4Title.Text = "⚠️ Tivi sắp hết hàng";
-            // 
-            // pnlCard3
-            // 
-            this.pnlCard3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(126)))), ((int)(((byte)(20)))));
-            this.pnlCard3.Controls.Add(this.lblCard3Val);
-            this.pnlCard3.Controls.Add(this.lblCard3Title);
-            this.pnlCard3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlCard3.Margin = new System.Windows.Forms.Padding(6, 4, 6, 6);
-            this.pnlCard3.Name = "pnlCard3";
-            this.pnlCard3.Size = new System.Drawing.Size(229, 115);
-            this.pnlCard3.TabIndex = 2;
-            // 
-            // lblCard3Val
-            // 
-            this.lblCard3Val.AutoSize = true;
-            this.lblCard3Val.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold);
-            this.lblCard3Val.ForeColor = System.Drawing.Color.White;
-            this.lblCard3Val.Location = new System.Drawing.Point(15, 45);
-            this.lblCard3Val.Name = "lblCard3Val";
-            this.lblCard3Val.Size = new System.Drawing.Size(62, 48);
-            this.lblCard3Val.TabIndex = 1;
-            this.lblCard3Val.Text = "12";
-            // 
-            // lblCard3Title
-            // 
-            this.lblCard3Title.AutoSize = true;
-            this.lblCard3Title.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.lblCard3Title.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.lblCard3Title.Location = new System.Drawing.Point(15, 15);
-            this.lblCard3Title.Name = "lblCard3Title";
-            this.lblCard3Title.Size = new System.Drawing.Size(167, 25);
-            this.lblCard3Title.TabIndex = 0;
-            this.lblCard3Title.Text = "📦 Hóa đơn đã lập";
-            // 
-            // pnlCard2
-            // 
-            this.pnlCard2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(167)))), ((int)(((byte)(69)))));
-            this.pnlCard2.Controls.Add(this.lblCard2Val);
-            this.pnlCard2.Controls.Add(this.lblCard2Title);
-            this.pnlCard2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlCard2.Margin = new System.Windows.Forms.Padding(6, 4, 6, 6);
-            this.pnlCard2.Name = "pnlCard2";
-            this.pnlCard2.Size = new System.Drawing.Size(229, 115);
-            this.pnlCard2.TabIndex = 1;
-            // 
-            // lblCard2Val
-            // 
-            this.lblCard2Val.AutoSize = true;
-            this.lblCard2Val.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold);
-            this.lblCard2Val.ForeColor = System.Drawing.Color.White;
-            this.lblCard2Val.Location = new System.Drawing.Point(15, 45);
-            this.lblCard2Val.Name = "lblCard2Val";
-            this.lblCard2Val.Size = new System.Drawing.Size(62, 48);
-            this.lblCard2Val.TabIndex = 1;
-            this.lblCard2Val.Text = "65";
-            // 
-            // lblCard2Title
-            // 
-            this.lblCard2Title.AutoSize = true;
-            this.lblCard2Title.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.lblCard2Title.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.lblCard2Title.Location = new System.Drawing.Point(15, 15);
-            this.lblCard2Title.Name = "lblCard2Title";
-            this.lblCard2Title.Size = new System.Drawing.Size(168, 25);
-            this.lblCard2Title.TabIndex = 0;
-            this.lblCard2Title.Text = "📊 Tổng lượng tồn";
             // 
             // pnlCard1
             // 
@@ -678,9 +580,10 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.pnlCard1.Controls.Add(this.lblCard1Val);
             this.pnlCard1.Controls.Add(this.lblCard1Title);
             this.pnlCard1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlCard1.Location = new System.Drawing.Point(6, 4);
             this.pnlCard1.Margin = new System.Windows.Forms.Padding(6, 4, 6, 6);
             this.pnlCard1.Name = "pnlCard1";
-            this.pnlCard1.Size = new System.Drawing.Size(229, 115);
+            this.pnlCard1.Size = new System.Drawing.Size(229, 87);
             this.pnlCard1.TabIndex = 0;
             // 
             // lblCard1Val
@@ -705,6 +608,108 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.lblCard1Title.TabIndex = 0;
             this.lblCard1Title.Text = "📺 Mẫu Tivi đang";
             // 
+            // pnlCard2
+            // 
+            this.pnlCard2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(167)))), ((int)(((byte)(69)))));
+            this.pnlCard2.Controls.Add(this.lblCard2Val);
+            this.pnlCard2.Controls.Add(this.lblCard2Title);
+            this.pnlCard2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlCard2.Location = new System.Drawing.Point(247, 4);
+            this.pnlCard2.Margin = new System.Windows.Forms.Padding(6, 4, 6, 6);
+            this.pnlCard2.Name = "pnlCard2";
+            this.pnlCard2.Size = new System.Drawing.Size(229, 87);
+            this.pnlCard2.TabIndex = 1;
+            // 
+            // lblCard2Val
+            // 
+            this.lblCard2Val.AutoSize = true;
+            this.lblCard2Val.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold);
+            this.lblCard2Val.ForeColor = System.Drawing.Color.White;
+            this.lblCard2Val.Location = new System.Drawing.Point(15, 45);
+            this.lblCard2Val.Name = "lblCard2Val";
+            this.lblCard2Val.Size = new System.Drawing.Size(62, 48);
+            this.lblCard2Val.TabIndex = 1;
+            this.lblCard2Val.Text = "65";
+            // 
+            // lblCard2Title
+            // 
+            this.lblCard2Title.AutoSize = true;
+            this.lblCard2Title.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.lblCard2Title.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.lblCard2Title.Location = new System.Drawing.Point(15, 15);
+            this.lblCard2Title.Name = "lblCard2Title";
+            this.lblCard2Title.Size = new System.Drawing.Size(168, 25);
+            this.lblCard2Title.TabIndex = 0;
+            this.lblCard2Title.Text = "📊 Tổng lượng tồn";
+            // 
+            // pnlCard3
+            // 
+            this.pnlCard3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(126)))), ((int)(((byte)(20)))));
+            this.pnlCard3.Controls.Add(this.lblCard3Val);
+            this.pnlCard3.Controls.Add(this.lblCard3Title);
+            this.pnlCard3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlCard3.Location = new System.Drawing.Point(488, 4);
+            this.pnlCard3.Margin = new System.Windows.Forms.Padding(6, 4, 6, 6);
+            this.pnlCard3.Name = "pnlCard3";
+            this.pnlCard3.Size = new System.Drawing.Size(229, 87);
+            this.pnlCard3.TabIndex = 2;
+            // 
+            // lblCard3Val
+            // 
+            this.lblCard3Val.AutoSize = true;
+            this.lblCard3Val.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold);
+            this.lblCard3Val.ForeColor = System.Drawing.Color.White;
+            this.lblCard3Val.Location = new System.Drawing.Point(15, 45);
+            this.lblCard3Val.Name = "lblCard3Val";
+            this.lblCard3Val.Size = new System.Drawing.Size(62, 48);
+            this.lblCard3Val.TabIndex = 1;
+            this.lblCard3Val.Text = "12";
+            // 
+            // lblCard3Title
+            // 
+            this.lblCard3Title.AutoSize = true;
+            this.lblCard3Title.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.lblCard3Title.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.lblCard3Title.Location = new System.Drawing.Point(15, 15);
+            this.lblCard3Title.Name = "lblCard3Title";
+            this.lblCard3Title.Size = new System.Drawing.Size(167, 25);
+            this.lblCard3Title.TabIndex = 0;
+            this.lblCard3Title.Text = "📦 Hóa đơn đã lập";
+            // 
+            // pnlCard4
+            // 
+            this.pnlCard4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(53)))), ((int)(((byte)(69)))));
+            this.pnlCard4.Controls.Add(this.lblCard4Val);
+            this.pnlCard4.Controls.Add(this.lblCard4Title);
+            this.pnlCard4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlCard4.Location = new System.Drawing.Point(729, 4);
+            this.pnlCard4.Margin = new System.Windows.Forms.Padding(6, 4, 6, 6);
+            this.pnlCard4.Name = "pnlCard4";
+            this.pnlCard4.Size = new System.Drawing.Size(229, 87);
+            this.pnlCard4.TabIndex = 3;
+            // 
+            // lblCard4Val
+            // 
+            this.lblCard4Val.AutoSize = true;
+            this.lblCard4Val.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold);
+            this.lblCard4Val.ForeColor = System.Drawing.Color.White;
+            this.lblCard4Val.Location = new System.Drawing.Point(15, 45);
+            this.lblCard4Val.Name = "lblCard4Val";
+            this.lblCard4Val.Size = new System.Drawing.Size(41, 48);
+            this.lblCard4Val.TabIndex = 1;
+            this.lblCard4Val.Text = "2";
+            // 
+            // lblCard4Title
+            // 
+            this.lblCard4Title.AutoSize = true;
+            this.lblCard4Title.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.lblCard4Title.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.lblCard4Title.Location = new System.Drawing.Point(15, 15);
+            this.lblCard4Title.Name = "lblCard4Title";
+            this.lblCard4Title.Size = new System.Drawing.Size(181, 25);
+            this.lblCard4Title.TabIndex = 0;
+            this.lblCard4Title.Text = "⚠️ Tivi sắp hết hàng";
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
@@ -727,20 +732,19 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.menuStripMain.PerformLayout();
             this.pnlSidebar.ResumeLayout(false);
             this.pnlLogo.ResumeLayout(false);
-            this.pnlLogo.PerformLayout();
             this.statusStripMain.ResumeLayout(false);
             this.statusStripMain.PerformLayout();
             this.pnlWorkspace.ResumeLayout(false);
             this.grpCards.ResumeLayout(false);
             this.tblCards.ResumeLayout(false);
-            this.pnlCard4.ResumeLayout(false);
-            this.pnlCard4.PerformLayout();
-            this.pnlCard3.ResumeLayout(false);
-            this.pnlCard3.PerformLayout();
-            this.pnlCard2.ResumeLayout(false);
-            this.pnlCard2.PerformLayout();
             this.pnlCard1.ResumeLayout(false);
             this.pnlCard1.PerformLayout();
+            this.pnlCard2.ResumeLayout(false);
+            this.pnlCard2.PerformLayout();
+            this.pnlCard3.ResumeLayout(false);
+            this.pnlCard3.PerformLayout();
+            this.pnlCard4.ResumeLayout(false);
+            this.pnlCard4.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -767,6 +771,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
         private System.Windows.Forms.ToolStripMenuItem mnuTimKiem;
         private System.Windows.Forms.ToolStripMenuItem mnuTimKiemTivi;
         private System.Windows.Forms.ToolStripMenuItem mnuTimKiemHDN;
+        private System.Windows.Forms.ToolStripMenuItem mnuTimKiemHDB;
         private System.Windows.Forms.ToolStripMenuItem mnuBaoCao;
         private System.Windows.Forms.ToolStripMenuItem mnuBaoCaoTongHop;
         private System.Windows.Forms.ToolStripMenuItem mnuTroGiup;

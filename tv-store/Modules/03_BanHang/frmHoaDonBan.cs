@@ -185,16 +185,25 @@ namespace tv_store.Modules._03_BanHang
                     int oldSl = Convert.ToInt32(r["SoLuong"]);
                     if (oldSl + sl > tonKho)
                     {
-                        MessageBox.Show(string.Format("Tổng số lượng đặt mua ({0}) vượt quá tồn kho ({1})!", oldSl + sl, tonKho),
+                        MessageBox.Show(string.Format("Tổng số lượng đặt mua ({0}) vượt quá tồn kho khả dụng ({1})!", oldSl + sl, tonKho),
                             "Cảnh báo hết hàng", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
 
-                    r["SoLuong"] = oldSl + sl;
-                    r["DonGia"] = gia;
-                    r["GiamGia"] = gg;
-                    r["ThanhTien"] = (oldSl + sl) * gia * (1 - gg / 100.0);
-                    CapNhatTongTien();
+                    string msg = string.Format(
+                        "Sản phẩm '{0}' đã có trong hóa đơn với số lượng {1} chiếc.\n" +
+                        "Bạn có muốn cộng thêm {2} chiếc vào hóa đơn không?", 
+                        tenTivi, oldSl, sl);
+
+                    if (MessageBox.Show(msg, "Xác nhận cộng dồn", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        int newSl = oldSl + sl;
+                        r["SoLuong"] = newSl;
+                        r["DonGia"] = gia;
+                        r["GiamGia"] = gg;
+                        r["ThanhTien"] = Math.Round(newSl * gia * (1 - gg / 100.0), 0);
+                        CapNhatTongTien();
+                    }
                     return;
                 }
             }
@@ -206,11 +215,11 @@ namespace tv_store.Modules._03_BanHang
 
         private string SinhMaHDBMoi()
         {
-            string ma = "HDB" + DateTime.Now.ToString("yyMMddHHmmss");
+            string ma = "HDB" + DateTime.Now.ToString("yyMMddHHmmssfff");
             int counter = 1;
             while (DatabaseHelper.CheckKey("SELECT SoHDB FROM tblHoaDonBan WHERE SoHDB='" + ma + "'"))
             {
-                ma = "HDB" + DateTime.Now.ToString("yyMMddHHmmss") + "_" + counter++;
+                ma = "HDB" + DateTime.Now.ToString("yyMMddHHmmssfff") + "_" + counter++;
             }
             return ma;
         }
@@ -344,14 +353,47 @@ namespace tv_store.Modules._03_BanHang
             btnXuatExcel.Enabled = false;
         }
 
+        private void InVaXuatExcelHoaDonBan()
+        {
+            if (dgvChiTietHDB.Rows.Count == 0)
+            {
+                MessageBox.Show("Hóa đơn chưa có sản phẩm nào để xuất!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            decimal tienHang = 0;
+            foreach (DataGridViewRow r in dgvChiTietHDB.Rows)
+            {
+                if (!r.IsNewRow && r.Cells["colThanhTien"].Value != null)
+                {
+                    decimal.TryParse(r.Cells["colThanhTien"].Value.ToString(), out decimal tt);
+                    tienHang += tt;
+                }
+            }
+            decimal tongThanhToan = Math.Round(tienHang * 1.1m, 0); // Đã gồm 10% VAT
+            string bangChu = DatabaseHelper.ChuyenSoSangChu(tongThanhToan);
+
+            ExcelExportHelper.ExportHoaDonBanToExcel(
+                txtMaHDB.Text.Trim(),
+                dtpNgayBan.Value,
+                txtTenNV.Text.Trim(),
+                txtTenKH.Text.Trim(),
+                txtDiaChiKH.Text.Trim(),
+                txtDienThoaiKH.Text.Trim(),
+                dgvChiTietHDB,
+                tongThanhToan,
+                bangChu
+            );
+        }
+
         private void btnInHDB_Click(object sender, EventArgs e)
         {
-            ExcelExportHelper.ExportToCSV(dgvChiTietHDB, "HoaDonBan_" + txtMaHDB.Text.Trim());
+            InVaXuatExcelHoaDonBan();
         }
 
         private void btnXuatExcel_Click(object sender, EventArgs e)
         {
-            ExcelExportHelper.ExportToCSV(dgvChiTietHDB, "HoaDonBan_" + txtMaHDB.Text.Trim());
+            InVaXuatExcelHoaDonBan();
         }
 
         private void btnDong_Click(object sender, EventArgs e)

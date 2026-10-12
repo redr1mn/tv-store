@@ -145,6 +145,14 @@ namespace tv_store.Modules._04_HeThong_BaoCao
                 frm.ShowDialog();
             }
         }
+
+        private void mnuTimKiemHDB_Click(object sender, EventArgs e)
+        {
+            using (frmTimKiemHDB frm = new frmTimKiemHDB())
+            {
+                frm.ShowDialog();
+            }
+        }
         #endregion
 
         #region HỆ THỐNG & TRỢ GIÚP
@@ -199,7 +207,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             MessageBox.Show(
                 "Hệ thống Quản lý Bán Tivi (TV Store)\n" +
                 "Nhóm thực hiện: Hưng, Duy, Huy, Khánh\n" +
-                "Đầy đủ chức năng CRUD, Phím tắt Alt (&), Trigger CSDL, 4 Báo cáo YC 6-9, Xuất Excel CSV.",
+                "Đầy đủ chức năng CRUD, Phím tắt Alt (&), Trigger CSDL, 4 Báo cáo YC 6-9, Xuất Excel (Interop.Excel).",
                 "Thông tin phần mềm", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         #endregion

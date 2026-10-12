@@ -178,11 +178,30 @@ namespace tv_store.Modules._04_HeThong_BaoCao
         private void btnXoa_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txtMaNV.Text)) return;
+            string maNV = txtMaNV.Text.Trim();
+
+            // Kiểm tra các bảng có khóa ngoại tham chiếu đến Nhân viên
+            bool hasHDB = DatabaseHelper.CheckKey("SELECT TOP 1 MaNV FROM tblHoaDonBan WHERE MaNV = '" + maNV + "'");
+            bool hasHDN = DatabaseHelper.CheckKey("SELECT TOP 1 MaNV FROM tblHoaDonNhap WHERE MaNV = '" + maNV + "'");
+            bool hasTK = DatabaseHelper.CheckKey("SELECT TOP 1 MaNV FROM tblTaiKhoan WHERE MaNV = '" + maNV + "'");
+
+            if (hasHDB || hasHDN || hasTK)
+            {
+                MessageBox.Show(
+                    "Không thể xóa Nhân viên này vì đã có dữ liệu liên quan (Hóa đơn Bán, Hóa đơn Nhập hoặc Tài khoản đăng nhập)!\n" +
+                    "Để bảo toàn tính toàn vẹn dữ liệu hệ thống, vui lòng không xóa nhân viên này.",
+                    "Không thể xóa", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             if (MessageBox.Show("Bạn có muốn xóa Nhân viên này?", "Xác nhận xóa", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                DatabaseHelper.RunSql("DELETE FROM tblNhanVien WHERE MaNV='" + txtMaNV.Text.Trim() + "'");
-                LoadDataGridView();
-                ResetValues();
+                if (DatabaseHelper.RunSql("DELETE FROM tblNhanVien WHERE MaNV='" + maNV + "'"))
+                {
+                    MessageBox.Show("Xóa Nhân viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    LoadDataGridView();
+                    ResetValues();
+                }
             }
         }
 
