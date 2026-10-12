@@ -25,14 +25,17 @@ namespace tv_store.Helpers
                     {
                         StringBuilder sb = new StringBuilder();
 
-                        // Header
+                        var visibleCols = new System.Collections.Generic.List<DataGridViewColumn>();
                         for (int i = 0; i < dgv.Columns.Count; i++)
                         {
-                            if (dgv.Columns[i].Visible)
-                            {
-                                sb.Append("\"" + dgv.Columns[i].HeaderText.Replace("\"", "\"\"") + "\"");
-                                if (i < dgv.Columns.Count - 1) sb.Append(",");
-                            }
+                            if (dgv.Columns[i].Visible) visibleCols.Add(dgv.Columns[i]);
+                        }
+
+                        // Header
+                        for (int i = 0; i < visibleCols.Count; i++)
+                        {
+                            sb.Append("\"" + visibleCols[i].HeaderText.Replace("\"", "\"\"") + "\"");
+                            if (i < visibleCols.Count - 1) sb.Append(",");
                         }
                         sb.AppendLine();
 
@@ -41,20 +44,17 @@ namespace tv_store.Helpers
                         {
                             if (!row.IsNewRow)
                             {
-                                for (int i = 0; i < dgv.Columns.Count; i++)
+                                for (int i = 0; i < visibleCols.Count; i++)
                                 {
-                                    if (dgv.Columns[i].Visible)
-                                    {
-                                        string val = row.Cells[i].Value != null ? row.Cells[i].Value.ToString() : "";
-                                        sb.Append("\"" + val.Replace("\"", "\"\"") + "\"");
-                                        if (i < dgv.Columns.Count - 1) sb.Append(",");
-                                    }
+                                    string val = row.Cells[visibleCols[i].Index].Value != null ? row.Cells[visibleCols[i].Index].Value.ToString() : "";
+                                    sb.Append("\"" + val.Replace("\"", "\"\"") + "\"");
+                                    if (i < visibleCols.Count - 1) sb.Append(",");
                                 }
                                 sb.AppendLine();
                             }
                         }
 
-                        File.WriteAllText(sfd.FileName, sb.ToString(), Encoding.UTF8);
+                        File.WriteAllText(sfd.FileName, sb.ToString(), new UTF8Encoding(true));
                         MessageBox.Show("Xuất file thành công!\nĐường dẫn: " + sfd.FileName, 
                             "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }

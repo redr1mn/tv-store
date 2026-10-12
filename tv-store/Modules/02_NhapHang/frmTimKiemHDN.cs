@@ -70,6 +70,10 @@ namespace tv_store.Modules._02_NhapHang
 
                 dgvKetQuaHDN.Columns["DonGia"].DefaultCellStyle.Format = "#,##0";
                 dgvKetQuaHDN.Columns["ThanhTien"].DefaultCellStyle.Format = "#,##0";
+
+                dgvKetQuaHDN.Columns["SoLuongNhap"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvKetQuaHDN.Columns["DonGia"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvKetQuaHDN.Columns["ThanhTien"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
             }
 
             lblSoLuongKetQua.Text = string.Format("Tìm thấy: {0} hóa đơn / mặt hàng nhập phù hợp", dt.Rows.Count);

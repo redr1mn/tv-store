@@ -131,6 +131,7 @@ namespace tv_store.Modules._02_NhapHang
             this.txtDienThoaiNCC.ReadOnly = true;
             this.txtDienThoaiNCC.Size = new System.Drawing.Size(380, 24);
             this.txtDienThoaiNCC.TabIndex = 15;
+            this.txtDienThoaiNCC.TabStop = false;
             // 
             // lblDienThoaiNCC
             // 
@@ -149,6 +150,7 @@ namespace tv_store.Modules._02_NhapHang
             this.txtDiaChiNCC.ReadOnly = true;
             this.txtDiaChiNCC.Size = new System.Drawing.Size(380, 24);
             this.txtDiaChiNCC.TabIndex = 13;
+            this.txtDiaChiNCC.TabStop = false;
             // 
             // lblDiaChiNCC
             // 
@@ -167,6 +169,7 @@ namespace tv_store.Modules._02_NhapHang
             this.txtTenNCC.ReadOnly = true;
             this.txtTenNCC.Size = new System.Drawing.Size(380, 24);
             this.txtTenNCC.TabIndex = 11;
+            this.txtTenNCC.TabStop = false;
             // 
             // lblTenNCC
             // 
@@ -205,6 +208,7 @@ namespace tv_store.Modules._02_NhapHang
             this.txtTenNV.ReadOnly = true;
             this.txtTenNV.Size = new System.Drawing.Size(380, 24);
             this.txtTenNV.TabIndex = 7;
+            this.txtTenNV.TabStop = false;
             // 
             // lblTenNV
             // 
@@ -307,8 +311,8 @@ namespace tv_store.Modules._02_NhapHang
             this.btnThemChiTiet.Name = "btnThemChiTiet";
             this.btnThemChiTiet.Size = new System.Drawing.Size(130, 32);
             this.btnThemChiTiet.TabIndex = 12;
-            this.btnThemChiTiet.Text = "&Thêm hàng";
-            this.toolTipMain.SetToolTip(this.btnThemChiTiet, "Thêm mặt hàng vào danh sách (Alt+H)");
+            this.btnThemChiTiet.Text = "Thêm &mặt hàng";
+            this.toolTipMain.SetToolTip(this.btnThemChiTiet, "Thêm mặt hàng vào danh sách (Alt+M)");
             this.btnThemChiTiet.UseVisualStyleBackColor = false;
             this.btnThemChiTiet.Click += new System.EventHandler(this.btnThemChiTiet_Click);
             // 
@@ -322,6 +326,8 @@ namespace tv_store.Modules._02_NhapHang
             this.txtThanhTien.ReadOnly = true;
             this.txtThanhTien.Size = new System.Drawing.Size(220, 24);
             this.txtThanhTien.TabIndex = 11;
+            this.txtThanhTien.TabStop = false;
+            this.txtThanhTien.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // lblThanhTien
             // 
@@ -340,6 +346,7 @@ namespace tv_store.Modules._02_NhapHang
             this.txtGiamGia.Size = new System.Drawing.Size(125, 24);
             this.txtGiamGia.TabIndex = 9;
             this.txtGiamGia.Text = "0";
+            this.txtGiamGia.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txtGiamGia.TextChanged += new System.EventHandler(this.TinhThanhTien);
             // 
             // lblGiamGia
@@ -358,6 +365,7 @@ namespace tv_store.Modules._02_NhapHang
             this.txtDonGiaNhap.Name = "txtDonGiaNhap";
             this.txtDonGiaNhap.Size = new System.Drawing.Size(220, 24);
             this.txtDonGiaNhap.TabIndex = 7;
+            this.txtDonGiaNhap.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txtDonGiaNhap.TextChanged += new System.EventHandler(this.TinhThanhTien);
             // 
             // lblDonGiaNhap
@@ -377,6 +385,7 @@ namespace tv_store.Modules._02_NhapHang
             this.txtSoLuong.Size = new System.Drawing.Size(150, 24);
             this.txtSoLuong.TabIndex = 5;
             this.txtSoLuong.Text = "1";
+            this.txtSoLuong.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txtSoLuong.TextChanged += new System.EventHandler(this.TinhThanhTien);
             // 
             // lblSoLuong
@@ -396,6 +405,7 @@ namespace tv_store.Modules._02_NhapHang
             this.txtTenTivi.ReadOnly = true;
             this.txtTenTivi.Size = new System.Drawing.Size(210, 24);
             this.txtTenTivi.TabIndex = 3;
+            this.txtTenTivi.TabStop = false;
             // 
             // lblTenTivi
             // 
@@ -600,9 +610,11 @@ namespace tv_store.Modules._02_NhapHang
             // 
             // frmHoaDonNhap
             // 
+            this.AcceptButton = this.btnThemChiTiet;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
+            this.CancelButton = this.btnDong;
             this.ClientSize = new System.Drawing.Size(1084, 655);
             this.Controls.Add(this.dgvChiTietHDN);
             this.Controls.Add(this.pnlTongTien);

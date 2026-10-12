@@ -203,6 +203,7 @@ namespace tv_store.Modules._01_SanPham
             this.txtBaoHanh.Name = "txtBaoHanh";
             this.txtBaoHanh.Size = new System.Drawing.Size(285, 24);
             this.txtBaoHanh.TabIndex = 22;
+            this.txtBaoHanh.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // lblBaoHanh
             // 
@@ -224,6 +225,8 @@ namespace tv_store.Modules._01_SanPham
             this.txtDonGiaBan.ReadOnly = true;
             this.txtDonGiaBan.Size = new System.Drawing.Size(285, 24);
             this.txtDonGiaBan.TabIndex = 20;
+            this.txtDonGiaBan.TabStop = false;
+            this.txtDonGiaBan.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // lblDonGiaBan
             // 
@@ -241,6 +244,7 @@ namespace tv_store.Modules._01_SanPham
             this.txtDonGiaNhap.Name = "txtDonGiaNhap";
             this.txtDonGiaNhap.Size = new System.Drawing.Size(285, 24);
             this.txtDonGiaNhap.TabIndex = 18;
+            this.txtDonGiaNhap.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txtDonGiaNhap.TextChanged += new System.EventHandler(this.txtDonGiaNhap_TextChanged);
             // 
             // lblDonGiaNhap
@@ -259,6 +263,7 @@ namespace tv_store.Modules._01_SanPham
             this.txtSoLuong.Name = "txtSoLuong";
             this.txtSoLuong.Size = new System.Drawing.Size(285, 24);
             this.txtSoLuong.TabIndex = 16;
+            this.txtSoLuong.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // lblSoLuong
             // 
@@ -436,7 +441,7 @@ namespace tv_store.Modules._01_SanPham
             // 
             this.dgvTivi.AllowUserToAddRows = false;
             this.dgvTivi.AllowUserToDeleteRows = false;
-            this.dgvTivi.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvTivi.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.None;
             this.dgvTivi.BackgroundColor = System.Drawing.Color.White;
             this.dgvTivi.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvTivi.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -445,6 +450,7 @@ namespace tv_store.Modules._01_SanPham
             this.dgvTivi.Name = "dgvTivi";
             this.dgvTivi.ReadOnly = true;
             this.dgvTivi.RowHeadersWidth = 35;
+            this.dgvTivi.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.dgvTivi.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvTivi.Size = new System.Drawing.Size(1078, 252);
             this.dgvTivi.TabIndex = 0;
@@ -585,6 +591,7 @@ namespace tv_store.Modules._01_SanPham
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
+            this.CancelButton = this.btnDong;
             this.ClientSize = new System.Drawing.Size(1084, 655);
             this.Controls.Add(this.grpDanhSach);
             this.Controls.Add(this.pnlChucNang);

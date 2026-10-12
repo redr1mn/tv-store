@@ -88,6 +88,9 @@ namespace tv_store.Modules._01_SanPham
                 dgvKetQua.Columns["ThoiGianBaoHanh"].HeaderText = "BH (th)";
 
                 dgvKetQua.Columns["DonGiaBan"].DefaultCellStyle.Format = "#,##0";
+                dgvKetQua.Columns["SoLuong"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvKetQua.Columns["DonGiaBan"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvKetQua.Columns["ThoiGianBaoHanh"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
                 dgvKetQua.Columns["MaTV"].Width = 75;
                 dgvKetQua.Columns["TenTV"].Width = 240;

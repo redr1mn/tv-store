@@ -2,9 +2,31 @@
 -- BÀI TẬP LỚN LẬP TRÌNH TRỰC QUAN (LTTQ) - C# WINFORMS
 -- ĐỀ TÀI: HỆ THỐNG QUẢN LÝ BÁN TIVI (TV STORE)
 -- FILE 3: DỮ LIỆU MẪU ĐỂ CHẠY THỬ NGHIỆM HỆ THỐNG (CHUẨN THEO SƠ ĐỒ RM)
+-- GIAI ĐOẠN 1: BỔ SUNG KHỐI DỌN DẸP DỮ LIỆU CŨ (TÍNH IDEMPOTENT) & CHUẨN DECIMAL
 -- ===================================================================
 
 USE QLBanTivi;
+GO
+
+-- 0. DỌN DẸP DỮ LIỆU CŨ THEO THỨ TỰ RÀNG BUỘC KHÓA NGOẠI (IDEMPOTENT)
+-- Đảm bảo có thể chạy script nhiều lần liên tiếp an toàn, không lỗi khóa ngoại hay trùng PK
+IF OBJECT_ID('tblChiTietHDB', 'U') IS NOT NULL DELETE FROM tblChiTietHDB;
+IF OBJECT_ID('tblChiTietHDN', 'U') IS NOT NULL DELETE FROM tblChiTietHDN;
+IF OBJECT_ID('tblHoaDonBan', 'U') IS NOT NULL DELETE FROM tblHoaDonBan;
+IF OBJECT_ID('tblHoaDonNhap', 'U') IS NOT NULL DELETE FROM tblHoaDonNhap;
+IF OBJECT_ID('tblTV', 'U') IS NOT NULL DELETE FROM tblTV;
+IF OBJECT_ID('tblTaiKhoan', 'U') IS NOT NULL DELETE FROM tblTaiKhoan;
+IF OBJECT_ID('tblKhachHang', 'U') IS NOT NULL DELETE FROM tblKhachHang;
+IF OBJECT_ID('tblNhaCungCap', 'U') IS NOT NULL DELETE FROM tblNhaCungCap;
+IF OBJECT_ID('tblNhanVien', 'U') IS NOT NULL DELETE FROM tblNhanVien;
+IF OBJECT_ID('tblCongViec', 'U') IS NOT NULL DELETE FROM tblCongViec;
+IF OBJECT_ID('tblCaLam', 'U') IS NOT NULL DELETE FROM tblCaLam;
+IF OBJECT_ID('tblHangSX', 'U') IS NOT NULL DELETE FROM tblHangSX;
+IF OBJECT_ID('tblKieuDang', 'U') IS NOT NULL DELETE FROM tblKieuDang;
+IF OBJECT_ID('tblMauSac', 'U') IS NOT NULL DELETE FROM tblMauSac;
+IF OBJECT_ID('tblManHinh', 'U') IS NOT NULL DELETE FROM tblManHinh;
+IF OBJECT_ID('tblCoManHinh', 'U') IS NOT NULL DELETE FROM tblCoManHinh;
+IF OBJECT_ID('tblNuocSX', 'U') IS NOT NULL DELETE FROM tblNuocSX;
 GO
 
 -- Tạm thời vô hiệu hóa trigger trong lúc nạp seed data để giữ đúng các số liệu tồn kho ban đầu
@@ -61,12 +83,14 @@ INSERT INTO tblNuocSX (MaNuocSX, TenNuocSX) VALUES
 ('NSX02', N'Nhật Bản'),
 ('NSX03', N'Hàn Quốc'),
 ('NSX04', N'Malaysia'),
-('NSX05', N'Thái Lan');
+('NSX05', N'Thái Lan'),
+('NSX06', N'Indonesia'),
+('NSX07', N'Trung Quốc');
 
 -- 7. CA LÀM & CÔNG VIỆC
 INSERT INTO tblCaLam (MaCa, TenCa) VALUES
-('CA01', N'Ca Sáng (08:00 - 12:00)'),
-('CA02', N'Ca Chiều (13:00 - 17:00)'),
+('CA01', N'Ca Sáng (08:00 - 12:30)'),
+('CA02', N'Ca Chiều (12:30 - 17:00)'),
 ('CA03', N'Ca Tối (17:00 - 21:30)');
 
 INSERT INTO tblCongViec (MaCV, TenCV) VALUES
@@ -82,7 +106,7 @@ INSERT INTO tblNhanVien (MaNV, TenNV, GioiTinh, NgaySinh, DienThoai, DiaChi, MaC
 ('NV03', N'Lê Minh Tuấn', N'Nam', '2000-01-15', '0934567890', N'Thanh Xuân, Hà Nội', 'CA03', 'CV03'),
 ('NV04', N'Phạm Thu Hà', N'Nữ', '1999-11-05', '0978123456', N'Hà Đông, Hà Nội', 'CA01', 'CV04');
 
--- TÀI KHOẢN
+-- TÀI KHOẢN (Mật khẩu mặc định: 123456)
 INSERT INTO tblTaiKhoan (TenDangNhap, MatKhau, MaNV, Quyen) VALUES
 ('admin', '123456', 'NV01', N'Admin'),
 ('nv_banhang', '123456', 'NV02', N'Nhân viên'),

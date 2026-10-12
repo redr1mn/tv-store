@@ -76,8 +76,20 @@ namespace tv_store.Modules._03_BanHang
                 dgvChiTietHDB.Columns["GiamGia"].HeaderText = "Giảm giá (%)";
                 dgvChiTietHDB.Columns["ThanhTien"].HeaderText = "Thành tiền";
 
+                dgvChiTietHDB.Columns["MaTV"].FillWeight = 60;
+                dgvChiTietHDB.Columns["TenTV"].FillWeight = 220;
+                dgvChiTietHDB.Columns["SoLuong"].FillWeight = 70;
+                dgvChiTietHDB.Columns["DonGia"].FillWeight = 100;
+                dgvChiTietHDB.Columns["GiamGia"].FillWeight = 70;
+                dgvChiTietHDB.Columns["ThanhTien"].FillWeight = 110;
+
                 dgvChiTietHDB.Columns["DonGia"].DefaultCellStyle.Format = "#,##0";
                 dgvChiTietHDB.Columns["ThanhTien"].DefaultCellStyle.Format = "#,##0";
+
+                dgvChiTietHDB.Columns["SoLuong"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvChiTietHDB.Columns["DonGia"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvChiTietHDB.Columns["GiamGia"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvChiTietHDB.Columns["ThanhTien"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
             }
         }
 

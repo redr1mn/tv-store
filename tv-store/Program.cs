@@ -15,10 +15,12 @@ namespace tv_store
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            frmDangNhap fLogin = new frmDangNhap();
-            if (fLogin.ShowDialog() == DialogResult.OK)
+            using (frmDangNhap fLogin = new frmDangNhap())
             {
-                Application.Run(new frmMain());
+                if (fLogin.ShowDialog() == DialogResult.OK)
+                {
+                    Application.Run(new frmMain());
+                }
             }
         }
     }

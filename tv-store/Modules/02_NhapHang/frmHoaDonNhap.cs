@@ -74,6 +74,18 @@ namespace tv_store.Modules._02_NhapHang
                 dgvChiTietHDN.Columns["GiamGia"].HeaderText = "Giảm giá (%)";
                 dgvChiTietHDN.Columns["ThanhTien"].HeaderText = "Thành tiền";
 
+                dgvChiTietHDN.Columns["MaTV"].FillWeight = 60;
+                dgvChiTietHDN.Columns["TenTV"].FillWeight = 220;
+                dgvChiTietHDN.Columns["SoLuong"].FillWeight = 70;
+                dgvChiTietHDN.Columns["DonGia"].FillWeight = 100;
+                dgvChiTietHDN.Columns["GiamGia"].FillWeight = 70;
+                dgvChiTietHDN.Columns["ThanhTien"].FillWeight = 110;
+
+                dgvChiTietHDN.Columns["SoLuong"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvChiTietHDN.Columns["DonGia"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvChiTietHDN.Columns["GiamGia"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvChiTietHDN.Columns["ThanhTien"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+
                 dgvChiTietHDN.Columns["DonGia"].DefaultCellStyle.Format = "#,##0";
                 dgvChiTietHDN.Columns["ThanhTien"].DefaultCellStyle.Format = "#,##0";
             }

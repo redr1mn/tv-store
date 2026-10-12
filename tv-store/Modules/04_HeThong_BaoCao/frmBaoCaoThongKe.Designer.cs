@@ -309,7 +309,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.tpDoanhThuQuy.Name = "tpDoanhThuQuy";
             this.tpDoanhThuQuy.Size = new System.Drawing.Size(1026, 466);
             this.tpDoanhThuQuy.TabIndex = 2;
-            this.tpDoanhThuQuy.Text = "3. Hóa đơn & Tổng tiền theo Quý";
+            this.tpDoanhThuQuy.Text = "3. Hóa đơn && Tổng tiền theo Quý";
             this.tpDoanhThuQuy.UseVisualStyleBackColor = true;
             // 
             // dgvBaoCao3
@@ -397,6 +397,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.txtNamQuy.Size = new System.Drawing.Size(75, 33);
             this.txtNamQuy.TabIndex = 5;
             this.txtNamQuy.Text = "2026";
+            this.txtNamQuy.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // lblNamQuy
             // 
@@ -506,6 +507,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.txtNamThang.Size = new System.Drawing.Size(85, 33);
             this.txtNamThang.TabIndex = 5;
             this.txtNamThang.Text = "2026";
+            this.txtNamThang.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // lblNamThang
             // 
@@ -610,8 +612,8 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.btnXuatExcel1.Name = "btnXuatExcel1";
             this.btnXuatExcel1.Size = new System.Drawing.Size(120, 34);
             this.btnXuatExcel1.TabIndex = 3;
-            this.btnXuatExcel1.Text = "&Xuất Excel";
-            this.toolTipMain.SetToolTip(this.btnXuatExcel1, "Xuất kết quả ra file Excel (Alt+X)");
+            this.btnXuatExcel1.Text = "Xuất &Excel";
+            this.toolTipMain.SetToolTip(this.btnXuatExcel1, "Xuất kết quả ra file Excel (Alt+E)");
             this.btnXuatExcel1.UseVisualStyleBackColor = false;
             this.btnXuatExcel1.Click += new System.EventHandler(this.btnXuatExcel1_Click);
             // 
@@ -620,6 +622,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
+            this.CancelButton = this.btnDong;
             this.ClientSize = new System.Drawing.Size(1034, 606);
             this.Controls.Add(this.tbcBaoCao);
             this.Controls.Add(this.pnlBottom);

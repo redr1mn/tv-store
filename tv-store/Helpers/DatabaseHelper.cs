@@ -239,6 +239,11 @@ namespace tv_store.Helpers
             return string.Format("{0:N0} VNĐ", tien);
         }
 
+        public static string FormatTien(decimal tien)
+        {
+            return string.Format("{0:N0} VNĐ", tien);
+        }
+
         private static readonly string[] ChuSo = { "không", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín" };
         private static readonly string[] DonViTien = { "", "nghìn", "triệu", "tỷ", "nghìn tỷ", "triệu tỷ", "tỷ tỷ" };
 
@@ -313,6 +318,11 @@ namespace tv_store.Helpers
             if (number < 0) result = "Âm " + result;
 
             return result;
+        }
+
+        public static string ChuyenSoSangChu(decimal number)
+        {
+            return ChuyenSoSangChu((double)number);
         }
     }
 }

@@ -1225,6 +1225,7 @@ namespace tv_store.Modules._01_SanPham
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
+            this.CancelButton = this.btnDong1;
             this.ClientSize = new System.Drawing.Size(884, 561);
             this.Controls.Add(this.tbcDanhMuc);
             this.Controls.Add(this.pnlTop);

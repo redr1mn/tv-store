@@ -2,6 +2,7 @@
 -- BÀI TẬP LỚN LẬP TRÌNH TRỰC QUAN (LTTQ) - C# WINFORMS
 -- ĐỀ TÀI: HỆ THỐNG QUẢN LÝ BÁN TIVI (TV STORE)
 -- FILE 1: TẠO CƠ SỞ DỮ LIỆU VÀ CÁC BẢNG (CHUẨN THEO SƠ ĐỒ RM)
+-- GIAI ĐOẠN 1: CHUẨN HÓA KIỂU DECIMAL(18,2) & BỔ SUNG CHECK CONSTRAINTS
 -- ===================================================================
 
 IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'QLBanTivi')
@@ -11,6 +12,26 @@ END
 GO
 
 USE QLBanTivi;
+GO
+
+-- XÓA BẢNG CŨ NẾU ĐÃ TỒN TẠI ĐỂ TẠO LẠI TOÀN BỘ CẤU TRÚC CHUẨN
+IF OBJECT_ID('tblChiTietHDB', 'U') IS NOT NULL DROP TABLE tblChiTietHDB;
+IF OBJECT_ID('tblChiTietHDN', 'U') IS NOT NULL DROP TABLE tblChiTietHDN;
+IF OBJECT_ID('tblHoaDonBan', 'U') IS NOT NULL DROP TABLE tblHoaDonBan;
+IF OBJECT_ID('tblHoaDonNhap', 'U') IS NOT NULL DROP TABLE tblHoaDonNhap;
+IF OBJECT_ID('tblTV', 'U') IS NOT NULL DROP TABLE tblTV;
+IF OBJECT_ID('tblTaiKhoan', 'U') IS NOT NULL DROP TABLE tblTaiKhoan;
+IF OBJECT_ID('tblKhachHang', 'U') IS NOT NULL DROP TABLE tblKhachHang;
+IF OBJECT_ID('tblNhaCungCap', 'U') IS NOT NULL DROP TABLE tblNhaCungCap;
+IF OBJECT_ID('tblNhanVien', 'U') IS NOT NULL DROP TABLE tblNhanVien;
+IF OBJECT_ID('tblCaLam', 'U') IS NOT NULL DROP TABLE tblCaLam;
+IF OBJECT_ID('tblCongViec', 'U') IS NOT NULL DROP TABLE tblCongViec;
+IF OBJECT_ID('tblHangSX', 'U') IS NOT NULL DROP TABLE tblHangSX;
+IF OBJECT_ID('tblKieuDang', 'U') IS NOT NULL DROP TABLE tblKieuDang;
+IF OBJECT_ID('tblMauSac', 'U') IS NOT NULL DROP TABLE tblMauSac;
+IF OBJECT_ID('tblManHinh', 'U') IS NOT NULL DROP TABLE tblManHinh;
+IF OBJECT_ID('tblCoManHinh', 'U') IS NOT NULL DROP TABLE tblCoManHinh;
+IF OBJECT_ID('tblNuocSX', 'U') IS NOT NULL DROP TABLE tblNuocSX;
 GO
 
 -- 1. BẢNG DANH MỤC THUỘC TÍNH TIVI (DANH MỤC PHỤ)
@@ -54,11 +75,11 @@ CREATE TABLE tblTV (
     MaManHinh NVARCHAR(20) FOREIGN KEY REFERENCES tblManHinh(MaManHinh),
     MaCo NVARCHAR(20) FOREIGN KEY REFERENCES tblCoManHinh(MaCo),
     MaNuocSX NVARCHAR(20) FOREIGN KEY REFERENCES tblNuocSX(MaNuocSX),
-    SoLuong INT DEFAULT 0,
-    DonGiaNhap FLOAT DEFAULT 0,
-    DonGiaBan FLOAT DEFAULT 0,
+    SoLuong INT DEFAULT 0 CONSTRAINT CK_TV_SoLuong CHECK (SoLuong >= 0),
+    DonGiaNhap DECIMAL(18, 2) DEFAULT 0 CONSTRAINT CK_TV_DonGiaNhap CHECK (DonGiaNhap >= 0),
+    DonGiaBan DECIMAL(18, 2) DEFAULT 0 CONSTRAINT CK_TV_DonGiaBan CHECK (DonGiaBan >= 0),
     Anh NVARCHAR(200),
-    ThoiGianBaoHanh INT DEFAULT 12, -- Tháng
+    ThoiGianBaoHanh INT DEFAULT 12 CONSTRAINT CK_TV_BaoHanh CHECK (ThoiGianBaoHanh >= 0), -- Tháng
     GhiChu NVARCHAR(300)
 );
 
@@ -87,7 +108,7 @@ CREATE TABLE tblNhanVien (
 -- BẢNG TÀI KHOẢN ĐĂNG NHẬP
 CREATE TABLE tblTaiKhoan (
     TenDangNhap NVARCHAR(50) PRIMARY KEY,
-    MatKhau NVARCHAR(100) NOT NULL,
+    MatKhau NVARCHAR(256) NOT NULL,
     MaNV NVARCHAR(20) FOREIGN KEY REFERENCES tblNhanVien(MaNV),
     Quyen NVARCHAR(20) DEFAULT N'Nhân viên' -- 'Admin' hoặc 'Nhân viên'
 );
@@ -113,16 +134,16 @@ CREATE TABLE tblHoaDonNhap (
     MaNV NVARCHAR(20) FOREIGN KEY REFERENCES tblNhanVien(MaNV),
     NgayNhap DATETIME DEFAULT GETDATE(),
     MaNCC NVARCHAR(20) FOREIGN KEY REFERENCES tblNhaCungCap(MaNCC),
-    TongTien FLOAT DEFAULT 0
+    TongTien DECIMAL(18, 2) DEFAULT 0 CONSTRAINT CK_HDN_TongTien CHECK (TongTien >= 0)
 );
 
 CREATE TABLE tblChiTietHDN (
     SoHDN NVARCHAR(30) FOREIGN KEY REFERENCES tblHoaDonNhap(SoHDN),
     MaTV NVARCHAR(20) FOREIGN KEY REFERENCES tblTV(MaTV),
-    SoLuong INT NOT NULL,
-    DonGia FLOAT NOT NULL,
-    GiamGia FLOAT DEFAULT 0,
-    ThanhTien FLOAT NOT NULL,
+    SoLuong INT NOT NULL CONSTRAINT CK_CTHDN_SoLuong CHECK (SoLuong > 0),
+    DonGia DECIMAL(18, 2) NOT NULL CONSTRAINT CK_CTHDN_DonGia CHECK (DonGia >= 0),
+    GiamGia DECIMAL(5, 2) DEFAULT 0 CONSTRAINT CK_CTHDN_GiamGia CHECK (GiamGia >= 0 AND GiamGia <= 100),
+    ThanhTien DECIMAL(18, 2) NOT NULL CONSTRAINT CK_CTHDN_ThanhTien CHECK (ThanhTien >= 0),
     PRIMARY KEY (SoHDN, MaTV)
 );
 
@@ -132,17 +153,17 @@ CREATE TABLE tblHoaDonBan (
     MaNV NVARCHAR(20) FOREIGN KEY REFERENCES tblNhanVien(MaNV),
     NgayBan DATETIME DEFAULT GETDATE(),
     MaKhach NVARCHAR(20) FOREIGN KEY REFERENCES tblKhachHang(MaKhach),
-    Thue FLOAT DEFAULT 0, -- Thuế VAT (%) theo sơ đồ RM
-    TongTien FLOAT DEFAULT 0
+    Thue DECIMAL(5, 2) DEFAULT 0 CONSTRAINT CK_HDB_Thue CHECK (Thue >= 0 AND Thue <= 100), -- Thuế VAT (%) theo sơ đồ RM
+    TongTien DECIMAL(18, 2) DEFAULT 0 CONSTRAINT CK_HDB_TongTien CHECK (TongTien >= 0)
 );
 
 CREATE TABLE tblChiTietHDB (
     SoHDB NVARCHAR(30) FOREIGN KEY REFERENCES tblHoaDonBan(SoHDB),
     MaTV NVARCHAR(20) FOREIGN KEY REFERENCES tblTV(MaTV),
-    SoLuong INT NOT NULL,
-    DonGia FLOAT NOT NULL, -- Đơn giá theo sơ đồ chuẩn
-    GiamGia FLOAT DEFAULT 0,
-    ThanhTien FLOAT NOT NULL,
+    SoLuong INT NOT NULL CONSTRAINT CK_CTHDB_SoLuong CHECK (SoLuong > 0),
+    DonGia DECIMAL(18, 2) NOT NULL CONSTRAINT CK_CTHDB_DonGia CHECK (DonGia >= 0), -- Đơn giá theo sơ đồ chuẩn
+    GiamGia DECIMAL(5, 2) DEFAULT 0 CONSTRAINT CK_CTHDB_GiamGia CHECK (GiamGia >= 0 AND GiamGia <= 100),
+    ThanhTien DECIMAL(18, 2) NOT NULL CONSTRAINT CK_CTHDB_ThanhTien CHECK (ThanhTien >= 0),
     PRIMARY KEY (SoHDB, MaTV)
 );
 GO

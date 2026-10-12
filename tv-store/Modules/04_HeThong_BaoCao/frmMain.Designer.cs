@@ -1,4 +1,4 @@
-﻿namespace tv_store.Modules._04_HeThong_BaoCao
+namespace tv_store.Modules._04_HeThong_BaoCao
 {
     partial class frmMain
     {
@@ -60,6 +60,7 @@
             this.timerDongHo = new System.Windows.Forms.Timer(this.components);
             this.pnlWorkspace = new System.Windows.Forms.Panel();
             this.grpCards = new System.Windows.Forms.GroupBox();
+            this.tblCards = new System.Windows.Forms.TableLayoutPanel();
             this.pnlCard4 = new System.Windows.Forms.Panel();
             this.lblCard4Val = new System.Windows.Forms.Label();
             this.lblCard4Title = new System.Windows.Forms.Label();
@@ -79,6 +80,7 @@
             this.statusStripMain.SuspendLayout();
             this.pnlWorkspace.SuspendLayout();
             this.grpCards.SuspendLayout();
+            this.tblCards.SuspendLayout();
             this.pnlCard4.SuspendLayout();
             this.pnlCard3.SuspendLayout();
             this.pnlCard2.SuspendLayout();
@@ -541,27 +543,45 @@
             // 
             this.grpCards.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.grpCards.Controls.Add(this.pnlCard4);
-            this.grpCards.Controls.Add(this.pnlCard3);
-            this.grpCards.Controls.Add(this.pnlCard2);
-            this.grpCards.Controls.Add(this.pnlCard1);
+            this.grpCards.Controls.Add(this.tblCards);
             this.grpCards.Font = new System.Drawing.Font("Segoe UI", 10.5F, System.Drawing.FontStyle.Bold);
             this.grpCards.ForeColor = System.Drawing.Color.Navy;
             this.grpCards.Location = new System.Drawing.Point(30, 20);
             this.grpCards.Name = "grpCards";
-            this.grpCards.Size = new System.Drawing.Size(984, 150);
+            this.grpCards.Padding = new System.Windows.Forms.Padding(10, 25, 10, 10);
+            this.grpCards.Size = new System.Drawing.Size(984, 160);
             this.grpCards.TabIndex = 1;
             this.grpCards.TabStop = false;
             this.grpCards.Text = "Tổng quan hoạt động kinh doanh";
+            // 
+            // tblCards
+            // 
+            this.tblCards.ColumnCount = 4;
+            this.tblCards.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tblCards.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tblCards.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tblCards.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tblCards.Controls.Add(this.pnlCard1, 0, 0);
+            this.tblCards.Controls.Add(this.pnlCard2, 1, 0);
+            this.tblCards.Controls.Add(this.pnlCard3, 2, 0);
+            this.tblCards.Controls.Add(this.pnlCard4, 3, 0);
+            this.tblCards.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tblCards.Location = new System.Drawing.Point(10, 25);
+            this.tblCards.Name = "tblCards";
+            this.tblCards.RowCount = 1;
+            this.tblCards.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tblCards.Size = new System.Drawing.Size(964, 125);
+            this.tblCards.TabIndex = 0;
             // 
             // pnlCard4
             // 
             this.pnlCard4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(53)))), ((int)(((byte)(69)))));
             this.pnlCard4.Controls.Add(this.lblCard4Val);
             this.pnlCard4.Controls.Add(this.lblCard4Title);
-            this.pnlCard4.Location = new System.Drawing.Point(745, 30);
+            this.pnlCard4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlCard4.Margin = new System.Windows.Forms.Padding(6, 4, 6, 6);
             this.pnlCard4.Name = "pnlCard4";
-            this.pnlCard4.Size = new System.Drawing.Size(220, 100);
+            this.pnlCard4.Size = new System.Drawing.Size(229, 115);
             this.pnlCard4.TabIndex = 3;
             // 
             // lblCard4Val
@@ -591,9 +611,10 @@
             this.pnlCard3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(126)))), ((int)(((byte)(20)))));
             this.pnlCard3.Controls.Add(this.lblCard3Val);
             this.pnlCard3.Controls.Add(this.lblCard3Title);
-            this.pnlCard3.Location = new System.Drawing.Point(505, 30);
+            this.pnlCard3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlCard3.Margin = new System.Windows.Forms.Padding(6, 4, 6, 6);
             this.pnlCard3.Name = "pnlCard3";
-            this.pnlCard3.Size = new System.Drawing.Size(220, 100);
+            this.pnlCard3.Size = new System.Drawing.Size(229, 115);
             this.pnlCard3.TabIndex = 2;
             // 
             // lblCard3Val
@@ -623,9 +644,10 @@
             this.pnlCard2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(167)))), ((int)(((byte)(69)))));
             this.pnlCard2.Controls.Add(this.lblCard2Val);
             this.pnlCard2.Controls.Add(this.lblCard2Title);
-            this.pnlCard2.Location = new System.Drawing.Point(265, 30);
+            this.pnlCard2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlCard2.Margin = new System.Windows.Forms.Padding(6, 4, 6, 6);
             this.pnlCard2.Name = "pnlCard2";
-            this.pnlCard2.Size = new System.Drawing.Size(220, 100);
+            this.pnlCard2.Size = new System.Drawing.Size(229, 115);
             this.pnlCard2.TabIndex = 1;
             // 
             // lblCard2Val
@@ -655,9 +677,10 @@
             this.pnlCard1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(123)))), ((int)(((byte)(255)))));
             this.pnlCard1.Controls.Add(this.lblCard1Val);
             this.pnlCard1.Controls.Add(this.lblCard1Title);
-            this.pnlCard1.Location = new System.Drawing.Point(25, 30);
+            this.pnlCard1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlCard1.Margin = new System.Windows.Forms.Padding(6, 4, 6, 6);
             this.pnlCard1.Name = "pnlCard1";
-            this.pnlCard1.Size = new System.Drawing.Size(220, 100);
+            this.pnlCard1.Size = new System.Drawing.Size(229, 115);
             this.pnlCard1.TabIndex = 0;
             // 
             // lblCard1Val
@@ -709,6 +732,7 @@
             this.statusStripMain.PerformLayout();
             this.pnlWorkspace.ResumeLayout(false);
             this.grpCards.ResumeLayout(false);
+            this.tblCards.ResumeLayout(false);
             this.pnlCard4.ResumeLayout(false);
             this.pnlCard4.PerformLayout();
             this.pnlCard3.ResumeLayout(false);
@@ -766,6 +790,7 @@
         private System.Windows.Forms.Timer timerDongHo;
         private System.Windows.Forms.Panel pnlWorkspace;
         private System.Windows.Forms.GroupBox grpCards;
+        private System.Windows.Forms.TableLayoutPanel tblCards;
         private System.Windows.Forms.Panel pnlCard1;
         private System.Windows.Forms.Label lblCard1Title;
         private System.Windows.Forms.Label lblCard1Val;

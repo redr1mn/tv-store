@@ -148,6 +148,7 @@ namespace tv_store.Modules._01_SanPham
             this.txtGiaDen.Name = "txtGiaDen";
             this.txtGiaDen.Size = new System.Drawing.Size(180, 33);
             this.txtGiaDen.TabIndex = 11;
+            this.txtGiaDen.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // lblGiaDen
             // 
@@ -165,6 +166,7 @@ namespace tv_store.Modules._01_SanPham
             this.txtGiaTu.Name = "txtGiaTu";
             this.txtGiaTu.Size = new System.Drawing.Size(180, 33);
             this.txtGiaTu.TabIndex = 9;
+            this.txtGiaTu.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // lblGiaTu
             // 
@@ -268,7 +270,7 @@ namespace tv_store.Modules._01_SanPham
             // 
             this.dgvKetQua.AllowUserToAddRows = false;
             this.dgvKetQua.AllowUserToDeleteRows = false;
-            this.dgvKetQua.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvKetQua.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.None;
             this.dgvKetQua.BackgroundColor = System.Drawing.Color.White;
             this.dgvKetQua.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvKetQua.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -277,6 +279,7 @@ namespace tv_store.Modules._01_SanPham
             this.dgvKetQua.Name = "dgvKetQua";
             this.dgvKetQua.ReadOnly = true;
             this.dgvKetQua.RowHeadersWidth = 62;
+            this.dgvKetQua.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.dgvKetQua.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvKetQua.Size = new System.Drawing.Size(978, 309);
             this.dgvKetQua.TabIndex = 0;
@@ -304,9 +307,11 @@ namespace tv_store.Modules._01_SanPham
             // 
             // frmTimKiemTivi
             // 
+            this.AcceptButton = this.btnTimKiem;
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
+            this.CancelButton = this.btnDong;
             this.ClientSize = new System.Drawing.Size(984, 581);
             this.Controls.Add(this.grpKetQua);
             this.Controls.Add(this.grpTieuChi);

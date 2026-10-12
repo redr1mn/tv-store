@@ -70,6 +70,11 @@ namespace tv_store.Modules._01_SanPham
                 dgvTivi.Columns["DonGiaNhap"].DefaultCellStyle.Format = "#,##0";
                 dgvTivi.Columns["DonGiaBan"].DefaultCellStyle.Format = "#,##0";
 
+                dgvTivi.Columns["SoLuong"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvTivi.Columns["DonGiaNhap"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvTivi.Columns["DonGiaBan"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvTivi.Columns["ThoiGianBaoHanh"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+
                 // Đặt độ rộng cột phù hợp để không bị cắt chữ '...'
                 dgvTivi.Columns["MaTV"].Width = 75;
                 dgvTivi.Columns["TenTV"].Width = 240;
@@ -85,6 +90,31 @@ namespace tv_store.Modules._01_SanPham
                 dgvTivi.Columns["ThoiGianBaoHanh"].Width = 80;
                 dgvTivi.Columns["Anh"].Width = 130;
                 dgvTivi.Columns["GhiChu"].Width = 220;
+            }
+        }
+
+        private void SetPreviewImage(string filePath)
+        {
+            if (picAnhTivi.Image != null)
+            {
+                var oldImg = picAnhTivi.Image;
+                picAnhTivi.Image = null;
+                oldImg.Dispose();
+            }
+
+            if (!string.IsNullOrEmpty(filePath) && File.Exists(filePath))
+            {
+                try
+                {
+                    using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                    {
+                        picAnhTivi.Image = new Bitmap(fs);
+                    }
+                }
+                catch
+                {
+                    picAnhTivi.Image = null;
+                }
             }
         }
 
@@ -104,7 +134,7 @@ namespace tv_store.Modules._01_SanPham
             txtBaoHanh.Text = "24";
             txtAnh.Text = "";
             txtGhiChu.Text = "";
-            picAnhTivi.Image = null;
+            SetPreviewImage(null);
         }
 
         private void dgvTivi_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -128,22 +158,7 @@ namespace tv_store.Modules._01_SanPham
             txtGhiChu.Text = row.Cells["GhiChu"].Value.ToString();
 
             // Load ảnh
-            string imgName = txtAnh.Text.Trim();
-            if (!string.IsNullOrEmpty(imgName) && File.Exists(imgName))
-            {
-                try
-                {
-                    picAnhTivi.Image = Image.FromFile(imgName);
-                }
-                catch
-                {
-                    picAnhTivi.Image = null;
-                }
-            }
-            else
-            {
-                picAnhTivi.Image = null;
-            }
+            SetPreviewImage(txtAnh.Text.Trim());
 
             btnSua.Enabled = true;
             btnXoa.Enabled = true;
@@ -171,7 +186,7 @@ namespace tv_store.Modules._01_SanPham
                 txtAnh.Text = dlgOpenImage.FileName;
                 try
                 {
-                    picAnhTivi.Image = Image.FromFile(dlgOpenImage.FileName);
+                    SetPreviewImage(dlgOpenImage.FileName);
                 }
                 catch (Exception ex)
                 {

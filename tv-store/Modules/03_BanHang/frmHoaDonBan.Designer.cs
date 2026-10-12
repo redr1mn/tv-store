@@ -133,6 +133,7 @@ namespace tv_store.Modules._03_BanHang
             this.txtDienThoaiKH.ReadOnly = true;
             this.txtDienThoaiKH.Size = new System.Drawing.Size(380, 24);
             this.txtDienThoaiKH.TabIndex = 15;
+            this.txtDienThoaiKH.TabStop = false;
             // 
             // lblDienThoaiKH
             // 
@@ -151,6 +152,7 @@ namespace tv_store.Modules._03_BanHang
             this.txtDiaChiKH.ReadOnly = true;
             this.txtDiaChiKH.Size = new System.Drawing.Size(380, 24);
             this.txtDiaChiKH.TabIndex = 13;
+            this.txtDiaChiKH.TabStop = false;
             // 
             // lblDiaChiKH
             // 
@@ -169,6 +171,7 @@ namespace tv_store.Modules._03_BanHang
             this.txtTenKH.ReadOnly = true;
             this.txtTenKH.Size = new System.Drawing.Size(380, 24);
             this.txtTenKH.TabIndex = 11;
+            this.txtTenKH.TabStop = false;
             // 
             // lblTenKH
             // 
@@ -207,6 +210,7 @@ namespace tv_store.Modules._03_BanHang
             this.txtTenNV.ReadOnly = true;
             this.txtTenNV.Size = new System.Drawing.Size(380, 24);
             this.txtTenNV.TabIndex = 7;
+            this.txtTenNV.TabStop = false;
             // 
             // lblTenNV
             // 
@@ -311,6 +315,8 @@ namespace tv_store.Modules._03_BanHang
             this.txtTonKho.ReadOnly = true;
             this.txtTonKho.Size = new System.Drawing.Size(65, 24);
             this.txtTonKho.TabIndex = 14;
+            this.txtTonKho.TabStop = false;
+            this.txtTonKho.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // lblTonKho
             // 
@@ -332,7 +338,7 @@ namespace tv_store.Modules._03_BanHang
             this.btnThemChiTiet.Name = "btnThemChiTiet";
             this.btnThemChiTiet.Size = new System.Drawing.Size(130, 32);
             this.btnThemChiTiet.TabIndex = 12;
-            this.btnThemChiTiet.Text = "&Thêm món";
+            this.btnThemChiTiet.Text = "Thêm &món";
             this.toolTipMain.SetToolTip(this.btnThemChiTiet, "Thêm mặt hàng vào hóa đơn bán (Alt+M)");
             this.btnThemChiTiet.UseVisualStyleBackColor = false;
             this.btnThemChiTiet.Click += new System.EventHandler(this.btnThemChiTiet_Click);
@@ -347,6 +353,8 @@ namespace tv_store.Modules._03_BanHang
             this.txtThanhTien.ReadOnly = true;
             this.txtThanhTien.Size = new System.Drawing.Size(220, 24);
             this.txtThanhTien.TabIndex = 11;
+            this.txtThanhTien.TabStop = false;
+            this.txtThanhTien.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // lblThanhTien
             // 
@@ -365,6 +373,7 @@ namespace tv_store.Modules._03_BanHang
             this.txtGiamGia.Size = new System.Drawing.Size(125, 24);
             this.txtGiamGia.TabIndex = 9;
             this.txtGiamGia.Text = "0";
+            this.txtGiamGia.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txtGiamGia.TextChanged += new System.EventHandler(this.TinhThanhTien);
             // 
             // lblGiamGia
@@ -385,6 +394,8 @@ namespace tv_store.Modules._03_BanHang
             this.txtDonGiaBan.ReadOnly = true;
             this.txtDonGiaBan.Size = new System.Drawing.Size(220, 24);
             this.txtDonGiaBan.TabIndex = 7;
+            this.txtDonGiaBan.TabStop = false;
+            this.txtDonGiaBan.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // lblDonGiaBan
             // 
@@ -403,6 +414,7 @@ namespace tv_store.Modules._03_BanHang
             this.txtSoLuongBan.Size = new System.Drawing.Size(150, 24);
             this.txtSoLuongBan.TabIndex = 5;
             this.txtSoLuongBan.Text = "1";
+            this.txtSoLuongBan.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txtSoLuongBan.TextChanged += new System.EventHandler(this.TinhThanhTien);
             // 
             // lblSoLuongBan
@@ -422,6 +434,7 @@ namespace tv_store.Modules._03_BanHang
             this.txtTenTivi.ReadOnly = true;
             this.txtTenTivi.Size = new System.Drawing.Size(210, 24);
             this.txtTenTivi.TabIndex = 3;
+            this.txtTenTivi.TabStop = false;
             // 
             // lblTenTivi
             // 
@@ -626,9 +639,11 @@ namespace tv_store.Modules._03_BanHang
             // 
             // frmHoaDonBan
             // 
+            this.AcceptButton = this.btnThemChiTiet;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
+            this.CancelButton = this.btnDong;
             this.ClientSize = new System.Drawing.Size(1084, 655);
             this.Controls.Add(this.dgvChiTietHDB);
             this.Controls.Add(this.pnlTongTien);

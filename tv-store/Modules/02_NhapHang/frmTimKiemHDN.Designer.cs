@@ -155,6 +155,7 @@ namespace tv_store.Modules._02_NhapHang
             this.txtSoLuongNhap.Name = "txtSoLuongNhap";
             this.txtSoLuongNhap.Size = new System.Drawing.Size(160, 33);
             this.txtSoLuongNhap.TabIndex = 3;
+            this.txtSoLuongNhap.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // lblSoLuongNhap
             // 
@@ -239,9 +240,11 @@ namespace tv_store.Modules._02_NhapHang
             // 
             // frmTimKiemHDN
             // 
+            this.AcceptButton = this.btnTimKiem;
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
+            this.CancelButton = this.btnDong;
             this.ClientSize = new System.Drawing.Size(984, 581);
             this.Controls.Add(this.grpKetQua);
             this.Controls.Add(this.grpTieuChi);

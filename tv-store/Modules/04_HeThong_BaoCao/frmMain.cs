@@ -65,76 +65,98 @@ namespace tv_store.Modules._04_HeThong_BaoCao
         #region ĐIỀU HƯỚNG CÁC PHÂN HỆ
         private void btnNavSanPham_Click(object sender, EventArgs e)
         {
-            frmDMTivi frm = new frmDMTivi();
-            frm.ShowDialog();
+            using (frmDMTivi frm = new frmDMTivi())
+            {
+                frm.ShowDialog();
+            }
             LoadDashboardStats();
         }
 
         private void btnNavDanhMucPhu_Click(object sender, EventArgs e)
         {
-            frmDanhMucPhu frm = new frmDanhMucPhu();
-            frm.ShowDialog();
+            using (frmDanhMucPhu frm = new frmDanhMucPhu())
+            {
+                frm.ShowDialog();
+            }
         }
 
         private void btnNavBanHang_Click(object sender, EventArgs e)
         {
-            frmHoaDonBan frm = new frmHoaDonBan();
-            frm.ShowDialog();
+            using (frmHoaDonBan frm = new frmHoaDonBan())
+            {
+                frm.ShowDialog();
+            }
             LoadDashboardStats();
         }
 
         private void btnNavNhapHang_Click(object sender, EventArgs e)
         {
-            frmHoaDonNhap frm = new frmHoaDonNhap();
-            frm.ShowDialog();
+            using (frmHoaDonNhap frm = new frmHoaDonNhap())
+            {
+                frm.ShowDialog();
+            }
             LoadDashboardStats();
         }
 
         private void btnNavKhachHang_Click(object sender, EventArgs e)
         {
-            frmKhachHang frm = new frmKhachHang();
-            frm.ShowDialog();
+            using (frmKhachHang frm = new frmKhachHang())
+            {
+                frm.ShowDialog();
+            }
         }
 
         private void btnNavNCC_Click(object sender, EventArgs e)
         {
-            frmNhaCungCap frm = new frmNhaCungCap();
-            frm.ShowDialog();
+            using (frmNhaCungCap frm = new frmNhaCungCap())
+            {
+                frm.ShowDialog();
+            }
         }
 
         private void btnNavNhanVien_Click(object sender, EventArgs e)
         {
-            frmNhanVien frm = new frmNhanVien();
-            frm.ShowDialog();
+            using (frmNhanVien frm = new frmNhanVien())
+            {
+                frm.ShowDialog();
+            }
         }
 
         private void btnNavBaoCao_Click(object sender, EventArgs e)
         {
-            frmBaoCaoThongKe frm = new frmBaoCaoThongKe();
-            frm.ShowDialog();
+            using (frmBaoCaoThongKe frm = new frmBaoCaoThongKe())
+            {
+                frm.ShowDialog();
+            }
         }
 
         private void mnuTimKiemTivi_Click(object sender, EventArgs e)
         {
-            frmTimKiemTivi frm = new frmTimKiemTivi();
-            frm.ShowDialog();
+            using (frmTimKiemTivi frm = new frmTimKiemTivi())
+            {
+                frm.ShowDialog();
+            }
         }
 
         private void mnuTimKiemHDN_Click(object sender, EventArgs e)
         {
-            frmTimKiemHDN frm = new frmTimKiemHDN();
-            frm.ShowDialog();
+            using (frmTimKiemHDN frm = new frmTimKiemHDN())
+            {
+                frm.ShowDialog();
+            }
         }
         #endregion
 
         #region HỆ THỐNG & TRỢ GIÚP
         private void mnuDangNhap_Click(object sender, EventArgs e)
         {
-            frmDangNhap frm = new frmDangNhap();
-            if (frm.ShowDialog() == DialogResult.OK)
+            using (frmDangNhap frm = new frmDangNhap())
             {
-                UpdateStatusBar();
-                LoadDashboardStats();
+                if (frm.ShowDialog() == DialogResult.OK)
+                {
+                    UpdateStatusBar();
+                    LoadDashboardStats();
+                }
             }
         }
 
@@ -147,16 +169,18 @@ namespace tv_store.Modules._04_HeThong_BaoCao
                 frmDangNhap.CurrentRole = "Chưa đăng nhập";
                 UpdateStatusBar();
 
-                frmDangNhap frm = new frmDangNhap();
-                if (frm.ShowDialog() == DialogResult.OK)
+                using (frmDangNhap frm = new frmDangNhap())
                 {
-                    UpdateStatusBar();
-                    LoadDashboardStats();
-                }
-                else
-                {
-                    // Nếu người dùng hủy form đăng nhập sau khi đã chọn Đăng xuất, đóng màn hình chính
-                    this.Close();
+                    if (frm.ShowDialog() == DialogResult.OK)
+                    {
+                        UpdateStatusBar();
+                        LoadDashboardStats();
+                    }
+                    else
+                    {
+                        // Nếu người dùng hủy form đăng nhập sau khi đã chọn Đăng xuất, đóng màn hình chính
+                        this.Close();
+                    }
                 }
             }
         }
