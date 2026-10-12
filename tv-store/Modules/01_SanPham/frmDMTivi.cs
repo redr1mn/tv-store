@@ -69,6 +69,22 @@ namespace tv_store.Modules._01_SanPham
                 // Format số tiền
                 dgvTivi.Columns["DonGiaNhap"].DefaultCellStyle.Format = "#,##0";
                 dgvTivi.Columns["DonGiaBan"].DefaultCellStyle.Format = "#,##0";
+
+                // Đặt độ rộng cột phù hợp để không bị cắt chữ '...'
+                dgvTivi.Columns["MaTV"].Width = 75;
+                dgvTivi.Columns["TenTV"].Width = 240;
+                dgvTivi.Columns["TenHangSX"].Width = 90;
+                dgvTivi.Columns["TenKieu"].Width = 170;
+                dgvTivi.Columns["TenMau"].Width = 120;
+                dgvTivi.Columns["TenManHinh"].Width = 140;
+                dgvTivi.Columns["TenCo"].Width = 80;
+                dgvTivi.Columns["TenNuocSX"].Width = 100;
+                dgvTivi.Columns["SoLuong"].Width = 80;
+                dgvTivi.Columns["DonGiaNhap"].Width = 110;
+                dgvTivi.Columns["DonGiaBan"].Width = 110;
+                dgvTivi.Columns["ThoiGianBaoHanh"].Width = 80;
+                dgvTivi.Columns["Anh"].Width = 130;
+                dgvTivi.Columns["GhiChu"].Width = 220;
             }
         }
 

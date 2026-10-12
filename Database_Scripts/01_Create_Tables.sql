@@ -1,4 +1,4 @@
--- ===================================================================
+﻿-- ===================================================================
 -- BÀI TẬP LỚN LẬP TRÌNH TRỰC QUAN (LTTQ) - C# WINFORMS
 -- ĐỀ TÀI: HỆ THỐNG QUẢN LÝ BÁN TIVI (TV STORE)
 -- FILE 1: TẠO CƠ SỞ DỮ LIỆU VÀ CÁC BẢNG (CHUẨN THEO SƠ ĐỒ RM)

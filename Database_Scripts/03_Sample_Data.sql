@@ -1,4 +1,4 @@
--- ===================================================================
+﻿-- ===================================================================
 -- BÀI TẬP LỚN LẬP TRÌNH TRỰC QUAN (LTTQ) - C# WINFORMS
 -- ĐỀ TÀI: HỆ THỐNG QUẢN LÝ BÁN TIVI (TV STORE)
 -- FILE 3: DỮ LIỆU MẪU ĐỂ CHẠY THỬ NGHIỆM HỆ THỐNG (CHUẨN THEO SƠ ĐỒ RM)
@@ -18,7 +18,11 @@ INSERT INTO tblHangSX (MaHangSX, TenHangSX) VALUES
 ('HSX02', N'Samsung'),
 ('HSX03', N'LG'),
 ('HSX04', N'TCL'),
-('HSX05', N'Xiaomi');
+('HSX05', N'Xiaomi'),
+('HSX06', N'Casper'),
+('HSX07', N'Sharp'),
+('HSX08', N'Coocaa'),
+('HSX09', N'Panasonic');
 
 -- 2. KIỂU DÁNG
 INSERT INTO tblKieuDang (MaKieu, TenKieu) VALUES
@@ -89,50 +93,98 @@ INSERT INTO tblKhachHang (MaKhach, TenKhach, DiaChi, DienThoai) VALUES
 ('KH01', N'Công ty Cổ phần Alpha Media', N'Hai Bà Trưng, Hà Nội', '0901234567'),
 ('KH02', N'Nguyễn Văn Hùng', N'Ba Đình, Hà Nội', '0913579246'),
 ('KH03', N'Vũ Thị Bích Ngọc', N'Tây Hồ, Hà Nội', '0988776655'),
-('KH04', N'Trịnh Quốc Dũng', N'Hoàng Mai, Hà Nội', '0945678123');
+('KH04', N'Trịnh Quốc Dũng', N'Hoàng Mai, Hà Nội', '0945678123'),
+('KH05', N'Khách sạn Grand Sunrise', N'Sơn Trà, Đà Nẵng', '0905123456'),
+('KH06', N'Chuỗi Cafe & Trà Highlands', N'Hoàn Kiếm, Hà Nội', '0912987654'),
+('KH07', N'Trường Đại học Công nghệ GTVT', N'Thanh Xuân, Hà Nội', '0987112233'),
+('KH08', N'Nguyễn Thùy Linh', N'Long Biên, Hà Nội', '0936224466'),
+('KH09', N'Công ty TNHH Xây dựng An Phát', N'Nam Từ Liêm, Hà Nội', '0977889900'),
+('KH10', N'Lê Hoàng Nam', N'Hà Đông, Hà Nội', '0944556677');
 
 -- 10. NHÀ CUNG CẤP (MaNCC, TenNCC)
 INSERT INTO tblNhaCungCap (MaNCC, TenNCC, DiaChi, DienThoai) VALUES
 ('NCC01', N'Tổng Công ty Điện Máy Sony Việt Nam', N'Quận 1, TP. Hồ Chí Minh', '02838221144'),
 ('NCC02', N'Công ty TNHH Điện tử Samsung Vina', N'KCN Yên Phong, Bắc Ninh', '02223889900'),
 ('NCC03', N'Công ty Cổ phần LG Electronics Hải Phòng', N'KCN Tràng Duệ, Hải Phòng', '02253778899'),
-('NCC04', N'Tập đoàn Điện tử TCL Technology', N'Bình Dương', '02743556677');
+('NCC04', N'Tập đoàn Điện tử TCL Technology', N'Bình Dương', '02743556677'),
+('NCC05', N'Công ty Cổ phần Casper Việt Nam', N'Cầu Giấy, Hà Nội', '02437856888'),
+('NCC06', N'Công ty TNHH Sharp Electronics Việt Nam', N'Quận 5, TP. Hồ Chí Minh', '02838668899'),
+('NCC07', N'Công ty TNHH Panasonic Appliances Việt Nam', N'KCN Thăng Long, Đông Anh, Hà Nội', '02438811888'),
+('NCC08', N'Công ty Cổ phần Skyworth Việt Nam', N'Bình Thạnh, TP. Hồ Chí Minh', '02835123456');
 
--- 11. SẢN PHẨM TIVI (MaTV, TenTV)
+-- 11. SẢN PHẨM TIVI (MaTV, TenTV) - 15 SẢN PHẨM ĐA DẠNG PHÂN KHÚC
 INSERT INTO tblTV (MaTV, TenTV, MaHangSX, MaKieu, MaMau, MaManHinh, MaCo, MaNuocSX, SoLuong, DonGiaNhap, DonGiaBan, ThoiGianBaoHanh, Anh, GhiChu) VALUES
-('TV01', N'Google Tivi Sony 4K 55 inch KD-55X75K', 'HSX01', 'KD01', 'M01', 'MH05', 'CO03', 'NSX04', 15, 11500000, 12650000, 24, 'sony_55x75k.jpg', N'Bán chạy nhất phân khúc 55 inch'),
-('TV02', N'Smart Tivi Samsung Neo QLED 4K 65 inch QA65QN85C', 'HSX02', 'KD01', 'M02', 'MH03', 'CO04', 'NSX01', 8, 23000000, 25300000, 24, 'samsung_65qn85c.jpg', N'Âm thanh vòm Dolby Atmos đỉnh cao'),
-('TV03', N'Smart Tivi OLED LG 4K 55 inch 55C3PSA', 'HSX03', 'KD03', 'M01', 'MH01', 'CO03', 'NSX05', 12, 26000000, 28600000, 36, 'lg_55c3psa.jpg', N'Màn hình OLED đen tuyệt đối'),
+('TV01', N'Google Tivi Sony 4K 55 inch KD-55X75K', 'HSX01', 'KD01', 'M01', 'MH05', 'CO03', 'NSX04', 19, 11500000, 12650000, 24, 'sony_55x75k.jpg', N'Bán chạy nhất phân khúc 55 inch'),
+('TV02', N'Smart Tivi Samsung Neo QLED 4K 65 inch QA65QN85C', 'HSX02', 'KD01', 'M02', 'MH03', 'CO04', 'NSX01', 15, 23000000, 25300000, 24, 'samsung_65qn85c.jpg', N'Âm thanh vòm Dolby Atmos đỉnh cao'),
+('TV03', N'Smart Tivi OLED LG 4K 55 inch 55C3PSA', 'HSX03', 'KD03', 'M01', 'MH01', 'CO03', 'NSX05', 16, 26000000, 28600000, 36, 'lg_55c3psa.jpg', N'Màn hình OLED đen tuyệt đối'),
 ('TV04', N'Google Tivi TCL QLED 4K 43 inch 43Q646', 'HSX04', 'KD04', 'M01', 'MH02', 'CO01', 'NSX01', 20, 6800000, 7480000, 24, 'tcl_43q646.jpg', N'Giá rẻ cho phòng ngủ'),
-('TV05', N'Smart Tivi Xiaomi A Pro 4K 65 inch', 'HSX05', 'KD01', 'M02', 'MH05', 'CO04', 'NSX01', 10, 10200000, 11220000, 24, 'xiaomi_65apro.jpg', N'Màn hình viền kim loại siêu mỏng');
+('TV05', N'Smart Tivi Xiaomi A Pro 4K 65 inch', 'HSX05', 'KD01', 'M02', 'MH05', 'CO04', 'NSX01', 10, 10200000, 11220000, 24, 'xiaomi_65apro.jpg', N'Màn hình viền kim loại siêu mỏng'),
+('TV06', N'Smart Tivi Casper 4K 50 inch 50UGA610', 'HSX06', 'KD01', 'M01', 'MH05', 'CO02', 'NSX05', 18, 6200000, 6820000, 24, 'casper_50uga610.jpg', N'Bảo hành chính hãng 1 đổi 1 trong 1 năm'),
+('TV07', N'Smart Tivi Sharp 4K 65 inch 4T-C65FJ1X', 'HSX07', 'KD01', 'M02', 'MH05', 'CO04', 'NSX04', 14, 11800000, 12980000, 24, 'sharp_65fj1x.jpg', N'Công nghệ âm thanh Dolby Audio chân thực'),
+('TV08', N'Google Tivi Sony 4K 65 inch XR-65X90L', 'HSX01', 'KD01', 'M01', 'MH04', 'CO04', 'NSX02', 10, 28500000, 31350000, 24, 'sony_65x90l.jpg', N'Bộ xử lý nhận thức Cognitive XR tân tiến'),
+('TV09', N'Smart Tivi Samsung 4K 75 inch Crystal 75CU8000', 'HSX02', 'KD01', 'M02', 'MH05', 'CO05', 'NSX01', 8, 21500000, 23650000, 24, 'samsung_75cu8000.jpg', N'Màn hình lớn cho phòng khách hiện đại'),
+('TV10', N'Smart Tivi OLED LG 4K 65 inch OLED65G3PSA', 'HSX03', 'KD03', 'M02', 'MH01', 'CO04', 'NSX03', 6, 48000000, 52800000, 36, 'lg_65g3psa.jpg', N'Thiết kế Gallery dán tường siêu mỏng tuyệt mỹ'),
+('TV11', N'Google Tivi TCL Mini-LED 4K 55 inch 55C745', 'HSX04', 'KD04', 'M01', 'MH04', 'CO03', 'NSX01', 16, 13500000, 14850000, 24, 'tcl_55c745.jpg', N'Tần số quét 144Hz Game Master đỉnh cao'),
+('TV12', N'Smart Tivi Xiaomi 4K 43 inch A Pro 43', 'HSX05', 'KD01', 'M01', 'MH05', 'CO01', 'NSX01', 25, 5600000, 6160000, 24, 'xiaomi_43apro.jpg', N'Khung kim loại nguyên khối, điều khiển giọng nói'),
+('TV13', N'Smart Tivi Panasonic 4K 55 inch TH-55LX800V', 'HSX09', 'KD01', 'M01', 'MH05', 'CO03', 'NSX04', 12, 12800000, 14080000, 24, 'panasonic_55lx800v.jpg', N'Màn hình Super Bright Panel độ sáng vượt trội'),
+('TV14', N'Smart Tivi Coocaa 4K 70 inch 70C9', 'HSX08', 'KD01', 'M01', 'MH05', 'CO05', 'NSX01', 11, 10500000, 11550000, 24, 'coocaa_70c9.jpg', N'Màn hình siêu lớn, công nghệ bảo vệ mắt Eye Care'),
+('TV15', N'Smart Tivi Samsung Neo QLED 8K 85 inch QA85QN900C', 'HSX02', 'KD01', 'M02', 'MH03', 'CO06', 'NSX03', 4, 95000000, 104500000, 36, 'samsung_85qn900c.jpg', N'Đỉnh cao 8K tràn viền vô cực Infinity One');
 
--- 12. DỮ LIỆU HÓA ĐƠN NHẬP & CHI TIẾT (SoHDN, MaTV)
+-- 12. DỮ LIỆU HÓA ĐƠN NHẬP & CHI TIẾT
 INSERT INTO tblHoaDonNhap (SoHDN, MaNV, NgayNhap, MaNCC, TongTien) VALUES
 ('HDN001', 'NV03', '2026-02-10', 'NCC01', 115000000),
 ('HDN002', 'NV03', '2026-03-05', 'NCC02', 184000000),
 ('HDN003', 'NV03', '2026-05-18', 'NCC03', 130000000),
-('HDN004', 'NV03', '2026-07-22', 'NCC01', 57500000);
+('HDN004', 'NV03', '2026-07-22', 'NCC01', 57500000),
+('HDN005', 'NV03', '2026-08-15', 'NCC05', 62000000),
+('HDN006', 'NV03', '2026-08-20', 'NCC06', 94400000),
+('HDN007', 'NV03', '2026-09-02', 'NCC01', 142500000),
+('HDN008', 'NV03', '2026-09-10', 'NCC02', 107500000),
+('HDN009', 'NV03', '2026-09-25', 'NCC07', 76800000),
+('HDN010', 'NV03', '2026-10-05', 'NCC08', 84000000);
 
 INSERT INTO tblChiTietHDN (SoHDN, MaTV, SoLuong, DonGia, GiamGia, ThanhTien) VALUES
 ('HDN001', 'TV01', 10, 11500000, 0, 115000000),
 ('HDN002', 'TV02', 8, 23000000, 0, 184000000),
 ('HDN003', 'TV03', 5, 26000000, 0, 130000000),
-('HDN004', 'TV01', 5, 11500000, 0, 57500000);
+('HDN004', 'TV01', 5, 11500000, 0, 57500000),
+('HDN005', 'TV06', 10, 6200000, 0, 62000000),
+('HDN006', 'TV07', 8, 11800000, 0, 94400000),
+('HDN007', 'TV08', 5, 28500000, 0, 142500000),
+('HDN008', 'TV09', 5, 21500000, 0, 107500000),
+('HDN009', 'TV13', 6, 12800000, 0, 76800000),
+('HDN010', 'TV14', 8, 10500000, 0, 84000000);
 
--- 13. DỮ LIỆU HÓA ĐƠN BÁN & CHI TIẾT (SoHDB, MaKhach, Thue, MaTV, DonGia)
+-- 13. DỮ LIỆU HÓA ĐƠN BÁN & CHI TIẾT
 INSERT INTO tblHoaDonBan (SoHDB, MaNV, NgayBan, MaKhach, Thue, TongTien) VALUES
 ('HDB001', 'NV02', '2026-02-15', 'KH01', 10, 41745000),
 ('HDB002', 'NV02', '2026-03-20', 'KH01', 10, 55660000),
 ('HDB003', 'NV02', '2026-04-10', 'KH02', 10, 31460000),
 ('HDB004', 'NV02', '2026-05-25', 'KH03', 10, 13915000),
-('HDB005', 'NV02', '2026-06-12', 'KH01', 10, 27830000);
+('HDB005', 'NV02', '2026-06-12', 'KH01', 10, 27830000),
+('HDB006', 'NV02', '2026-07-05', 'KH05', 10, 37510000),
+('HDB007', 'NV02', '2026-08-12', 'KH06', 10, 42834000),
+('HDB008', 'NV02', '2026-08-25', 'KH07', 10, 43439000),
+('HDB009', 'NV02', '2026-09-08', 'KH08', 10, 34485000),
+('HDB010', 'NV02', '2026-09-18', 'KH09', 10, 58080000),
+('HDB011', 'NV02', '2026-10-02', 'KH10', 10, 26015000),
+('HDB012', 'NV02', '2026-10-10', 'KH05', 10, 56386000);
 
 INSERT INTO tblChiTietHDB (SoHDB, MaTV, SoLuong, DonGia, GiamGia, ThanhTien) VALUES
 ('HDB001', 'TV01', 3, 12650000, 0, 37950000),
 ('HDB002', 'TV02', 2, 25300000, 0, 50600000),
 ('HDB003', 'TV03', 1, 28600000, 0, 28600000),
 ('HDB004', 'TV01', 1, 12650000, 0, 12650000),
-('HDB005', 'TV02', 1, 25300000, 0, 25300000);
+('HDB005', 'TV02', 1, 25300000, 0, 25300000),
+('HDB006', 'TV06', 5, 6820000, 0, 34100000),
+('HDB007', 'TV07', 3, 12980000, 0, 38940000),
+('HDB008', 'TV12', 4, 6160000, 0, 24640000),
+('HDB008', 'TV11', 1, 14850000, 0, 14850000),
+('HDB009', 'TV08', 1, 31350000, 0, 31350000),
+('HDB010', 'TV10', 1, 52800000, 0, 52800000),
+('HDB011', 'TV09', 1, 23650000, 0, 23650000),
+('HDB012', 'TV13', 2, 14080000, 0, 28160000),
+('HDB012', 'TV14', 2, 11550000, 0, 23100000);
 GO
 
 -- Bật lại Trigger sau khi đã nạp xong toàn bộ dữ liệu mẫu

@@ -88,6 +88,18 @@ namespace tv_store.Modules._01_SanPham
                 dgvKetQua.Columns["ThoiGianBaoHanh"].HeaderText = "BH (th)";
 
                 dgvKetQua.Columns["DonGiaBan"].DefaultCellStyle.Format = "#,##0";
+
+                dgvKetQua.Columns["MaTV"].Width = 75;
+                dgvKetQua.Columns["TenTV"].Width = 240;
+                dgvKetQua.Columns["TenHangSX"].Width = 90;
+                dgvKetQua.Columns["TenKieu"].Width = 160;
+                dgvKetQua.Columns["TenMau"].Width = 120;
+                dgvKetQua.Columns["TenManHinh"].Width = 140;
+                dgvKetQua.Columns["TenCo"].Width = 80;
+                dgvKetQua.Columns["TenNuocSX"].Width = 100;
+                dgvKetQua.Columns["SoLuong"].Width = 80;
+                dgvKetQua.Columns["DonGiaBan"].Width = 110;
+                dgvKetQua.Columns["ThoiGianBaoHanh"].Width = 80;
             }
 
             lblSoLuongKetQua.Text = string.Format("Tìm thấy: {0} sản phẩm Tivi phù hợp", dt.Rows.Count);

@@ -1,4 +1,4 @@
--- ===================================================================
+﻿-- ===================================================================
 -- BÀI TẬP LỚN LẬP TRÌNH TRỰC QUAN (LTTQ) - C# WINFORMS
 -- ĐỀ TÀI: HỆ THỐNG QUẢN LÝ BÁN TIVI (TV STORE)
 -- FILE 2: TRIGGERS & STORED PROCEDURES (XỬ LÝ NGHIỆP VỤ & BÁO CÁO THEO SƠ ĐỒ RM)

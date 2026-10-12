@@ -173,10 +173,8 @@ namespace tv_store.Modules._04_HeThong_BaoCao
         private void mnuThongTin_Click(object sender, EventArgs e)
         {
             MessageBox.Show(
-                "ĐỒ ÁN LẬP TRÌNH TRỰC QUAN (LTTQ) - C# WINFORMS\n" +
-                "Đề tài: Hệ thống Quản lý Bán Tivi (TV Store)\n" +
-                "Phiên bản: 2.0 Extended\n" +
-                "Nhóm thực hiện: 4 Thành viên\n" +
+                "Hệ thống Quản lý Bán Tivi (TV Store)\n" +
+                "Nhóm thực hiện: Hưng, Duy, Huy, Khánh\n" +
                 "Đầy đủ chức năng CRUD, Phím tắt Alt (&), Trigger CSDL, 4 Báo cáo YC 6-9, Xuất Excel CSV.",
                 "Thông tin phần mềm", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
