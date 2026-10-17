@@ -14,6 +14,7 @@ namespace tv_store.Modules._01_SanPham
 
         private void frmDanhMucPhu_Load(object sender, EventArgs e)
         {
+            if (DesignMode || System.ComponentModel.LicenseManager.UsageMode == System.ComponentModel.LicenseUsageMode.Designtime) return;
             LoadDataHangSX();
             LoadDataKieuDang();
             LoadDataMauSac();

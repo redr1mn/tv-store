@@ -1,5 +1,7 @@
-using System;
+﻿using System;
 using System.Data;
+using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Windows.Forms;
 using tv_store.Helpers;
 
@@ -16,6 +18,7 @@ namespace tv_store.Modules._03_BanHang
 
         private void frmTimKiemHDB_Load(object sender, EventArgs e)
         {
+            if (DesignMode || System.ComponentModel.LicenseManager.UsageMode == System.ComponentModel.LicenseUsageMode.Designtime) return;
             LoadComboBoxes();
             dtpTuNgay.Value = DateTime.Now.AddMonths(-1);
             dtpDenNgay.Value = DateTime.Now;
@@ -37,6 +40,7 @@ namespace tv_store.Modules._03_BanHang
 
         private void ThucHienTimKiem()
         {
+            var parameters = new List<SqlParameter>();
             string sql = "SELECT hdb.SoHDB, hdb.NgayBan, kh.TenKhach, kh.DienThoai AS SDTKhach, nv.TenNV, " +
                          "ct.MaTV, tv.TenTV, ct.SoLuong, ct.DonGia, ct.GiamGia, ct.ThanhTien, " +
                          "hdb.Thue, hdb.TongTien " +
@@ -49,34 +53,43 @@ namespace tv_store.Modules._03_BanHang
 
             if (!string.IsNullOrWhiteSpace(txtMaHDB.Text))
             {
-                sql += " AND hdb.SoHDB LIKE '%" + txtMaHDB.Text.Trim().Replace("'", "''") + "%' ";
+                sql += " AND hdb.SoHDB LIKE @code ";
+                parameters.Add(DatabaseHelper.P("@code", "%" + txtMaHDB.Text.Trim() + "%"));
             }
 
             if (cboKhachHang.SelectedValue != null && !string.IsNullOrEmpty(cboKhachHang.SelectedValue.ToString()))
             {
-                sql += " AND hdb.MaKhach = '" + cboKhachHang.SelectedValue.ToString() + "' ";
+                sql += " AND hdb.MaKhach = @customer ";
+                parameters.Add(DatabaseHelper.P("@customer", cboKhachHang.SelectedValue));
             }
 
             if (cboNhanVien.SelectedValue != null && !string.IsNullOrEmpty(cboNhanVien.SelectedValue.ToString()))
             {
-                sql += " AND hdb.MaNV = '" + cboNhanVien.SelectedValue.ToString() + "' ";
+                sql += " AND hdb.MaNV = @employee ";
+                parameters.Add(DatabaseHelper.P("@employee", cboNhanVien.SelectedValue));
             }
 
             if (cboMaTivi.SelectedValue != null && !string.IsNullOrEmpty(cboMaTivi.SelectedValue.ToString()))
             {
-                sql += " AND ct.MaTV = '" + cboMaTivi.SelectedValue.ToString() + "' ";
+                sql += " AND ct.MaTV = @product ";
+                parameters.Add(DatabaseHelper.P("@product", cboMaTivi.SelectedValue));
             }
 
             if (chkLocNgay.Checked)
             {
-                string tuNgay = dtpTuNgay.Value.ToString("yyyy-MM-dd 00:00:00");
-                string denNgay = dtpDenNgay.Value.ToString("yyyy-MM-dd 23:59:59");
-                sql += string.Format(" AND hdb.NgayBan >= '{0}' AND hdb.NgayBan <= '{1}' ", tuNgay, denNgay);
+                if (dtpTuNgay.Value.Date > dtpDenNgay.Value.Date)
+                {
+                    MessageBox.Show("Ngày bắt đầu phải trước hoặc bằng ngày kết thúc."); return;
+                }
+                sql += " AND hdb.NgayBan >= @start AND hdb.NgayBan < @end ";
+                parameters.Add(DatabaseHelper.P("@start", dtpTuNgay.Value.Date));
+                parameters.Add(DatabaseHelper.P("@end", dtpDenNgay.Value.Date.AddDays(1)));
             }
 
             sql += " ORDER BY hdb.NgayBan DESC, hdb.SoHDB DESC";
 
-            tblKetQua = DatabaseHelper.GetDataToTable(sql);
+            try { tblKetQua = DatabaseHelper.Query(sql, parameters.ToArray()); }
+            catch (Exception ex) { MessageBox.Show(ex.Message, "Không thể tra cứu hóa đơn"); return; }
             dgvKetQuaHDB.DataSource = tblKetQua;
 
             if (dgvKetQuaHDB.Columns.Count > 0)
@@ -107,7 +120,6 @@ namespace tv_store.Modules._03_BanHang
                 dgvKetQuaHDB.Columns["Thue"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                 dgvKetQuaHDB.Columns["TongTien"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
-                // Đặt độ rộng cột phù hợp để không bị cắt chữ '...' tương tự bên sản phẩm Tivi
                 dgvKetQuaHDB.Columns["SoHDB"].Width = 115;
                 dgvKetQuaHDB.Columns["NgayBan"].Width = 135;
                 dgvKetQuaHDB.Columns["TenKhach"].Width = 180;
@@ -123,7 +135,7 @@ namespace tv_store.Modules._03_BanHang
                 dgvKetQuaHDB.Columns["TongTien"].Width = 120;
             }
 
-            // Tính toán tổng hợp số hóa đơn và tổng doanh thu
+            // Kết quả có nhiều dòng cho một hóa đơn; chỉ cộng tổng tiền hóa đơn một lần.
             System.Collections.Generic.HashSet<string> distinctHDB = new System.Collections.Generic.HashSet<string>();
             double tongTienDoanhThu = 0;
 
@@ -172,22 +184,13 @@ namespace tv_store.Modules._03_BanHang
         {
             if (e.RowIndex < 0 || tblKetQua.Rows.Count == 0) return;
 
-            DataGridViewRow r = dgvKetQuaHDB.Rows[e.RowIndex];
-            string soHDB = r.Cells["SoHDB"].Value.ToString();
-            string ngay = Convert.ToDateTime(r.Cells["NgayBan"].Value).ToString("dd/MM/yyyy HH:mm");
-            string khach = r.Cells["TenKhach"].Value.ToString();
-            string nv = r.Cells["TenNV"].Value.ToString();
-            string tongTien = DatabaseHelper.FormatTien(Convert.ToDouble(r.Cells["TongTien"].Value));
-
-            MessageBox.Show(
-                string.Format("THÔNG TIN HÓA ĐƠN BÁN:\n" +
-                              "- Số HĐB: {0}\n" +
-                              "- Ngày lập: {1}\n" +
-                              "- Khách hàng: {2}\n" +
-                              "- Nhân viên lập: {3}\n" +
-                              "- Tổng tiền thanh toán: {4}",
-                              soHDB, ngay, khach, nv, tongTien),
-                "Chi tiết hóa đơn", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            string id = dgvKetQuaHDB.Rows[e.RowIndex].Cells["SoHDB"].Value.ToString();
+            using (var invoice = new frmHoaDonBan())
+            {
+                invoice.Shown += (s, args) => { try { invoice.OpenInvoice(id); } catch (Exception ex) { MessageBox.Show(ex.Message); } };
+                invoice.ShowDialog(this);
+            }
+            ThucHienTimKiem();
         }
     }
 }

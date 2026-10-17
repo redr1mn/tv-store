@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Data;
 using System.Drawing;
 using System.IO;
@@ -18,6 +18,7 @@ namespace tv_store.Modules._01_SanPham
 
         private void frmDMTivi_Load(object sender, EventArgs e)
         {
+            if (DesignMode || System.ComponentModel.LicenseManager.UsageMode == System.ComponentModel.LicenseUsageMode.Designtime) return;
             btnLuu.Enabled = false;
             btnBoQua.Enabled = false;
             LoadComboBoxes();
@@ -66,7 +67,6 @@ namespace tv_store.Modules._01_SanPham
                 dgvTivi.Columns["Anh"].HeaderText = "Ảnh";
                 dgvTivi.Columns["GhiChu"].HeaderText = "Ghi chú";
 
-                // Format số tiền
                 dgvTivi.Columns["DonGiaNhap"].DefaultCellStyle.Format = "#,##0";
                 dgvTivi.Columns["DonGiaBan"].DefaultCellStyle.Format = "#,##0";
 
@@ -75,7 +75,6 @@ namespace tv_store.Modules._01_SanPham
                 dgvTivi.Columns["DonGiaBan"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                 dgvTivi.Columns["ThoiGianBaoHanh"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
-                // Đặt độ rộng cột phù hợp để không bị cắt chữ '...'
                 dgvTivi.Columns["MaTV"].Width = 75;
                 dgvTivi.Columns["TenTV"].Width = 240;
                 dgvTivi.Columns["TenHangSX"].Width = 90;
@@ -102,6 +101,8 @@ namespace tv_store.Modules._01_SanPham
                 oldImg.Dispose();
             }
 
+            if (!string.IsNullOrEmpty(filePath) && !Path.IsPathRooted(filePath))
+                filePath = Path.Combine(Application.StartupPath, "Images", Path.GetFileName(filePath));
             if (!string.IsNullOrEmpty(filePath) && File.Exists(filePath))
             {
                 try
@@ -157,7 +158,6 @@ namespace tv_store.Modules._01_SanPham
             txtAnh.Text = row.Cells["Anh"].Value.ToString();
             txtGhiChu.Text = row.Cells["GhiChu"].Value.ToString();
 
-            // Load ảnh
             SetPreviewImage(txtAnh.Text.Trim());
 
             btnSua.Enabled = true;
@@ -167,7 +167,7 @@ namespace tv_store.Modules._01_SanPham
 
         private void txtDonGiaNhap_TextChanged(object sender, EventArgs e)
         {
-            // Nghiệp vụ yêu cầu 3: Đơn giá bán tự động bằng 110% đơn giá nhập
+            // Giá bán đề xuất cao hơn đơn giá nhập 10%, theo quy tắc định giá của cửa hàng.
             if (double.TryParse(txtDonGiaNhap.Text.Trim(), out double giaNhap))
             {
                 double giaBan = Math.Round(giaNhap * 1.1, 0);
@@ -183,10 +183,14 @@ namespace tv_store.Modules._01_SanPham
         {
             if (dlgOpenImage.ShowDialog() == DialogResult.OK)
             {
-                txtAnh.Text = dlgOpenImage.FileName;
                 try
                 {
-                    SetPreviewImage(dlgOpenImage.FileName);
+                    string folder = Path.Combine(Application.StartupPath, "Images");
+                    Directory.CreateDirectory(folder);
+                    string filename = Guid.NewGuid().ToString("N") + Path.GetExtension(dlgOpenImage.FileName);
+                    File.Copy(dlgOpenImage.FileName, Path.Combine(folder, filename));
+                    txtAnh.Text = filename;
+                    SetPreviewImage(filename);
                 }
                 catch (Exception ex)
                 {
@@ -224,6 +228,21 @@ namespace tv_store.Modules._01_SanPham
                 return;
             }
 
+            try
+            {
+                if (Path.IsPathRooted(txtAnh.Text.Trim()))
+                {
+                    string oldPath = txtAnh.Text.Trim();
+                    if (!File.Exists(oldPath)) throw new IOException("Không tìm thấy ảnh cũ. Vui lòng chọn lại ảnh.");
+                    string folder = Path.Combine(Application.StartupPath, "Images");
+                    Directory.CreateDirectory(folder);
+                    string filename = Guid.NewGuid().ToString("N") + Path.GetExtension(oldPath);
+                    File.Copy(oldPath, Path.Combine(folder, filename));
+                    txtAnh.Text = filename;
+                }
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message, "Không thể lưu ảnh"); return; }
+
             string maTivi = txtMaTivi.Text.Trim();
             if (string.IsNullOrEmpty(maTivi))
             {
@@ -256,7 +275,7 @@ namespace tv_store.Modules._01_SanPham
 
             if (DatabaseHelper.CheckKey("SELECT MaTV FROM tblTV WHERE MaTV = '" + maTivi + "'"))
             {
-                // Cập nhật: Không cập nhật cột SoLuong tồn kho, tồn kho được quản lý qua Hóa đơn Nhập / Hóa đơn Bán
+                // Không ghi đè tồn kho khi sửa sản phẩm; số lượng được cập nhật qua hóa đơn.
                 string sqlUpdate = string.Format(
                     "UPDATE tblTV SET TenTV=N'{0}', MaHangSX={1}, MaKieu={2}, MaMau={3}, " +
                     "MaManHinh={4}, MaCo={5}, MaNuocSX={6}, DonGiaNhap={7}, " +
@@ -273,7 +292,7 @@ namespace tv_store.Modules._01_SanPham
             }
             else
             {
-                // Thêm mới: Tồn kho khởi tạo mặc định là 0, chỉ tăng lên khi lập Hóa đơn Nhập
+                // Sản phẩm mới bắt đầu với tồn kho 0 để số lượng chỉ phát sinh từ hóa đơn nhập.
                 string sqlInsert = string.Format(
                     "INSERT INTO tblTV(MaTV, TenTV, MaHangSX, MaKieu, MaMau, MaManHinh, MaCo, MaNuocSX, SoLuong, DonGiaNhap, DonGiaBan, ThoiGianBaoHanh, Anh, GhiChu) " +
                     "VALUES('{0}', N'{1}', {2}, {3}, {4}, {5}, {6}, {7}, 0, {8}, {9}, {10}, N'{11}', N'{12}')",
@@ -322,7 +341,7 @@ namespace tv_store.Modules._01_SanPham
 
             string maTivi = txtMaTivi.Text.Trim();
 
-            // Kiểm tra ràng buộc trước khi xóa để tránh lỗi khóa ngoại không thân thiện
+            // Giữ sản phẩm đã có giao dịch để bảo toàn liên kết với lịch sử nhập và bán.
             bool hasHDN = DatabaseHelper.CheckKey("SELECT TOP 1 MaTV FROM tblChiTietHDN WHERE MaTV = '" + maTivi + "'");
             bool hasHDB = DatabaseHelper.CheckKey("SELECT TOP 1 MaTV FROM tblChiTietHDB WHERE MaTV = '" + maTivi + "'");
             if (hasHDN || hasHDB)

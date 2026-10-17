@@ -1,4 +1,5 @@
-using System;
+﻿using System;
+using System.ComponentModel;
 using System.Data;
 using System.Windows.Forms;
 using tv_store.Helpers;
@@ -12,8 +13,46 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             InitializeComponent();
         }
 
+        private void SetEmployeePassword()
+        {
+            if (string.IsNullOrWhiteSpace(txtMaNV.Text))
+            {
+                MessageBox.Show("Vui lòng chọn nhân viên đã lưu."); return;
+            }
+            using (var dialog = new Form { Text = "Mật khẩu cho " + txtMaNV.Text, Width = 420, Height = 180, StartPosition = FormStartPosition.CenterParent, FormBorderStyle = FormBorderStyle.FixedDialog, MaximizeBox = false, MinimizeBox = false })
+            {
+                var input = new TextBox { Left = 20, Top = 35, Width = 360, UseSystemPasswordChar = true };
+                var label = new Label { Text = "Nhập mật khẩu mới (ít nhất 6 ký tự)", Left = 20, Top = 12, Width = 360 };
+                var confirm = new Button { Text = "Lưu", Left = 210, Top = 80, Width = 80 };
+                var cancel = new Button { Text = "Hủy", Left = 300, Top = 80, Width = 80, DialogResult = DialogResult.Cancel };
+                dialog.Controls.AddRange(new Control[] { label, input, confirm, cancel });
+                dialog.AcceptButton = confirm; dialog.CancelButton = cancel;
+                confirm.Click += (sender, args) =>
+                {
+                    if (input.Text.Length < 6) { MessageBox.Show("Mật khẩu cần ít nhất 6 ký tự."); return; }
+                    try
+                    {
+                        DatabaseHelper.Execute(
+                            "UPDATE tblNhanVien SET Passw=@password WHERE MaNV=@id; IF @@ROWCOUNT=0 THROW 50005,N'Hãy lưu nhân viên trước khi đặt mật khẩu.',1;",
+                            DatabaseHelper.P("@password", input.Text), DatabaseHelper.P("@id", txtMaNV.Text.Trim()));
+                        dialog.DialogResult = DialogResult.OK;
+                    }
+                    catch (Exception ex) { MessageBox.Show(ex.Message, "Không thể đặt mật khẩu"); }
+                };
+                dialog.ShowDialog(this);
+            }
+        }
+
         private void frmNhanVien_Load(object sender, EventArgs e)
         {
+            if (DesignMode || LicenseManager.UsageMode == LicenseUsageMode.Designtime) return;
+            if (!grpThongTin.Controls.ContainsKey("btnEmployeePassword"))
+            {
+                grpThongTin.Height += 38;
+                var passwordButton = new Button { Name = "btnEmployeePassword", Text = "Đặt mật khẩu đăng nhập", Left = 590, Top = 150, Width = 240, Height = 28 };
+                grpThongTin.Controls.Add(passwordButton);
+                passwordButton.Click += (buttonSender, args) => SetEmployeePassword();
+            }
             btnLuu.Enabled = false;
             btnBoQua.Enabled = false;
             LoadComboBoxes();
@@ -180,7 +219,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             if (string.IsNullOrEmpty(txtMaNV.Text)) return;
             string maNV = txtMaNV.Text.Trim();
 
-            // Kiểm tra các bảng có khóa ngoại tham chiếu đến Nhân viên
+            // Nhân viên có hóa đơn hoặc tài khoản phải được giữ để không mất liên kết dữ liệu.
             bool hasHDB = DatabaseHelper.CheckKey("SELECT TOP 1 MaNV FROM tblHoaDonBan WHERE MaNV = '" + maNV + "'");
             bool hasHDN = DatabaseHelper.CheckKey("SELECT TOP 1 MaNV FROM tblHoaDonNhap WHERE MaNV = '" + maNV + "'");
             bool hasTK = DatabaseHelper.CheckKey("SELECT TOP 1 MaNV FROM tblTaiKhoan WHERE MaNV = '" + maNV + "'");

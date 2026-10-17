@@ -14,6 +14,7 @@ namespace tv_store.Modules._03_BanHang
 
         private void frmKhachHang_Load(object sender, EventArgs e)
         {
+            if (DesignMode || System.ComponentModel.LicenseManager.UsageMode == System.ComponentModel.LicenseUsageMode.Designtime) return;
             btnLuu.Enabled = false;
             btnBoQua.Enabled = false;
             LoadDataGridView();
@@ -130,7 +131,7 @@ namespace tv_store.Modules._03_BanHang
             if (string.IsNullOrEmpty(txtMaKH.Text)) return;
             string maKH = txtMaKH.Text.Trim();
 
-            // Kiểm tra ràng buộc khóa ngoại trước khi xóa
+            // Giữ khách hàng đã có hóa đơn để lịch sử mua hàng còn tham chiếu hợp lệ.
             if (DatabaseHelper.CheckKey("SELECT TOP 1 MaKhach FROM tblHoaDonBan WHERE MaKhach = '" + maKH + "'"))
             {
                 MessageBox.Show(

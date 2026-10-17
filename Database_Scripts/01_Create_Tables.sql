@@ -1,9 +1,4 @@
-﻿-- ===================================================================
--- BÀI TẬP LỚN LẬP TRÌNH TRỰC QUAN (LTTQ) - C# WINFORMS
--- ĐỀ TÀI: HỆ THỐNG QUẢN LÝ BÁN TIVI (TV STORE)
--- FILE 1: TẠO CƠ SỞ DỮ LIỆU VÀ CÁC BẢNG (CHUẨN THEO SƠ ĐỒ RM)
--- GIAI ĐOẠN 1: CHUẨN HÓA KIỂU DECIMAL(18,2) & BỔ SUNG CHECK CONSTRAINTS
--- ===================================================================
+﻿-- Tạo cấu trúc CSDL quản lý bán tivi cho lần cài mới.
 
 IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'QLBanTivi')
 BEGIN
@@ -14,7 +9,8 @@ GO
 USE QLBanTivi;
 GO
 
--- XÓA BẢNG CŨ NẾU ĐÃ TỒN TẠI ĐỂ TẠO LẠI TOÀN BỘ CẤU TRÚC CHUẨN
+-- Xóa các bảng cũ cùng dữ liệu bên trong; chỉ dùng để cài mới hoặc tạo lại CSDL.
+-- CSDL đang sử dụng cần nâng cấp bằng script 04 để giữ dữ liệu.
 IF OBJECT_ID('tblChiTietHDB', 'U') IS NOT NULL DROP TABLE tblChiTietHDB;
 IF OBJECT_ID('tblChiTietHDN', 'U') IS NOT NULL DROP TABLE tblChiTietHDN;
 IF OBJECT_ID('tblHoaDonBan', 'U') IS NOT NULL DROP TABLE tblHoaDonBan;
@@ -65,7 +61,7 @@ CREATE TABLE tblNuocSX (
     TenNuocSX NVARCHAR(50) NOT NULL
 );
 
--- 2. BẢNG TIVI (SẢN PHẨM) - THEO SƠ ĐỒ RM: MaTV, TenTV
+-- 2. BẢNG TIVI (SẢN PHẨM)
 CREATE TABLE tblTV (
     MaTV NVARCHAR(20) PRIMARY KEY,
     TenTV NVARCHAR(100) NOT NULL,
@@ -99,6 +95,7 @@ CREATE TABLE tblNhanVien (
     TenNV NVARCHAR(50) NOT NULL,
     GioiTinh NVARCHAR(10),
     NgaySinh DATETIME,
+    Passw NVARCHAR(256) NULL, -- Đăng nhập bằng MaNV
     DienThoai NVARCHAR(20),
     DiaChi NVARCHAR(100),
     MaCa NVARCHAR(20) FOREIGN KEY REFERENCES tblCaLam(MaCa),
@@ -113,7 +110,7 @@ CREATE TABLE tblTaiKhoan (
     Quyen NVARCHAR(20) DEFAULT N'Nhân viên' -- 'Admin' hoặc 'Nhân viên'
 );
 
--- 4. BẢNG ĐỐI TÁC (KHÁCH HÀNG & NHÀ CUNG CẤP) - THEO SƠ ĐỒ RM: MaKhach, TenKhach
+-- 4. BẢNG ĐỐI TÁC (KHÁCH HÀNG & NHÀ CUNG CẤP)
 CREATE TABLE tblKhachHang (
     MaKhach NVARCHAR(20) PRIMARY KEY,
     TenKhach NVARCHAR(50) NOT NULL,
@@ -128,7 +125,7 @@ CREATE TABLE tblNhaCungCap (
     DienThoai NVARCHAR(20)
 );
 
--- 5. BẢNG HÓA ĐƠN NHẬP & CHI TIẾT HÓA ĐƠN NHẬP - THEO SƠ ĐỒ RM: SoHDN
+-- 5. BẢNG HÓA ĐƠN NHẬP & CHI TIẾT HÓA ĐƠN NHẬP
 CREATE TABLE tblHoaDonNhap (
     SoHDN NVARCHAR(30) PRIMARY KEY,
     MaNV NVARCHAR(20) FOREIGN KEY REFERENCES tblNhanVien(MaNV),
@@ -147,7 +144,7 @@ CREATE TABLE tblChiTietHDN (
     PRIMARY KEY (SoHDN, MaTV)
 );
 
--- 6. BẢNG HÓA ĐƠN BÁN & CHI TIẾT HÓA ĐƠN BÁN - THEO SƠ ĐỒ RM: SoHDB, Thue, DonGia
+-- 6. BẢNG HÓA ĐƠN BÁN & CHI TIẾT HÓA ĐƠN BÁN
 CREATE TABLE tblHoaDonBan (
     SoHDB NVARCHAR(30) PRIMARY KEY,
     MaNV NVARCHAR(20) FOREIGN KEY REFERENCES tblNhanVien(MaNV),
@@ -163,6 +160,7 @@ CREATE TABLE tblChiTietHDB (
     SoLuong INT NOT NULL CONSTRAINT CK_CTHDB_SoLuong CHECK (SoLuong > 0),
     DonGia DECIMAL(18, 2) NOT NULL CONSTRAINT CK_CTHDB_DonGia CHECK (DonGia >= 0), -- Đơn giá theo sơ đồ chuẩn
     GiamGia DECIMAL(5, 2) DEFAULT 0 CONSTRAINT CK_CTHDB_GiamGia CHECK (GiamGia >= 0 AND GiamGia <= 100),
+    GiaVonChot DECIMAL(18,2) NULL CONSTRAINT CK_CTHDB_GiaVon CHECK (GiaVonChot >= 0),
     ThanhTien DECIMAL(18, 2) NOT NULL CONSTRAINT CK_CTHDB_ThanhTien CHECK (ThanhTien >= 0),
     PRIMARY KEY (SoHDB, MaTV)
 );

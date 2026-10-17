@@ -9,6 +9,8 @@
     <RootNamespace>tv_store</RootNamespace>
     <AssemblyName>tv-store</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <!-- Tách việc nạp kiểu .NET Framework và Office COM khỏi tiến trình Visual Studio. -->
+    <UseWinFormsOutOfProcDesigner>True</UseWinFormsOutOfProcDesigner>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
@@ -44,13 +46,18 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <!-- Helpers -->
+    <!-- Các lớp hỗ trợ -->
+    <Compile Include="Helpers\InvoiceRepository.cs" />
+    <Compile Include="Modules\04_HeThong_BaoCao\frmProfitReport.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Helpers\DatabaseHelper.cs" />
     <Compile Include="Helpers\ExcelExportHelper.cs" />
-    <!-- Module 01_SanPham -->
+    <!-- Phân hệ 01_SanPham -->
     <Compile Include="Modules\01_SanPham\frmDMTivi.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -69,7 +76,7 @@
     <Compile Include="Modules\01_SanPham\frmTimKiemTivi.Designer.cs">
       <DependentUpon>frmTimKiemTivi.cs</DependentUpon>
     </Compile>
-    <!-- Module 02_NhapHang -->
+    <!-- Phân hệ 02_NhapHang -->
     <Compile Include="Modules\02_NhapHang\frmNhaCungCap.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -88,7 +95,7 @@
     <Compile Include="Modules\02_NhapHang\frmTimKiemHDN.Designer.cs">
       <DependentUpon>frmTimKiemHDN.cs</DependentUpon>
     </Compile>
-    <!-- Module 03_BanHang -->
+    <!-- Phân hệ 03_BanHang -->
     <Compile Include="Modules\03_BanHang\frmKhachHang.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -107,7 +114,7 @@
     <Compile Include="Modules\03_BanHang\frmTimKiemHDB.Designer.cs">
       <DependentUpon>frmTimKiemHDB.cs</DependentUpon>
     </Compile>
-    <!-- Module 04_HeThong_BaoCao -->
+    <!-- Phân hệ 04_HeThong_BaoCao -->
     <Compile Include="Modules\04_HeThong_BaoCao\frmMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -134,11 +141,29 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Modules\01_SanPham\frmDanhMucPhu.resx">
+      <DependentUpon>frmDanhMucPhu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\01_SanPham\frmDMTivi.resx">
+      <DependentUpon>frmDMTivi.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Modules\01_SanPham\frmTimKiemTivi.resx">
       <DependentUpon>frmTimKiemTivi.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Modules\02_NhapHang\frmHoaDonNhap.resx">
+      <DependentUpon>frmHoaDonNhap.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\02_NhapHang\frmNhaCungCap.resx">
+      <DependentUpon>frmNhaCungCap.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Modules\02_NhapHang\frmTimKiemHDN.resx">
       <DependentUpon>frmTimKiemHDN.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\03_BanHang\frmHoaDonBan.resx">
+      <DependentUpon>frmHoaDonBan.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\03_BanHang\frmKhachHang.resx">
+      <DependentUpon>frmKhachHang.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Modules\04_HeThong_BaoCao\frmBaoCaoThongKe.resx">
       <DependentUpon>frmBaoCaoThongKe.cs</DependentUpon>
@@ -148,6 +173,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Modules\04_HeThong_BaoCao\frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modules\04_HeThong_BaoCao\frmNhanVien.resx">
+      <DependentUpon>frmNhanVien.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

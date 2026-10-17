@@ -10,10 +10,22 @@ namespace tv_store.Modules._02_NhapHang
         public frmTimKiemHDN()
         {
             InitializeComponent();
+            dgvKetQuaHDN.CellDoubleClick += (s, e) =>
+            {
+                if (e.RowIndex < 0 || dgvKetQuaHDN.Rows[e.RowIndex].IsNewRow) return;
+                string id = dgvKetQuaHDN.Rows[e.RowIndex].Cells["SoHDN"].Value.ToString();
+                using (var invoice = new frmHoaDonNhap())
+                {
+                    invoice.Shown += (sender, args) => { try { invoice.OpenInvoice(id); } catch (Exception ex) { MessageBox.Show(ex.Message); } };
+                    invoice.ShowDialog(this);
+                }
+                ThucHienTimKiem();
+            };
         }
 
         private void frmTimKiemHDN_Load(object sender, EventArgs e)
         {
+            if (DesignMode || System.ComponentModel.LicenseManager.UsageMode == System.ComponentModel.LicenseUsageMode.Designtime) return;
             LoadComboBoxes();
             ThucHienTimKiem();
         }
@@ -26,7 +38,6 @@ namespace tv_store.Modules._02_NhapHang
 
         private void ThucHienTimKiem()
         {
-            // Yêu cầu 5: Tìm kiếm hóa đơn nhập theo Mã Tivi và Số lượng nhập
             string sql = "SELECT hdn.SoHDN, hdn.NgayNhap, ncc.TenNCC, nv.TenNV, " +
                          "ct.MaTV, tv.TenTV, ct.SoLuong AS SoLuongNhap, ct.DonGia, ct.ThanhTien " +
                          "FROM tblChiTietHDN ct " +
@@ -75,7 +86,6 @@ namespace tv_store.Modules._02_NhapHang
                 dgvKetQuaHDN.Columns["DonGia"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                 dgvKetQuaHDN.Columns["ThanhTien"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
-                // Đặt độ rộng cột phù hợp để không bị cắt chữ '...'
                 dgvKetQuaHDN.Columns["SoHDN"].Width = 110;
                 dgvKetQuaHDN.Columns["NgayNhap"].Width = 130;
                 dgvKetQuaHDN.Columns["TenNCC"].Width = 220;

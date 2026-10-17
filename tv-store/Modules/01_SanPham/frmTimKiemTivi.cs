@@ -14,6 +14,7 @@ namespace tv_store.Modules._01_SanPham
 
         private void frmTimKiemTivi_Load(object sender, EventArgs e)
         {
+            if (DesignMode || System.ComponentModel.LicenseManager.UsageMode == System.ComponentModel.LicenseUsageMode.Designtime) return;
             LoadComboBoxes();
             ThucHienTimKiem();
         }
@@ -37,7 +38,6 @@ namespace tv_store.Modules._01_SanPham
                          "LEFT JOIN tblCoManHinh c ON t.MaCo = c.MaCo " +
                          "LEFT JOIN tblNuocSX n ON t.MaNuocSX = n.MaNuocSX WHERE 1=1 ";
 
-            // Yêu cầu 4: Tìm kiếm theo Hãng SX, Màn hình, Cỡ màn hình
             if (cboHangSX.SelectedValue != null && !string.IsNullOrEmpty(cboHangSX.SelectedValue.ToString()))
             {
                 sql += " AND t.MaHangSX = '" + cboHangSX.SelectedValue.ToString() + "' ";
@@ -53,13 +53,11 @@ namespace tv_store.Modules._01_SanPham
                 sql += " AND t.MaCo = '" + cboCoManHinh.SelectedValue.ToString() + "' ";
             }
 
-            // Mở rộng thêm: Tìm theo từ khóa tên
             if (!string.IsNullOrWhiteSpace(txtTuKhoa.Text))
             {
                 sql += " AND t.TenTV LIKE N'%" + txtTuKhoa.Text.Trim() + "%' ";
             }
 
-            // Mở rộng thêm: Khoảng giá bán
             if (double.TryParse(txtGiaTu.Text.Trim(), out double giaTu) && giaTu > 0)
             {
                 sql += " AND t.DonGiaBan >= " + giaTu;

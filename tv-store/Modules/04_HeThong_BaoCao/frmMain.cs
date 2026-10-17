@@ -17,6 +17,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
 
         private void frmMain_Load(object sender, EventArgs e)
         {
+            if (DesignMode || System.ComponentModel.LicenseManager.UsageMode == System.ComponentModel.LicenseUsageMode.Designtime) return;
             UpdateStatusBar();
             LoadDashboardStats();
         }
@@ -36,21 +37,18 @@ namespace tv_store.Modules._04_HeThong_BaoCao
         {
             try
             {
-                // 1. Số mẫu Tivi đang kinh doanh
                 string c1 = DatabaseHelper.GetFieldValue("SELECT COUNT(*) FROM tblTV");
                 lblCard1Val.Text = string.IsNullOrEmpty(c1) ? "0" : c1;
 
-                // 2. Tổng số lượng tồn kho
                 string c2 = DatabaseHelper.GetFieldValue("SELECT ISNULL(SUM(SoLuong), 0) FROM tblTV");
                 lblCard2Val.Text = string.IsNullOrEmpty(c2) ? "0" : c2;
 
-                // 3. Tổng số hóa đơn
                 string hdb = DatabaseHelper.GetFieldValue("SELECT COUNT(*) FROM tblHoaDonBan");
                 string hdn = DatabaseHelper.GetFieldValue("SELECT COUNT(*) FROM tblHoaDonNhap");
                 int totalHd = (int.TryParse(hdb, out int b) ? b : 0) + (int.TryParse(hdn, out int n) ? n : 0);
                 lblCard3Val.Text = totalHd.ToString();
 
-                // 4. Số mẫu Tivi sắp hết hàng (<= 3)
+                // Ngưỡng cảnh báo sắp hết hàng của màn hình tổng quan là 3 chiếc cho mỗi mẫu.
                 string c4 = DatabaseHelper.GetFieldValue("SELECT COUNT(*) FROM tblTV WHERE SoLuong <= 3");
                 lblCard4Val.Text = string.IsNullOrEmpty(c4) ? "0" : c4;
             }
@@ -174,6 +172,8 @@ namespace tv_store.Modules._04_HeThong_BaoCao
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 frmDangNhap.CurrentUser = "Khách";
+                frmDangNhap.CurrentEmployeeId = null;
+                frmDangNhap.CurrentEmployeeName = "";
                 frmDangNhap.CurrentRole = "Chưa đăng nhập";
                 UpdateStatusBar();
 

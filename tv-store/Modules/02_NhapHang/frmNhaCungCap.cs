@@ -14,6 +14,7 @@ namespace tv_store.Modules._02_NhapHang
 
         private void frmNhaCungCap_Load(object sender, EventArgs e)
         {
+            if (DesignMode || System.ComponentModel.LicenseManager.UsageMode == System.ComponentModel.LicenseUsageMode.Designtime) return;
             btnLuu.Enabled = false;
             btnBoQua.Enabled = false;
             LoadDataGridView();
@@ -130,7 +131,7 @@ namespace tv_store.Modules._02_NhapHang
             if (string.IsNullOrEmpty(txtMaNCC.Text)) return;
             string maNCC = txtMaNCC.Text.Trim();
 
-            // Kiểm tra ràng buộc trước khi xóa
+            // Không xóa nhà cung cấp đã được dùng trên hóa đơn nhập.
             if (DatabaseHelper.CheckKey("SELECT TOP 1 MaNCC FROM tblHoaDonNhap WHERE MaNCC = '" + maNCC + "'"))
             {
                 MessageBox.Show(

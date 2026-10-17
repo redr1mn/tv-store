@@ -1,4 +1,5 @@
-using System;
+﻿using System;
+using System.ComponentModel;
 using System.Data;
 using System.Windows.Forms;
 using tv_store.Helpers;
@@ -14,6 +15,15 @@ namespace tv_store.Modules._04_HeThong_BaoCao
 
         private void frmBaoCaoThongKe_Load(object sender, EventArgs e)
         {
+            if (DesignMode || LicenseManager.UsageMode == LicenseUsageMode.Designtime) return;
+            if (!tbcBaoCao.TabPages.ContainsKey("tpProfitReport"))
+            {
+                var page = new TabPage("Lãi lỗ và biểu đồ") { Name = "tpProfitReport" };
+                var report = new frmProfitReport { TopLevel = false, FormBorderStyle = FormBorderStyle.None, Dock = DockStyle.Fill };
+                page.Controls.Add(report);
+                tbcBaoCao.TabPages.Add(page);
+                report.Show();
+            }
             DatabaseHelper.FillCombo("SELECT MaKhach, TenKhach FROM tblKhachHang", cboKhachHang, "MaKhach", "TenKhach");
             DatabaseHelper.FillCombo("SELECT MaNCC, TenNCC FROM tblNhaCungCap", cboNCC, "MaNCC", "TenNCC");
 
@@ -23,7 +33,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             txtNamThang.Text = DateTime.Now.Year.ToString();
         }
 
-        #region BÁO CÁO 1 (YÊU CẦU 6): TOP 3 TIVI MUA NHIỀU NHẤT THEO KHÁCH HÀNG
+        #region TOP 3 TIVI MUA NHIỀU NHẤT THEO KHÁCH HÀNG
         private void btnXemBaoCao1_Click(object sender, EventArgs e)
         {
             if (cboKhachHang.SelectedIndex == -1)
@@ -33,21 +43,8 @@ namespace tv_store.Modules._04_HeThong_BaoCao
                 return;
             }
 
-            string maKH = cboKhachHang.SelectedValue.ToString();
-            string sql = string.Format(
-                "SELECT TOP 3 tv.MaTV, tv.TenTV, hsx.TenHangSX, mh.TenManHinh, co.TenCo, " +
-                "SUM(ct.SoLuong) AS TongSoLuongMua, SUM(ct.ThanhTien) AS TongTienChi " +
-                "FROM tblChiTietHDB ct " +
-                "INNER JOIN tblHoaDonBan hdb ON ct.SoHDB = hdb.SoHDB " +
-                "INNER JOIN tblTV tv ON ct.MaTV = tv.MaTV " +
-                "LEFT JOIN tblHangSX hsx ON tv.MaHangSX = hsx.MaHangSX " +
-                "LEFT JOIN tblManHinh mh ON tv.MaManHinh = mh.MaManHinh " +
-                "LEFT JOIN tblCoManHinh co ON tv.MaCo = co.MaCo " +
-                "WHERE hdb.MaKhach = '{0}' " +
-                "GROUP BY tv.MaTV, tv.TenTV, hsx.TenHangSX, mh.TenManHinh, co.TenCo " +
-                "ORDER BY TongSoLuongMua DESC, tv.MaTV ASC", maKH);
-
-            DataTable dt = DatabaseHelper.GetDataToTable(sql);
+            DataTable dt = DatabaseHelper.GetDataToTable("EXEC dbo.sp_Top3TiviTheoKhachHang @MaKhach",
+                DatabaseHelper.P("@MaKhach", cboKhachHang.SelectedValue));
             dgvBaoCao1.DataSource = dt;
 
             if (dgvBaoCao1.Columns.Count > 0)
@@ -72,7 +69,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
         }
         #endregion
 
-        #region BÁO CÁO 2 (YÊU CẦU 7): HÓA ĐƠN & TỔNG TIỀN NHẬP HÀNG THEO NCC
+        #region HÓA ĐƠN & TỔNG TIỀN NHẬP HÀNG THEO NCC
         private void btnXemBaoCao2_Click(object sender, EventArgs e)
         {
             if (cboNCC.SelectedIndex == -1)
@@ -82,19 +79,11 @@ namespace tv_store.Modules._04_HeThong_BaoCao
                 return;
             }
 
-            string maNCC = cboNCC.SelectedValue.ToString();
-            string sql = string.Format(
-                "SELECT hdn.SoHDN, hdn.NgayNhap, nv.TenNV AS NguoiLap, ncc.TenNCC, hdn.TongTien " +
-                "FROM tblHoaDonNhap hdn " +
-                "INNER JOIN tblNhaCungCap ncc ON hdn.MaNCC = ncc.MaNCC " +
-                "INNER JOIN tblNhanVien nv ON hdn.MaNV = nv.MaNV " +
-                "WHERE hdn.MaNCC = '{0}' " +
-                "ORDER BY hdn.NgayNhap DESC", maNCC);
-
-            DataTable dt = DatabaseHelper.GetDataToTable(sql);
+            DataTable dt = DatabaseHelper.GetDataToTable("EXEC dbo.sp_BaoCaoNhapHangTheoNCC @MaNCC",
+                DatabaseHelper.P("@MaNCC", cboNCC.SelectedValue));
             dgvBaoCao2.DataSource = dt;
 
-            double tongTien = 0;
+            decimal tongTien = 0m;
             if (dgvBaoCao2.Columns.Count > 0)
             {
                 dgvBaoCao2.Columns["SoHDN"].HeaderText = "Mã HĐN";
@@ -108,7 +97,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
 
             foreach (DataRow r in dt.Rows)
             {
-                tongTien += Convert.ToDouble(r["TongTien"]);
+                tongTien += Convert.ToDecimal(r["TongTien"]);
             }
 
             lblTongTienBaoCao2.Text = string.Format("Tổng tiền nhập từ {0}: {1}", cboNCC.Text, DatabaseHelper.FormatTien(tongTien));
@@ -122,7 +111,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
         }
         #endregion
 
-        #region BÁO CÁO 3 (YÊU CẦU 8): DOANH THU & HÓA ĐƠN THEO QUÝ
+        #region DOANH THU & HÓA ĐƠN THEO QUÝ
         private void btnXemBaoCao3_Click(object sender, EventArgs e)
         {
             int quy = cboQuy.SelectedIndex + 1;
@@ -133,34 +122,15 @@ namespace tv_store.Modules._04_HeThong_BaoCao
                 return;
             }
 
-            string sql = "";
-            if (rdoBanHang.Checked)
-            {
-                sql = string.Format(
-                    "SELECT hdb.SoHDB AS MaHoaDon, hdb.NgayBan AS NgayLap, nv.TenNV, kh.TenKhach AS DoiTac, hdb.TongTien " +
-                    "FROM tblHoaDonBan hdb " +
-                    "INNER JOIN tblNhanVien nv ON hdb.MaNV = nv.MaNV " +
-                    "INNER JOIN tblKhachHang kh ON hdb.MaKhach = kh.MaKhach " +
-                    "WHERE DATEPART(QUARTER, hdb.NgayBan) = {0} AND YEAR(hdb.NgayBan) = {1} " +
-                    "ORDER BY hdb.NgayBan DESC", quy, nam);
-            }
-            else
-            {
-                sql = string.Format(
-                    "SELECT hdn.SoHDN AS MaHoaDon, hdn.NgayNhap AS NgayLap, nv.TenNV, ncc.TenNCC AS DoiTac, hdn.TongTien " +
-                    "FROM tblHoaDonNhap hdn " +
-                    "INNER JOIN tblNhanVien nv ON hdn.MaNV = nv.MaNV " +
-                    "INNER JOIN tblNhaCungCap ncc ON hdn.MaNCC = ncc.MaNCC " +
-                    "WHERE DATEPART(QUARTER, hdn.NgayNhap) = {0} AND YEAR(hdn.NgayNhap) = {1} " +
-                    "ORDER BY hdn.NgayNhap DESC", quy, nam);
-            }
-
-            DataTable dt = DatabaseHelper.GetDataToTable(sql);
+            DataTable dt = DatabaseHelper.GetDataToTable("EXEC dbo.sp_BaoCaoHoaDonTheoQuy @Quy,@Nam,@LoaiHoaDon",
+                DatabaseHelper.P("@Quy", quy), DatabaseHelper.P("@Nam", nam),
+                DatabaseHelper.P("@LoaiHoaDon", rdoBanHang.Checked ? "BAN" : "NHAP"));
             dgvBaoCao3.DataSource = dt;
 
-            double tongTien = 0;
+            decimal tongTien = 0m;
             if (dgvBaoCao3.Columns.Count > 0)
             {
+                dgvBaoCao3.Columns["Thue"].Visible = false;
                 dgvBaoCao3.Columns["MaHoaDon"].HeaderText = "Mã Hóa đơn";
                 dgvBaoCao3.Columns["NgayLap"].HeaderText = "Ngày lập";
                 dgvBaoCao3.Columns["TenNV"].HeaderText = "Nhân viên";
@@ -172,7 +142,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
 
             foreach (DataRow r in dt.Rows)
             {
-                tongTien += Convert.ToDouble(r["TongTien"]);
+                tongTien += Convert.ToDecimal(r["TongTien"]);
             }
 
             lblTongTienBaoCao3.Text = string.Format("Tổng tiền {0} Quý {1}/{2}: {3}", 
@@ -189,7 +159,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
         }
         #endregion
 
-        #region BÁO CÁO 4 (YÊU CẦU 9): TOP 5 NHÀ CUNG CẤP GIAO NHIỀU HÀNG TRONG THÁNG
+        #region TOP 5 NHÀ CUNG CẤP GIAO NHIỀU HÀNG TRONG THÁNG
         private void btnXemBaoCao4_Click(object sender, EventArgs e)
         {
             int thang = cboThang.SelectedIndex + 1;
@@ -200,19 +170,8 @@ namespace tv_store.Modules._04_HeThong_BaoCao
                 return;
             }
 
-            string sql = string.Format(
-                "SELECT TOP 5 ncc.MaNCC, ncc.TenNCC, ncc.DiaChi, ncc.DienThoai, " +
-                "COUNT(DISTINCT hdn.SoHDN) AS SoDonNhap, " +
-                "SUM(ct.SoLuong) AS TongSoLuongGiao, " +
-                "SUM(ct.ThanhTien) AS TongGiaTriNhap " +
-                "FROM tblHoaDonNhap hdn " +
-                "INNER JOIN tblNhaCungCap ncc ON hdn.MaNCC = ncc.MaNCC " +
-                "INNER JOIN tblChiTietHDN ct ON hdn.SoHDN = ct.SoHDN " +
-                "WHERE MONTH(hdn.NgayNhap) = {0} AND YEAR(hdn.NgayNhap) = {1} " +
-                "GROUP BY ncc.MaNCC, ncc.TenNCC, ncc.DiaChi, ncc.DienThoai " +
-                "ORDER BY TongSoLuongGiao DESC, ncc.MaNCC ASC", thang, nam);
-
-            DataTable dt = DatabaseHelper.GetDataToTable(sql);
+            DataTable dt = DatabaseHelper.GetDataToTable("EXEC dbo.sp_Top5NCCGiaoHangTheoThang @Thang,@Nam",
+                DatabaseHelper.P("@Thang", thang), DatabaseHelper.P("@Nam", nam));
             dgvBaoCao4.DataSource = dt;
 
             if (dgvBaoCao4.Columns.Count > 0)

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Data;
 using System.Windows.Forms;
 using tv_store.Helpers;
@@ -7,8 +7,10 @@ namespace tv_store.Modules._04_HeThong_BaoCao
 {
     public partial class frmDangNhap : Form
     {
-        public static string CurrentUser = "admin";
-        public static string CurrentRole = "Admin";
+        public static string CurrentUser = "";
+        public static string CurrentEmployeeId;
+        public static string CurrentEmployeeName = "";
+        public static string CurrentRole = "";
 
         public frmDangNhap()
         {
@@ -23,7 +25,7 @@ namespace tv_store.Modules._04_HeThong_BaoCao
         private void btnDangNhap_Click(object sender, EventArgs e)
         {
             string user = txtTenDangNhap.Text.Trim();
-            string pass = txtMatKhau.Text.Trim();
+            string pass = txtMatKhau.Text;
 
             if (string.IsNullOrEmpty(user))
             {
@@ -41,31 +43,28 @@ namespace tv_store.Modules._04_HeThong_BaoCao
             }
             errProvider.SetError(txtMatKhau, "");
 
-            // Kiểm tra trong CSDL SQL Server hoặc fallback mặc định
             bool isValid = false;
-            string safeUser = user.Replace("'", "''");
-            string safePass = pass.Replace("'", "''");
-            string sql = string.Format("SELECT TenDangNhap, Quyen FROM tblTaiKhoan WHERE TenDangNhap='{0}' AND MatKhau='{1}'", safeUser, safePass);
-            DataTable dt = DatabaseHelper.GetDataToTable(sql);
-
-            if (dt.Rows.Count > 0)
+            try
             {
-                isValid = true;
-                CurrentUser = dt.Rows[0]["TenDangNhap"].ToString();
-                CurrentRole = dt.Rows[0]["Quyen"].ToString();
-            }
-            else
-            {
-                // Chỉ Fallback nếu CSDL thực sự chưa có dữ liệu tài khoản nào (bảng rỗng hoặc vừa mới tạo DB)
-                string countStr = DatabaseHelper.GetFieldValue("SELECT COUNT(*) FROM tblTaiKhoan");
-                bool isTableEmpty = string.IsNullOrEmpty(countStr) || countStr == "0";
-
-                if (isTableEmpty && user == "admin" && pass == "123456")
+                var dt = DatabaseHelper.Query(
+                    "SELECT nv.MaNV,nv.TenNV,nv.Passw,CASE WHEN EXISTS(SELECT 1 FROM tblTaiKhoan t WHERE t.MaNV=nv.MaNV AND t.Quyen=N'Admin') THEN N'Admin' ELSE N'Nhân viên' END AS Quyen FROM tblNhanVien nv WHERE nv.MaNV=@user",
+                    DatabaseHelper.P("@user", user));
+                // So sánh tại C# để mật khẩu phân biệt hoa/thường dù CSDL dùng collation không phân biệt.
+                if (dt.Rows.Count == 1 && dt.Rows[0]["Passw"] != DBNull.Value &&
+                    string.Equals(dt.Rows[0]["Passw"].ToString(), pass, StringComparison.Ordinal))
                 {
                     isValid = true;
-                    CurrentUser = "admin";
-                    CurrentRole = "Admin";
+                    CurrentUser = CurrentEmployeeId = dt.Rows[0]["MaNV"].ToString();
+                    CurrentEmployeeName = dt.Rows[0]["TenNV"].ToString();
+                    CurrentRole = dt.Rows[0]["Quyen"].ToString();
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Không thể đăng nhập: " + ex.Message +
+                    "\nNếu CSDL chưa được nâng cấp, hãy chạy Database_Scripts/04_Upgrade_Requirements.sql.",
+                    "Lỗi đăng nhập", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
 
             if (isValid)

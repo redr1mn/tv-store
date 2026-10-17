@@ -35,7 +35,7 @@ namespace tv_store.Modules._02_NhapHang
             this.lblNhanVien = new System.Windows.Forms.Label();
             this.dtpNgayNhap = new System.Windows.Forms.DateTimePicker();
             this.lblNgayNhap = new System.Windows.Forms.Label();
-            this.txtMaHDN = new System.Windows.Forms.TextBox();
+            this.txtMaHDN = new System.Windows.Forms.ComboBox();
             this.lblMaHDN = new System.Windows.Forms.Label();
             this.grpChiTiet = new System.Windows.Forms.GroupBox();
             this.btnThemChiTiet = new System.Windows.Forms.Button();
@@ -663,7 +663,7 @@ namespace tv_store.Modules._02_NhapHang
         private System.Windows.Forms.Label lblNhanVien;
         private System.Windows.Forms.DateTimePicker dtpNgayNhap;
         private System.Windows.Forms.Label lblNgayNhap;
-        private System.Windows.Forms.TextBox txtMaHDN;
+        private System.Windows.Forms.ComboBox txtMaHDN;
         private System.Windows.Forms.Label lblMaHDN;
         private System.Windows.Forms.GroupBox grpChiTiet;
         private System.Windows.Forms.Button btnThemChiTiet;

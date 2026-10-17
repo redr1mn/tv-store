@@ -35,7 +35,7 @@ namespace tv_store.Modules._03_BanHang
             this.lblNhanVien = new System.Windows.Forms.Label();
             this.dtpNgayBan = new System.Windows.Forms.DateTimePicker();
             this.lblNgayBan = new System.Windows.Forms.Label();
-            this.txtMaHDB = new System.Windows.Forms.TextBox();
+            this.txtMaHDB = new System.Windows.Forms.ComboBox();
             this.lblMaHDB = new System.Windows.Forms.Label();
             this.grpChiTiet = new System.Windows.Forms.GroupBox();
             this.txtTonKho = new System.Windows.Forms.TextBox();
@@ -692,7 +692,7 @@ namespace tv_store.Modules._03_BanHang
         private System.Windows.Forms.Label lblNhanVien;
         private System.Windows.Forms.DateTimePicker dtpNgayBan;
         private System.Windows.Forms.Label lblNgayBan;
-        private System.Windows.Forms.TextBox txtMaHDB;
+        private System.Windows.Forms.ComboBox txtMaHDB;
         private System.Windows.Forms.Label lblMaHDB;
         private System.Windows.Forms.GroupBox grpChiTiet;
         private System.Windows.Forms.TextBox txtTonKho;

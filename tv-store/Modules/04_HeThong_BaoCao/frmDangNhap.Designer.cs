@@ -65,7 +65,7 @@
             this.lblTenDangNhap.Name = "lblTenDangNhap";
             this.lblTenDangNhap.Size = new System.Drawing.Size(157, 28);
             this.lblTenDangNhap.TabIndex = 1;
-            this.lblTenDangNhap.Text = "Tên đăng nhập:";
+            this.lblTenDangNhap.Text = "Mã nhân viên:";
             // 
             // txtTenDangNhap
             // 
@@ -74,7 +74,7 @@
             this.txtTenDangNhap.Name = "txtTenDangNhap";
             this.txtTenDangNhap.Size = new System.Drawing.Size(335, 35);
             this.txtTenDangNhap.TabIndex = 2;
-            this.txtTenDangNhap.Text = "admin";
+            this.txtTenDangNhap.Text = "";
             // 
             // lblMatKhau
             // 
@@ -94,7 +94,7 @@
             this.txtMatKhau.Name = "txtMatKhau";
             this.txtMatKhau.Size = new System.Drawing.Size(335, 35);
             this.txtMatKhau.TabIndex = 4;
-            this.txtMatKhau.Text = "123456";
+            this.txtMatKhau.Text = "";
             this.txtMatKhau.UseSystemPasswordChar = true;
             // 
             // chkHienMatKhau

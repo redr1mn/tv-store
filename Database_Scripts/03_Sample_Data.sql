@@ -1,15 +1,10 @@
-﻿-- ===================================================================
--- BÀI TẬP LỚN LẬP TRÌNH TRỰC QUAN (LTTQ) - C# WINFORMS
--- ĐỀ TÀI: HỆ THỐNG QUẢN LÝ BÁN TIVI (TV STORE)
--- FILE 3: DỮ LIỆU MẪU ĐỂ CHẠY THỬ NGHIỆM HỆ THỐNG (CHUẨN THEO SƠ ĐỒ RM)
--- GIAI ĐOẠN 1: BỔ SUNG KHỐI DỌN DẸP DỮ LIỆU CŨ (TÍNH IDEMPOTENT) & CHUẨN DECIMAL
--- ===================================================================
+﻿-- Nạp dữ liệu mẫu để thử ứng dụng quản lý bán tivi.
 
 USE QLBanTivi;
 GO
 
--- 0. DỌN DẸP DỮ LIỆU CŨ THEO THỨ TỰ RÀNG BUỘC KHÓA NGOẠI (IDEMPOTENT)
--- Đảm bảo có thể chạy script nhiều lần liên tiếp an toàn, không lỗi khóa ngoại hay trùng PK
+-- Xóa toàn bộ dữ liệu cũ trước khi nạp mẫu; chạy lại sẽ làm mất dữ liệu đang có.
+-- Xóa bảng chi tiết trước bảng danh mục để không vi phạm khóa ngoại.
 IF OBJECT_ID('tblChiTietHDB', 'U') IS NOT NULL DELETE FROM tblChiTietHDB;
 IF OBJECT_ID('tblChiTietHDN', 'U') IS NOT NULL DELETE FROM tblChiTietHDN;
 IF OBJECT_ID('tblHoaDonBan', 'U') IS NOT NULL DELETE FROM tblHoaDonBan;
@@ -29,7 +24,7 @@ IF OBJECT_ID('tblCoManHinh', 'U') IS NOT NULL DELETE FROM tblCoManHinh;
 IF OBJECT_ID('tblNuocSX', 'U') IS NOT NULL DELETE FROM tblNuocSX;
 GO
 
--- Tạm thời vô hiệu hóa trigger trong lúc nạp seed data để giữ đúng các số liệu tồn kho ban đầu
+-- Tồn kho mẫu đã được gán sẵn; tắt trigger để các chi tiết mẫu không cộng/trừ kho lần nữa.
 IF OBJECT_ID('trg_ChiTietHDN_CapNhat', 'TR') IS NOT NULL ALTER TABLE tblChiTietHDN DISABLE TRIGGER trg_ChiTietHDN_CapNhat;
 IF OBJECT_ID('trg_ChiTietHDB_CapNhat', 'TR') IS NOT NULL ALTER TABLE tblChiTietHDB DISABLE TRIGGER trg_ChiTietHDB_CapNhat;
 GO
@@ -111,6 +106,7 @@ INSERT INTO tblTaiKhoan (TenDangNhap, MatKhau, MaNV, Quyen) VALUES
 ('admin', '123456', 'NV01', N'Admin'),
 ('nv_banhang', '123456', 'NV02', N'Nhân viên'),
 ('nv_kho', '123456', 'NV03', N'Nhân viên');
+UPDATE nv SET Passw=t.MatKhau FROM tblNhanVien nv JOIN tblTaiKhoan t ON nv.MaNV=t.MaNV;
 
 -- 9. KHÁCH HÀNG (MaKhach, TenKhach)
 INSERT INTO tblKhachHang (MaKhach, TenKhach, DiaChi, DienThoai) VALUES

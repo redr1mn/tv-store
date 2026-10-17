@@ -1,404 +1,373 @@
-using System;
+﻿using System;
+using System.ComponentModel;
 using System.Data;
+using System.Linq;
 using System.Windows.Forms;
 using tv_store.Helpers;
+using tv_store.Modules._04_HeThong_BaoCao;
 
 namespace tv_store.Modules._03_BanHang
 {
     public partial class frmHoaDonBan : Form
     {
-        private DataTable tblChiTietHDBData;
+        private DataTable lines;
+        private string savedCode;
+        private decimal tax;
+        private bool loading;
+        private bool runtimeInitialized;
 
         public frmHoaDonBan()
         {
             InitializeComponent();
         }
 
-        private void frmHoaDonBan_Load(object sender, EventArgs e)
+        private void InitializeRuntime()
         {
-            btnLuuHDB.Enabled = false;
-            btnHuyHDB.Enabled = false;
-            btnInHDB.Enabled = false;
-            btnXuatExcel.Enabled = false;
-            LoadComboBoxes();
-            ResetForm();
+            if (runtimeInitialized || DesignMode || LicenseManager.UsageMode == LicenseUsageMode.Designtime) return;
+            runtimeInitialized = true;
+            txtMaHDB.Width -= 85;
+            var search = new Button { Text = "Tìm HĐ", Left = txtMaHDB.Right + 5, Top = txtMaHDB.Top - 1, Width = 80, Height = txtMaHDB.Height + 2 };
+            txtMaHDB.Parent.Controls.Add(search);
+            search.Click += (s, e) => Search();
+            txtMaHDB.KeyDown += (s, e) => { if (e.KeyCode == Keys.Enter) { e.SuppressKeyPress = true; Search(); } };
+            txtMaHDB.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            txtMaHDB.AutoCompleteSource = AutoCompleteSource.ListItems;
+            cboNhanVien.Enabled = false;
+
+            txtDienThoaiKH.Leave += (s, e) => Safe(LookupCustomer);
+            txtDienThoaiKH.TextChanged += (s, e) =>
+            {
+                if (loading || savedCode != null) return;
+                loading = true;
+                cboKhachHang.SelectedIndex = -1;
+                txtTenKH.Clear(); txtDiaChiKH.Clear();
+                txtTenKH.ReadOnly = txtDiaChiKH.ReadOnly = false;
+                loading = false;
+            };
+
+            FormClosing += (s, e) => { if (!CanDiscard()) e.Cancel = true; };
+
+            LoadInvoiceData();
         }
 
-        private void LoadComboBoxes()
+        private void Safe(Action action)
         {
-            DatabaseHelper.FillCombo("SELECT MaNV, TenNV FROM tblNhanVien", cboNhanVien, "MaNV", "TenNV");
-            DatabaseHelper.FillCombo("SELECT MaKhach, TenKhach FROM tblKhachHang", cboKhachHang, "MaKhach", "TenKhach");
-            DatabaseHelper.FillCombo("SELECT MaTV, TenTV FROM tblTV", cboMaTivi, "MaTV", "TenTV");
+            try { action(); }
+            catch (Exception ex) { MessageBox.Show(this, ex.Message, "Không thể thực hiện", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
         }
 
-        private void ResetForm()
+        private static void Bind(ComboBox combo, DataTable data, string value, string display)
         {
+            combo.DisplayMember = display; combo.ValueMember = value; combo.DataSource = data; combo.SelectedIndex = -1;
+        }
+
+        private void LoadInvoiceData()
+        {
+            Safe(() =>
+            {
+                loading = true;
+                try
+                {
+                    Bind(cboNhanVien, DatabaseHelper.Query("SELECT MaNV,TenNV FROM tblNhanVien"), "MaNV", "MaNV");
+                    Bind(cboKhachHang, DatabaseHelper.Query("SELECT MaKhach,TenKhach FROM tblKhachHang"), "MaKhach", "MaKhach");
+                    Bind(cboMaTivi, DatabaseHelper.Query("SELECT MaTV,TenTV FROM tblTV"), "MaTV", "MaTV");
+                    RefreshCodes();
+                }
+                finally { loading = false; }
+                Reset();
+            });
+        }
+
+        private void RefreshCodes()
+        {
+            var data = DatabaseHelper.Query("SELECT SoHDB FROM tblHoaDonBan ORDER BY NgayBan DESC");
+            string text = txtMaHDB.Text;
+            txtMaHDB.Items.Clear();
+            foreach (DataRow row in data.Rows) txtMaHDB.Items.Add(row[0].ToString());
+            txtMaHDB.Text = text;
+        }
+
+        private void Reset()
+        {
+            loading = true;
+            savedCode = null;
+            tax = 10m;
             txtMaHDB.Text = "";
             dtpNgayBan.Value = DateTime.Now;
-            cboNhanVien.SelectedIndex = -1;
-            txtTenNV.Text = "";
-            cboKhachHang.SelectedIndex = -1;
-            txtTenKH.Text = "";
-            txtDiaChiKH.Text = "";
-            txtDienThoaiKH.Text = "";
-
-            cboMaTivi.SelectedIndex = -1;
-            txtTenTivi.Text = "";
+            cboNhanVien.SelectedValue = frmDangNhap.CurrentEmployeeId ?? "";
+            txtTenNV.Text = frmDangNhap.CurrentEmployeeName;
+            cboKhachHang.SelectedIndex = cboMaTivi.SelectedIndex = -1;
+            txtTenKH.Clear(); txtDiaChiKH.Clear(); txtDienThoaiKH.Clear(); txtTenTivi.Clear();
+            txtSoLuongBan.Text = "1"; txtDonGiaBan.Text = txtGiamGia.Text = txtThanhTien.Text = "0";
             txtTonKho.Text = "0";
-            txtSoLuongBan.Text = "1";
-            txtDonGiaBan.Text = "0";
-            txtGiamGia.Text = "0";
-            txtThanhTien.Text = "0";
-
-            lblTongTien.Text = "0 VNĐ";
-            lblBangChu.Text = "Bằng chữ: Không đồng.";
-
-            CreateTempDataTable();
+            lines = new DataTable();
+            lines.Columns.Add("MaTV", typeof(string)); lines.Columns.Add("TenTV", typeof(string));
+            lines.Columns.Add("SoLuong", typeof(int)); lines.Columns.Add("DonGia", typeof(decimal));
+            lines.Columns.Add("GiamGia", typeof(decimal)); lines.Columns.Add("ThanhTien", typeof(decimal));
+            BindLines();
+            loading = false;
+            SetState(false);
+            CalculateTotal();
         }
 
-        private void CreateTempDataTable()
+        private void BindLines()
         {
-            tblChiTietHDBData = new DataTable();
-            tblChiTietHDBData.Columns.Add("MaTV", typeof(string));
-            tblChiTietHDBData.Columns.Add("TenTV", typeof(string));
-            tblChiTietHDBData.Columns.Add("SoLuong", typeof(int));
-            tblChiTietHDBData.Columns.Add("DonGia", typeof(double));
-            tblChiTietHDBData.Columns.Add("GiamGia", typeof(double));
-            tblChiTietHDBData.Columns.Add("ThanhTien", typeof(double));
-            dgvChiTietHDB.DataSource = tblChiTietHDBData;
-
-            if (dgvChiTietHDB.Columns.Count > 0)
-            {
-                dgvChiTietHDB.Columns["MaTV"].HeaderText = "Mã Tivi";
-                dgvChiTietHDB.Columns["TenTV"].HeaderText = "Tên Tivi";
-                dgvChiTietHDB.Columns["SoLuong"].HeaderText = "Số lượng mua";
-                dgvChiTietHDB.Columns["DonGia"].HeaderText = "Đơn giá bán";
-                dgvChiTietHDB.Columns["GiamGia"].HeaderText = "Giảm giá (%)";
-                dgvChiTietHDB.Columns["ThanhTien"].HeaderText = "Thành tiền";
-
-                dgvChiTietHDB.Columns["MaTV"].FillWeight = 60;
-                dgvChiTietHDB.Columns["TenTV"].FillWeight = 220;
-                dgvChiTietHDB.Columns["SoLuong"].FillWeight = 70;
-                dgvChiTietHDB.Columns["DonGia"].FillWeight = 100;
-                dgvChiTietHDB.Columns["GiamGia"].FillWeight = 70;
-                dgvChiTietHDB.Columns["ThanhTien"].FillWeight = 110;
-
-                dgvChiTietHDB.Columns["DonGia"].DefaultCellStyle.Format = "#,##0";
-                dgvChiTietHDB.Columns["ThanhTien"].DefaultCellStyle.Format = "#,##0";
-
-                dgvChiTietHDB.Columns["SoLuong"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                dgvChiTietHDB.Columns["DonGia"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                dgvChiTietHDB.Columns["GiamGia"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                dgvChiTietHDB.Columns["ThanhTien"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-            }
+            dgvChiTietHDB.DataSource = lines;
+            string[] titles = { "Mã Tivi", "Tên Tivi", "Số lượng", "Đơn giá bán", "Giảm giá (%)", "Thành tiền" };
+            for (int i = 0; i < titles.Length; i++) dgvChiTietHDB.Columns[i].HeaderText = titles[i];
+            dgvChiTietHDB.Columns["TenTV"].FillWeight = 220;
+            foreach (string name in new[] { "DonGia", "ThanhTien" }) dgvChiTietHDB.Columns[name].DefaultCellStyle.Format = "N2";
         }
 
-        private void cboNhanVien_SelectedIndexChanged(object sender, EventArgs e)
+        private void SetState(bool saved)
         {
-            if (cboNhanVien.SelectedValue != null)
-            {
-                txtTenNV.Text = DatabaseHelper.GetFieldValue("SELECT TenNV FROM tblNhanVien WHERE MaNV='" + cboNhanVien.SelectedValue.ToString() + "'");
-            }
+            btnLuuHDB.Enabled = !saved;
+            btnHuyHDB.Enabled = saved || lines.Rows.Count > 0 || txtMaHDB.Text.Length > 0;
+            btnInHDB.Enabled = saved && lines.Rows.Count > 0;
+            btnXuatExcel.Enabled = btnInHDB.Enabled;
+            btnThemChiTiet.Enabled = !saved;
+            grpChiTiet.Enabled = !saved;
+            dtpNgayBan.Enabled = cboKhachHang.Enabled = !saved;
+            txtDienThoaiKH.ReadOnly = saved;
+            txtDienThoaiKH.TabStop = !saved;
+            txtTenKH.ReadOnly = txtDiaChiKH.ReadOnly = saved || cboKhachHang.SelectedIndex >= 0;
+            cboNhanVien.Enabled = false;
         }
 
-        private void cboKhachHang_SelectedIndexChanged(object sender, EventArgs e)
+        private bool CanDiscard()
         {
-            if (cboKhachHang.SelectedValue != null)
+            return savedCode != null || lines == null || lines.Rows.Count == 0 ||
+                MessageBox.Show(this, "Bỏ hóa đơn đang nhập chưa lưu?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
+        }
+
+        private void NewInvoice()
+        {
+            Safe(() =>
             {
-                string ma = cboKhachHang.SelectedValue.ToString();
-                DataTable dt = DatabaseHelper.GetDataToTable("SELECT TenKhach, DiaChi, DienThoai FROM tblKhachHang WHERE MaKhach='" + ma + "'");
-                if (dt.Rows.Count > 0)
+                if (!CanDiscard()) return;
+                Reset();
+                txtMaHDB.Text = InvoiceRepository.PreviewCode(true, dtpNgayBan.Value);
+                SetState(false);
+            });
+        }
+
+        private void EmployeeChanged()
+        {
+            if (loading || cboNhanVien.SelectedValue == null) return;
+            Safe(() =>
+            {
+                var data = DatabaseHelper.Query("SELECT TenNV FROM tblNhanVien WHERE MaNV=@id", DatabaseHelper.P("@id", cboNhanVien.SelectedValue));
+                txtTenNV.Text = data.Rows.Count == 0 ? "" : data.Rows[0][0].ToString();
+            });
+        }
+
+        private void PartnerChanged()
+        {
+            if (loading || cboKhachHang.SelectedValue == null) return;
+            Safe(() =>
+            {
+                var data = DatabaseHelper.Query("SELECT TenKhach,DiaChi,DienThoai FROM tblKhachHang WHERE MaKhach=@id", DatabaseHelper.P("@id", cboKhachHang.SelectedValue));
+                if (data.Rows.Count == 0) return;
+                loading = true;
+                try { txtTenKH.Text = data.Rows[0][0].ToString(); txtDiaChiKH.Text = data.Rows[0][1].ToString(); txtDienThoaiKH.Text = data.Rows[0][2].ToString(); }
+                finally { loading = false; }
+                txtTenKH.ReadOnly = txtDiaChiKH.ReadOnly = true;
+            });
+        }
+
+        private void LookupCustomer()
+        {
+            if (savedCode != null || string.IsNullOrWhiteSpace(txtDienThoaiKH.Text)) return;
+            var data = DatabaseHelper.Query("SELECT TOP 1 MaKhach,TenKhach,DiaChi FROM tblKhachHang WHERE DienThoai=@phone ORDER BY MaKhach", DatabaseHelper.P("@phone", txtDienThoaiKH.Text.Trim()));
+            loading = true;
+            try
+            {
+                if (data.Rows.Count > 0)
                 {
-                    txtTenKH.Text = dt.Rows[0]["TenKhach"].ToString();
-                    txtDiaChiKH.Text = dt.Rows[0]["DiaChi"].ToString();
-                    txtDienThoaiKH.Text = dt.Rows[0]["DienThoai"].ToString();
+                    // Nạp lại danh sách để nhận cả khách hàng vừa được tạo ở cửa sổ khác.
+                    Bind(cboKhachHang, DatabaseHelper.Query("SELECT MaKhach,TenKhach FROM tblKhachHang"), "MaKhach", "MaKhach");
+                    cboKhachHang.SelectedValue = data.Rows[0]["MaKhach"];
+                    txtTenKH.Text = data.Rows[0]["TenKhach"].ToString();
+                    txtDiaChiKH.Text = data.Rows[0]["DiaChi"].ToString();
                 }
+                else cboKhachHang.SelectedIndex = -1;
+                txtTenKH.ReadOnly = txtDiaChiKH.ReadOnly = data.Rows.Count > 0;
             }
+            finally { loading = false; }
         }
 
-        private void cboMaTivi_SelectedIndexChanged(object sender, EventArgs e)
+        private void ProductChanged()
         {
-            if (cboMaTivi.SelectedValue != null)
+            if (loading || cboMaTivi.SelectedValue == null) return;
+            Safe(() =>
             {
-                string ma = cboMaTivi.SelectedValue.ToString();
-                DataTable dt = DatabaseHelper.GetDataToTable("SELECT TenTV, DonGiaBan, SoLuong FROM tblTV WHERE MaTV='" + ma + "'");
-                if (dt.Rows.Count > 0)
+                var data = DatabaseHelper.Query("SELECT TenTV,DonGiaBan,DonGiaNhap,SoLuong FROM tblTV WHERE MaTV=@id", DatabaseHelper.P("@id", cboMaTivi.SelectedValue));
+                if (data.Rows.Count == 0) return;
+                txtTenTivi.Text = data.Rows[0]["TenTV"].ToString();
+                txtDonGiaBan.Text = data.Rows[0]["DonGiaBan"].ToString();
+                txtTonKho.Text = data.Rows[0]["SoLuong"].ToString();
+                Calculate();
+            });
+        }
+
+        private void Calculate()
+        {
+            if (loading) return;
+            int count; decimal unitPrice, reduction;
+            try
+            {
+                txtThanhTien.Text = int.TryParse(txtSoLuongBan.Text, out count) && decimal.TryParse(txtDonGiaBan.Text, out unitPrice) && decimal.TryParse(txtGiamGia.Text, out reduction)
+                    ? InvoiceRepository.LineTotal(count, unitPrice, reduction).ToString() : "0";
+            }
+            catch (ArgumentException) { txtThanhTien.Text = "0"; }
+            catch (OverflowException) { txtThanhTien.Text = "0"; }
+        }
+
+        private void AddLine()
+        {
+            Safe(() =>
+            {
+                if (savedCode != null) return;
+                int count; decimal unitPrice, reduction;
+                if (cboMaTivi.SelectedValue == null) throw new ArgumentException("Vui lòng chọn Tivi.");
+                if (!int.TryParse(txtSoLuongBan.Text, out count) || !decimal.TryParse(txtDonGiaBan.Text, out unitPrice) || !decimal.TryParse(txtGiamGia.Text, out reduction))
+                    throw new ArgumentException("Vui lòng nhập số lượng, đơn giá và giảm giá hợp lệ.");
+                InvoiceRepository.LineTotal(count, unitPrice, reduction);
+                string id = cboMaTivi.SelectedValue.ToString();
+                DataRow existing = lines.Rows.Cast<DataRow>().FirstOrDefault(r => r["MaTV"].ToString() == id);
+                int newCount = checked(count + (existing == null ? 0 : Convert.ToInt32(existing["SoLuong"])));
+
+                var stock = DatabaseHelper.Query("SELECT SoLuong FROM tblTV WHERE MaTV=@id", DatabaseHelper.P("@id", id));
+                if (stock.Rows.Count == 0 || Convert.ToInt32(stock.Rows[0][0]) < newCount) throw new ArgumentException("Tổng số lượng mua vượt quá tồn kho hiện tại.");
+                txtTonKho.Text = stock.Rows[0][0].ToString();
+
+                if (existing != null)
                 {
-                    txtTenTivi.Text = dt.Rows[0]["TenTV"].ToString();
-                    txtDonGiaBan.Text = dt.Rows[0]["DonGiaBan"].ToString();
-                    txtTonKho.Text = dt.Rows[0]["SoLuong"].ToString();
-                    TinhThanhTien(null, null);
+                    if (MessageBox.Show(this, "Cộng thêm số lượng và áp dụng đơn giá, giảm giá hiện tại cho sản phẩm này?", "Xác nhận", MessageBoxButtons.YesNo) != DialogResult.Yes) return;
+                    existing["SoLuong"] = newCount; existing["DonGia"] = unitPrice; existing["GiamGia"] = reduction;
+                    existing["ThanhTien"] = InvoiceRepository.LineTotal(newCount, unitPrice, reduction);
                 }
-            }
+                else lines.Rows.Add(id, txtTenTivi.Text, count, unitPrice, reduction, InvoiceRepository.LineTotal(count, unitPrice, reduction));
+                CalculateTotal(); SetState(false);
+            });
         }
 
-        private void TinhThanhTien(object sender, EventArgs e)
+        private decimal CalculateTotal()
         {
-            double.TryParse(txtDonGiaBan.Text.Trim(), out double gia);
-            int.TryParse(txtSoLuongBan.Text.Trim(), out int sl);
-            double.TryParse(txtGiamGia.Text.Trim(), out double gg);
+            decimal subtotal = lines.Rows.Cast<DataRow>().Sum(r => Convert.ToDecimal(r["ThanhTien"]));
+            decimal value = Math.Round(subtotal * (1 + tax / 100m), 0, MidpointRounding.AwayFromZero);
 
-            double thanhTien = sl * gia * (1 - gg / 100.0);
-            txtThanhTien.Text = thanhTien.ToString();
+            lblTongTien.Text = DatabaseHelper.FormatTien(value);
+            lblBangChu.Text = "Bằng chữ (VAT " + tax + "%): " + DatabaseHelper.ChuyenSoSangChu(value);
+            return value;
         }
 
-        private void btnThemChiTiet_Click(object sender, EventArgs e)
+        private void SaveInvoice()
         {
-            if (cboMaTivi.SelectedIndex == -1)
+            Safe(() =>
             {
-                MessageBox.Show("Vui lòng chọn Tivi cần bán!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                cboMaTivi.Focus();
-                return;
+                if (savedCode != null) return;
+                LookupCustomer();
+                string id = InvoiceRepository.SaveSale(dtpNgayBan.Value, frmDangNhap.CurrentEmployeeId,
+                    lines, txtTenKH.Text.Trim(), txtDiaChiKH.Text.Trim(), txtDienThoaiKH.Text.Trim(), tax);
+                // Đánh dấu đã lưu trước khi tải lại để không tạo trùng nếu việc tải thất bại.
+                savedCode = id; txtMaHDB.Text = id; SetState(true);
+                OpenInvoice(id); RefreshCodes();
+                MessageBox.Show(this, "Đã lưu hóa đơn và cập nhật tồn kho.", "Thành công");
+            });
+        }
+
+        private void Search()
+        {
+            Safe(() =>
+            {
+                string id = txtMaHDB.Text.Trim();
+                if (id.Length == 0 || !CanDiscard()) return;
+                OpenInvoice(id);
+            });
+        }
+
+        public void OpenInvoice(string id)
+        {
+            InitializeRuntime();
+            if (!runtimeInitialized) return;
+            var header = InvoiceRepository.Header(true, id);
+            if (header.Rows.Count == 0) throw new ArgumentException("Không tìm thấy hóa đơn.");
+            var detail = InvoiceRepository.Lines(true, id);
+            loading = true;
+            try
+            {
+                var row = header.Rows[0];
+                savedCode = id; txtMaHDB.Text = id;
+                dtpNgayBan.Value = Convert.ToDateTime(row["NgayBan"]);
+                cboNhanVien.SelectedValue = row["MaNV"];
+                var staff = DatabaseHelper.Query("SELECT TenNV FROM tblNhanVien WHERE MaNV=@id", DatabaseHelper.P("@id", row["MaNV"]));
+                txtTenNV.Text = staff.Rows.Count == 0 ? "" : staff.Rows[0][0].ToString();
+                Bind(cboKhachHang, DatabaseHelper.Query("SELECT MaKhach,TenKhach FROM tblKhachHang"), "MaKhach", "MaKhach");
+                cboKhachHang.SelectedValue = row["MaKhach"];
+                lines = detail; BindLines();
+                tax = Convert.ToDecimal(row["Thue"]);
             }
+            finally { loading = false; }
+            PartnerChanged(); CalculateTotal(); SetState(true);
+        }
 
-            int.TryParse(txtSoLuongBan.Text.Trim(), out int sl);
-            int.TryParse(txtTonKho.Text.Trim(), out int tonKho);
-
-            if (sl <= 0)
+        private void RemoveLine(int index)
+        {
+            Safe(() =>
             {
-                MessageBox.Show("Số lượng mua phải lớn hơn 0!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtSoLuongBan.Focus();
-                return;
-            }
+                if (lines == null || index < 0 || index >= lines.Rows.Count) return;
+                if (MessageBox.Show(this, savedCode == null ? "Xóa sản phẩm khỏi hóa đơn đang nhập?" : "Xóa sản phẩm khỏi hóa đơn đã lưu và cập nhật lại tồn kho?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
+                DataRow row = GetLineAt(index);
+                if (savedCode == null) { lines.Rows.Remove(row); CalculateTotal(); SetState(false); }
+                else { InvoiceRepository.Delete(true, savedCode, row["MaTV"].ToString()); OpenInvoice(savedCode); }
+            });
+        }
 
-            // Nghiệp vụ yêu cầu 1: Kiểm tra tồn kho trước khi bán
-            if (sl > tonKho)
+        internal DataRow GetLineAt(int displayIndex)
+        {
+            // Lấy dòng đang hiển thị vì người dùng có thể đã sắp xếp bảng.
+            return ((DataRowView)dgvChiTietHDB.Rows[displayIndex].DataBoundItem).Row;
+        }
+
+        private void CancelInvoice()
+        {
+            Safe(() =>
             {
-                MessageBox.Show(string.Format("Số lượng tồn kho không đủ để bán!\nHiện trong kho chỉ còn {0} chiếc.", tonKho),
-                    "Cảnh báo hết hàng", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtSoLuongBan.Focus();
-                return;
-            }
-
-            double.TryParse(txtDonGiaBan.Text.Trim(), out double gia);
-            double.TryParse(txtGiamGia.Text.Trim(), out double gg);
-            double.TryParse(txtThanhTien.Text.Trim(), out double tt);
-
-            string maTivi = cboMaTivi.SelectedValue.ToString();
-            string tenTivi = txtTenTivi.Text.Trim();
-
-            // Kiểm tra mặt hàng đã có trong chi tiết chưa
-            foreach (DataRow r in tblChiTietHDBData.Rows)
-            {
-                if (r["MaTV"].ToString() == maTivi)
+                if (savedCode != null)
                 {
-                    int oldSl = Convert.ToInt32(r["SoLuong"]);
-                    if (oldSl + sl > tonKho)
-                    {
-                        MessageBox.Show(string.Format("Tổng số lượng đặt mua ({0}) vượt quá tồn kho khả dụng ({1})!", oldSl + sl, tonKho),
-                            "Cảnh báo hết hàng", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
-                    }
-
-                    string msg = string.Format(
-                        "Sản phẩm '{0}' đã có trong hóa đơn với số lượng {1} chiếc.\n" +
-                        "Bạn có muốn cộng thêm {2} chiếc vào hóa đơn không?", 
-                        tenTivi, oldSl, sl);
-
-                    if (MessageBox.Show(msg, "Xác nhận cộng dồn", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                    {
-                        int newSl = oldSl + sl;
-                        r["SoLuong"] = newSl;
-                        r["DonGia"] = gia;
-                        r["GiamGia"] = gg;
-                        r["ThanhTien"] = Math.Round(newSl * gia * (1 - gg / 100.0), 0);
-                        CapNhatTongTien();
-                    }
-                    return;
+                    if (MessageBox.Show(this, "Xóa toàn bộ hóa đơn đã lưu và cập nhật lại tồn kho?", "Xác nhận hủy hóa đơn", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
+                    InvoiceRepository.Delete(true, savedCode);
                 }
-            }
-
-            tblChiTietHDBData.Rows.Add(maTivi, tenTivi, sl, gia, gg, tt);
-            CapNhatTongTien();
-            btnLuuHDB.Enabled = true;
+                else if (!CanDiscard()) return;
+                Reset(); RefreshCodes();
+            });
         }
 
-        private string SinhMaHDBMoi()
+        private void PrintInvoice()
         {
-            string ma = "HDB" + DateTime.Now.ToString("yyMMddHHmmssfff");
-            int counter = 1;
-            while (DatabaseHelper.CheckKey("SELECT SoHDB FROM tblHoaDonBan WHERE SoHDB='" + ma + "'"))
+            Safe(() =>
             {
-                ma = "HDB" + DateTime.Now.ToString("yyMMddHHmmssfff") + "_" + counter++;
-            }
-            return ma;
+                if (savedCode == null) return;
+                OpenInvoice(savedCode); // In dữ liệu đã lưu, bao gồm thuế suất ban đầu.
+                if (lines.Rows.Count == 0) throw new ArgumentException("Hóa đơn không còn sản phẩm để in.");
+                decimal value = CalculateTotal();
+                ExcelExportHelper.ExportHoaDonBanToExcel(savedCode, dtpNgayBan.Value, txtTenNV.Text, txtTenKH.Text, txtDiaChiKH.Text, txtDienThoaiKH.Text, dgvChiTietHDB, value, DatabaseHelper.ChuyenSoSangChu(value));
+            });
         }
 
-        private void CapNhatTongTien()
-        {
-            double tienHang = 0;
-            foreach (DataRow r in tblChiTietHDBData.Rows)
-            {
-                tienHang += Convert.ToDouble(r["ThanhTien"]);
-            }
-
-            double thue = 10; // Thuế VAT 10% theo quy định
-            double tongThanhToan = Math.Round(tienHang * (1.0 + thue / 100.0), 0);
-
-            lblTongTien.Text = DatabaseHelper.FormatTien(tongThanhToan);
-            lblBangChu.Text = "Bằng chữ (đã gồm VAT 10%): " + DatabaseHelper.ChuyenSoSangChu(tongThanhToan);
-        }
-
-        private void dgvChiTietHDB_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex < 0 || tblChiTietHDBData.Rows.Count == 0) return;
-
-            if (MessageBox.Show("Bạn có muốn xóa mặt hàng này khỏi hóa đơn bán?", "Xác nhận", 
-                MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-            {
-                tblChiTietHDBData.Rows.RemoveAt(e.RowIndex);
-                CapNhatTongTien();
-            }
-        }
-
-        private void btnThemHDB_Click(object sender, EventArgs e)
-        {
-            ResetForm();
-            txtMaHDB.Text = SinhMaHDBMoi();
-            btnThemHDB.Enabled = false;
-            btnLuuHDB.Enabled = true;
-            btnHuyHDB.Enabled = true;
-        }
-
-        private void btnLuuHDB_Click(object sender, EventArgs e)
-        {
-            string maHDB = txtMaHDB.Text.Trim();
-            if (string.IsNullOrWhiteSpace(maHDB))
-            {
-                maHDB = SinhMaHDBMoi();
-                txtMaHDB.Text = maHDB;
-            }
-            else if (DatabaseHelper.CheckKey("SELECT SoHDB FROM tblHoaDonBan WHERE SoHDB='" + maHDB + "'"))
-            {
-                MessageBox.Show(string.Format("Mã hóa đơn '{0}' đã tồn tại! Vui lòng nhập mã khác.", maHDB), 
-                    "Trùng mã hóa đơn", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtMaHDB.Focus();
-                return;
-            }
-
-            if (cboNhanVien.SelectedIndex == -1)
-            {
-                MessageBox.Show("Vui lòng chọn Nhân viên lập hóa đơn!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                cboNhanVien.Focus();
-                return;
-            }
-
-            if (cboKhachHang.SelectedIndex == -1)
-            {
-                MessageBox.Show("Vui lòng chọn Khách hàng!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                cboKhachHang.Focus();
-                return;
-            }
-
-            if (tblChiTietHDBData.Rows.Count == 0)
-            {
-                MessageBox.Show("Hóa đơn bán phải có ít nhất 1 mặt hàng!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            string maNV = cboNhanVien.SelectedValue.ToString();
-            string maKH = cboKhachHang.SelectedValue.ToString();
-            string ngayBan = dtpNgayBan.Value.ToString("yyyy-MM-dd HH:mm:ss");
-
-            double thue = 10; // Thuế VAT 10%
-            double tienHang = 0;
-            foreach (DataRow r in tblChiTietHDBData.Rows)
-                tienHang += Convert.ToDouble(r["ThanhTien"]);
-
-            double tongTien = Math.Round(tienHang * (1.0 + thue / 100.0), 0);
-
-            var ci = System.Globalization.CultureInfo.InvariantCulture;
-            System.Collections.Generic.List<string> sqlList = new System.Collections.Generic.List<string>();
-
-            // 1. Lệnh thêm Hóa đơn bán (Header)
-            string sqlHDB = string.Format(
-                "INSERT INTO tblHoaDonBan(SoHDB, MaNV, NgayBan, MaKhach, Thue, TongTien) VALUES('{0}', '{1}', '{2}', '{3}', {4}, {5})",
-                maHDB, maNV, ngayBan, maKH, thue.ToString(ci), tongTien.ToString(ci));
-            sqlList.Add(sqlHDB);
-
-            // 2. Lệnh thêm từng dòng Chi tiết HDB (Trigger SQL Server sẽ tự động cập nhật tồn kho)
-            foreach (DataRow r in tblChiTietHDBData.Rows)
-            {
-                double donGia = Convert.ToDouble(r["DonGia"]);
-                double giamGia = Convert.ToDouble(r["GiamGia"]);
-                double thanhTien = Convert.ToDouble(r["ThanhTien"]);
-
-                string sqlCT = string.Format(
-                    "INSERT INTO tblChiTietHDB(SoHDB, MaTV, SoLuong, DonGia, GiamGia, ThanhTien) " +
-                    "VALUES('{0}', '{1}', {2}, {3}, {4}, {5})",
-                    maHDB, r["MaTV"].ToString(), r["SoLuong"], 
-                    donGia.ToString(ci), giamGia.ToString(ci), thanhTien.ToString(ci));
-                sqlList.Add(sqlCT);
-            }
-
-            // Thực thi toàn bộ lệnh trong 1 Transaction duy nhất (Atomic Save)
-            if (DatabaseHelper.RunSqlTransaction(sqlList))
-            {
-                MessageBox.Show("Lập Hóa đơn bán thành công!\nTồn kho Tivi đã được tự động trừ tương ứng.", 
-                    "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                btnInHDB.Enabled = true;
-                btnXuatExcel.Enabled = true;
-                btnThemHDB.Enabled = true;
-                btnLuuHDB.Enabled = false;
-            }
-        }
-
-        private void btnHuyHDB_Click(object sender, EventArgs e)
-        {
-            ResetForm();
-            btnThemHDB.Enabled = true;
-            btnLuuHDB.Enabled = false;
-            btnHuyHDB.Enabled = false;
-            btnInHDB.Enabled = false;
-            btnXuatExcel.Enabled = false;
-        }
-
-        private void InVaXuatExcelHoaDonBan()
-        {
-            if (dgvChiTietHDB.Rows.Count == 0)
-            {
-                MessageBox.Show("Hóa đơn chưa có sản phẩm nào để xuất!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            decimal tienHang = 0;
-            foreach (DataGridViewRow r in dgvChiTietHDB.Rows)
-            {
-                if (!r.IsNewRow && r.Cells["colThanhTien"].Value != null)
-                {
-                    decimal.TryParse(r.Cells["colThanhTien"].Value.ToString(), out decimal tt);
-                    tienHang += tt;
-                }
-            }
-            decimal tongThanhToan = Math.Round(tienHang * 1.1m, 0); // Đã gồm 10% VAT
-            string bangChu = DatabaseHelper.ChuyenSoSangChu(tongThanhToan);
-
-            ExcelExportHelper.ExportHoaDonBanToExcel(
-                txtMaHDB.Text.Trim(),
-                dtpNgayBan.Value,
-                txtTenNV.Text.Trim(),
-                txtTenKH.Text.Trim(),
-                txtDiaChiKH.Text.Trim(),
-                txtDienThoaiKH.Text.Trim(),
-                dgvChiTietHDB,
-                tongThanhToan,
-                bangChu
-            );
-        }
-
-        private void btnInHDB_Click(object sender, EventArgs e)
-        {
-            InVaXuatExcelHoaDonBan();
-        }
-
-        private void btnXuatExcel_Click(object sender, EventArgs e)
-        {
-            InVaXuatExcelHoaDonBan();
-        }
-
-        private void btnDong_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
+        private void frmHoaDonBan_Load(object sender, EventArgs e) { InitializeRuntime(); }
+        private void cboNhanVien_SelectedIndexChanged(object sender, EventArgs e) { if (runtimeInitialized) EmployeeChanged(); }
+        private void cboKhachHang_SelectedIndexChanged(object sender, EventArgs e) { if (runtimeInitialized) PartnerChanged(); }
+        private void cboMaTivi_SelectedIndexChanged(object sender, EventArgs e) { if (runtimeInitialized) ProductChanged(); }
+        private void TinhThanhTien(object sender, EventArgs e) { if (runtimeInitialized) Calculate(); }
+        private void btnThemChiTiet_Click(object sender, EventArgs e) { if (runtimeInitialized) AddLine(); }
+        private void btnThemHDB_Click(object sender, EventArgs e) { if (runtimeInitialized) NewInvoice(); }
+        private void btnLuuHDB_Click(object sender, EventArgs e) { if (runtimeInitialized) SaveInvoice(); }
+        private void btnHuyHDB_Click(object sender, EventArgs e) { if (runtimeInitialized) CancelInvoice(); }
+        private void btnInHDB_Click(object sender, EventArgs e) { if (runtimeInitialized) PrintInvoice(); }
+        private void btnDong_Click(object sender, EventArgs e) { Close(); }
+        private void btnXuatExcel_Click(object sender, EventArgs e) { if (runtimeInitialized) PrintInvoice(); }
+        private void dgvChiTietHDB_CellDoubleClick(object sender, DataGridViewCellEventArgs e) { if (runtimeInitialized) RemoveLine(e.RowIndex); }
     }
 }

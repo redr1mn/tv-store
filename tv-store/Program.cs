@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Windows.Forms;
 using tv_store.Modules._04_HeThong_BaoCao;
 
@@ -7,7 +7,7 @@ namespace tv_store
     internal static class Program
     {
         /// <summary>
-        /// The main entry point for the application.
+        /// Điểm khởi chạy ứng dụng.
         /// </summary>
         [STAThread]
         static void Main()

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
@@ -8,230 +8,92 @@ namespace tv_store.Helpers
 {
     public static class DatabaseHelper
     {
-        public static SqlConnection Con;
-        private static string workingConnStr = null;
-        private static string[] candidateSources = new string[]
-        {
-            @".\SQLEXPRESS",
-            @".",
-            @"(local)\SQLEXPRESS",
-            @"(local)",
-            @"localhost\SQLEXPRESS",
-            @"localhost"
-        };
-
         public static string ConnectionString
         {
             get
             {
-                if (!string.IsNullOrEmpty(workingConnStr))
-                    return workingConnStr;
-
-                try
-                {
-                    if (ConfigurationManager.ConnectionStrings["QLBanTivi"] != null)
-                    {
-                        return ConfigurationManager.ConnectionStrings["QLBanTivi"].ConnectionString;
-                    }
-                }
-                catch { }
-                return @"Data Source=.\SQLEXPRESS;Initial Catalog=QLBanTivi;Integrated Security=True";
+                var setting = ConfigurationManager.ConnectionStrings["QLBanTivi"];
+                if (setting == null || string.IsNullOrWhiteSpace(setting.ConnectionString))
+                    throw new ConfigurationErrorsException("Chưa cấu hình kết nối QLBanTivi trong App.config.");
+                return setting.ConnectionString;
             }
         }
 
-        public static void Connect()
+        public static SqlParameter P(string name, object value)
         {
-            if (Con != null && Con.State == ConnectionState.Open)
-                return;
-
-            if (Con != null)
-            {
-                try { Con.Dispose(); } catch { }
-                Con = null;
-            }
-
-            string initialConn = ConnectionString;
-            try
-            {
-                Con = new SqlConnection(initialConn);
-                Con.Open();
-                workingConnStr = initialConn;
-                return;
-            }
-            catch
-            {
-                // Thử lần lượt các Server/Instance phổ biến để tự tương thích mọi máy
-                foreach (string src in candidateSources)
-                {
-                    string tryConn = string.Format("Data Source={0};Initial Catalog=QLBanTivi;Integrated Security=True", src);
-                    if (tryConn == initialConn) continue;
-                    try
-                    {
-                        Con = new SqlConnection(tryConn);
-                        Con.Open();
-                        workingConnStr = tryConn;
-                        return;
-                    }
-                    catch { }
-                }
-            }
-
-            MessageBox.Show("Không thể kết nối cơ sở dữ liệu QLBanTivi!\n" +
-                            "Vui lòng kiểm tra:\n" +
-                            "1. Service 'SQL Server (SQLEXPRESS)' hoặc 'SQL Server (MSSQLSERVER)' đã được BẬT (Start).\n" +
-                            "2. Đã chạy script tạo CSDL 'QLBanTivi' trong thư mục Database_Scripts.", 
-                            "Lỗi kết nối CSDL", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return new SqlParameter(name, value ?? DBNull.Value);
         }
 
-        public static void Disconnect()
+        // Mỗi lần truy vấn tự mở và giải phóng kết nối theo cấu hình.
+        public static DataTable Query(string sql, params SqlParameter[] parameters)
         {
-            try
+            using (var connection = new SqlConnection(ConnectionString))
+            using (var command = new SqlCommand(sql, connection))
+            using (var adapter = new SqlDataAdapter(command))
             {
-                if (Con != null)
-                {
-                    if (Con.State == ConnectionState.Open)
-                        Con.Close();
-                    Con.Dispose();
-                    Con = null;
-                }
+                command.Parameters.AddRange(parameters);
+                var result = new DataTable();
+                connection.Open();
+                adapter.Fill(result);
+                return result;
             }
-            catch { }
         }
 
-        public static DataTable GetDataToTable(string sql)
+        public static void Execute(string sql, params SqlParameter[] parameters)
         {
-            Connect();
-            DataTable table = new DataTable();
-            if (Con == null || Con.State != ConnectionState.Open) return table;
-
-            try
+            using (var connection = new SqlConnection(ConnectionString))
+            using (var command = new SqlCommand(sql, connection))
             {
-                using (SqlCommand cmd = new SqlCommand(sql, Con))
-                using (SqlDataAdapter dap = new SqlDataAdapter(cmd))
-                {
-                    dap.Fill(table);
-                }
+                command.Parameters.AddRange(parameters);
+                connection.Open();
+                command.ExecuteNonQuery();
             }
+        }
+
+        // Các form danh mục dùng các hàm này để hiện lỗi và giữ nguyên dữ liệu nhập.
+        public static DataTable GetDataToTable(string sql, params SqlParameter[] parameters)
+        {
+            try { return Query(sql, parameters); }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi truy vấn dữ liệu: " + ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Lỗi truy vấn dữ liệu: " + ex.Message, "Lỗi CSDL", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return new DataTable();
             }
-            return table;
         }
 
-        public static bool RunSql(string sql)
+        public static bool RunSql(string sql, params SqlParameter[] parameters)
         {
-            Connect();
-            if (Con == null || Con.State != ConnectionState.Open) return false;
-
             try
             {
-                using (SqlCommand cmd = new SqlCommand(sql, Con))
-                {
-                    cmd.ExecuteNonQuery();
-                }
+                Execute(sql, parameters);
                 return true;
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi thực thi câu lệnh SQL:\n" + ex.Message, "Lỗi thực thi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Lỗi thực thi SQL: " + ex.Message, "Lỗi CSDL", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
         }
 
-        public static bool RunSqlTransaction(System.Collections.Generic.IEnumerable<string> sqlQueries)
+        public static bool CheckKey(string sql, params SqlParameter[] parameters)
         {
-            Connect();
-            if (Con == null || Con.State != ConnectionState.Open)
-            {
-                MessageBox.Show("Không thể kết nối CSDL để thực hiện giao dịch!", "Lỗi kết nối", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-
-            using (SqlTransaction tran = Con.BeginTransaction())
-            {
-                try
-                {
-                    foreach (string sql in sqlQueries)
-                    {
-                        if (string.IsNullOrWhiteSpace(sql)) continue;
-                        using (SqlCommand cmd = new SqlCommand(sql, Con, tran))
-                        {
-                            cmd.ExecuteNonQuery();
-                        }
-                    }
-                    tran.Commit();
-                    return true;
-                }
-                catch (Exception ex)
-                {
-                    try { tran.Rollback(); } catch { }
-                    MessageBox.Show("Lỗi thực thi giao dịch SQL (Đã hủy toàn bộ thay đổi):\n" + ex.Message, 
-                        "Lỗi giao dịch", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return false;
-                }
-            }
+            return GetDataToTable(sql, parameters).Rows.Count > 0;
         }
 
-        public static bool CheckKey(string sql)
+        public static string GetFieldValue(string sql, params SqlParameter[] parameters)
         {
-            Connect();
-            if (Con == null || Con.State != ConnectionState.Open) return false;
-
-            try
-            {
-                using (SqlDataAdapter dap = new SqlDataAdapter(sql, Con))
-                {
-                    DataTable table = new DataTable();
-                    dap.Fill(table);
-                    return table.Rows.Count > 0;
-                }
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        public static string GetFieldValue(string sql)
-        {
-            Connect();
-            if (Con == null || Con.State != ConnectionState.Open) return "";
-
-            string val = "";
-            try
-            {
-                using (SqlCommand cmd = new SqlCommand(sql, Con))
-                using (SqlDataReader reader = cmd.ExecuteReader())
-                {
-                    if (reader.Read())
-                    {
-                        val = reader[0].ToString();
-                    }
-                }
-            }
-            catch { }
-            return val;
+            var data = GetDataToTable(sql, parameters);
+            return data.Rows.Count == 0 ? "" : Convert.ToString(data.Rows[0][0]);
         }
 
         public static void FillCombo(string sql, ComboBox cbo, string ma, string ten)
         {
-            Connect();
-            if (Con == null || Con.State != ConnectionState.Open) return;
-
-            try
-            {
-                using (SqlDataAdapter dap = new SqlDataAdapter(sql, Con))
-                {
-                    DataTable table = new DataTable();
-                    dap.Fill(table);
-                    cbo.DataSource = table;
-                    cbo.ValueMember = ma;
-                    cbo.DisplayMember = ten;
-                    cbo.SelectedIndex = -1;
-                }
-            }
-            catch { }
+            var data = GetDataToTable(sql);
+            if (!data.Columns.Contains(ma) || !data.Columns.Contains(ten)) return;
+            cbo.ValueMember = ma;
+            cbo.DisplayMember = ten;
+            cbo.DataSource = data;
+            cbo.SelectedIndex = -1;
         }
 
         public static string FormatTien(double tien)
@@ -277,7 +139,7 @@ namespace tv_store.Helpers
                 else if (donvi == 5) res += "lăm ";
                 else if (donvi > 0) res += ChuSo[donvi] + " ";
             }
-            else // chuc == 0
+            else // Hàng chục bằng 0
             {
                 if (donvi > 0)
                 {
