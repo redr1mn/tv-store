@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Drawing;
 using System.IO;
@@ -101,13 +101,31 @@ namespace tv_store.Modules._01_SanPham
                 oldImg.Dispose();
             }
 
-            if (!string.IsNullOrEmpty(filePath) && !Path.IsPathRooted(filePath))
-                filePath = Path.Combine(Application.StartupPath, "Images", Path.GetFileName(filePath));
-            if (!string.IsNullOrEmpty(filePath) && File.Exists(filePath))
+            if (string.IsNullOrWhiteSpace(filePath)) return;
+
+            string resolvedPath = filePath;
+            if (!Path.IsPathRooted(resolvedPath))
+            {
+                string fileName = Path.GetFileName(filePath);
+                string candidate1 = Path.Combine(Application.StartupPath, "Images", fileName);
+                string candidate2 = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images", fileName);
+                string candidate3 = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "Images", fileName);
+
+                if (File.Exists(candidate1))
+                    resolvedPath = candidate1;
+                else if (File.Exists(candidate2))
+                    resolvedPath = candidate2;
+                else if (File.Exists(candidate3))
+                    resolvedPath = candidate3;
+                else
+                    resolvedPath = candidate1;
+            }
+
+            if (!string.IsNullOrEmpty(resolvedPath) && File.Exists(resolvedPath))
             {
                 try
                 {
-                    using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                    using (FileStream fs = new FileStream(resolvedPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                     {
                         picAnhTivi.Image = new Bitmap(fs);
                     }

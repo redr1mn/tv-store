@@ -1,4 +1,4 @@
-﻿-- Nạp dữ liệu mẫu để thử ứng dụng quản lý bán tivi.
+-- Nạp dữ liệu mẫu để thử ứng dụng quản lý bán tivi.
 
 USE QLBanTivi;
 GO
@@ -134,21 +134,21 @@ INSERT INTO tblNhaCungCap (MaNCC, TenNCC, DiaChi, DienThoai) VALUES
 
 -- 11. SẢN PHẨM TIVI (MaTV, TenTV) - 15 SẢN PHẨM ĐA DẠNG PHÂN KHÚC
 INSERT INTO tblTV (MaTV, TenTV, MaHangSX, MaKieu, MaMau, MaManHinh, MaCo, MaNuocSX, SoLuong, DonGiaNhap, DonGiaBan, ThoiGianBaoHanh, Anh, GhiChu) VALUES
-('TV01', N'Google Tivi Sony 4K 55 inch KD-55X75K', 'HSX01', 'KD01', 'M01', 'MH05', 'CO03', 'NSX04', 19, 11500000, 12650000, 24, 'sony_55x75k.jpg', N'Bán chạy nhất phân khúc 55 inch'),
-('TV02', N'Smart Tivi Samsung Neo QLED 4K 65 inch QA65QN85C', 'HSX02', 'KD01', 'M02', 'MH03', 'CO04', 'NSX01', 15, 23000000, 25300000, 24, 'samsung_65qn85c.jpg', N'Âm thanh vòm Dolby Atmos đỉnh cao'),
-('TV03', N'Smart Tivi OLED LG 4K 55 inch 55C3PSA', 'HSX03', 'KD03', 'M01', 'MH01', 'CO03', 'NSX05', 16, 26000000, 28600000, 36, 'lg_55c3psa.jpg', N'Màn hình OLED đen tuyệt đối'),
-('TV04', N'Google Tivi TCL QLED 4K 43 inch 43Q646', 'HSX04', 'KD04', 'M01', 'MH02', 'CO01', 'NSX01', 20, 6800000, 7480000, 24, 'tcl_43q646.jpg', N'Giá rẻ cho phòng ngủ'),
-('TV05', N'Smart Tivi Xiaomi A Pro 4K 65 inch', 'HSX05', 'KD01', 'M02', 'MH05', 'CO04', 'NSX01', 10, 10200000, 11220000, 24, 'xiaomi_65apro.jpg', N'Màn hình viền kim loại siêu mỏng'),
-('TV06', N'Smart Tivi Casper 4K 50 inch 50UGA610', 'HSX06', 'KD01', 'M01', 'MH05', 'CO02', 'NSX05', 18, 6200000, 6820000, 24, 'casper_50uga610.jpg', N'Bảo hành chính hãng 1 đổi 1 trong 1 năm'),
-('TV07', N'Smart Tivi Sharp 4K 65 inch 4T-C65FJ1X', 'HSX07', 'KD01', 'M02', 'MH05', 'CO04', 'NSX04', 14, 11800000, 12980000, 24, 'sharp_65fj1x.jpg', N'Công nghệ âm thanh Dolby Audio chân thực'),
-('TV08', N'Google Tivi Sony 4K 65 inch XR-65X90L', 'HSX01', 'KD01', 'M01', 'MH04', 'CO04', 'NSX02', 10, 28500000, 31350000, 24, 'sony_65x90l.jpg', N'Bộ xử lý nhận thức Cognitive XR tân tiến'),
-('TV09', N'Smart Tivi Samsung 4K 75 inch Crystal 75CU8000', 'HSX02', 'KD01', 'M02', 'MH05', 'CO05', 'NSX01', 8, 21500000, 23650000, 24, 'samsung_75cu8000.jpg', N'Màn hình lớn cho phòng khách hiện đại'),
-('TV10', N'Smart Tivi OLED LG 4K 65 inch OLED65G3PSA', 'HSX03', 'KD03', 'M02', 'MH01', 'CO04', 'NSX03', 6, 48000000, 52800000, 36, 'lg_65g3psa.jpg', N'Thiết kế Gallery dán tường siêu mỏng tuyệt mỹ'),
-('TV11', N'Google Tivi TCL Mini-LED 4K 55 inch 55C745', 'HSX04', 'KD04', 'M01', 'MH04', 'CO03', 'NSX01', 16, 13500000, 14850000, 24, 'tcl_55c745.jpg', N'Tần số quét 144Hz Game Master đỉnh cao'),
-('TV12', N'Smart Tivi Xiaomi 4K 43 inch A Pro 43', 'HSX05', 'KD01', 'M01', 'MH05', 'CO01', 'NSX01', 25, 5600000, 6160000, 24, 'xiaomi_43apro.jpg', N'Khung kim loại nguyên khối, điều khiển giọng nói'),
-('TV13', N'Smart Tivi Panasonic 4K 55 inch TH-55LX800V', 'HSX09', 'KD01', 'M01', 'MH05', 'CO03', 'NSX04', 12, 12800000, 14080000, 24, 'panasonic_55lx800v.jpg', N'Màn hình Super Bright Panel độ sáng vượt trội'),
-('TV14', N'Smart Tivi Coocaa 4K 70 inch 70C9', 'HSX08', 'KD01', 'M01', 'MH05', 'CO05', 'NSX01', 11, 10500000, 11550000, 24, 'coocaa_70c9.jpg', N'Màn hình siêu lớn, công nghệ bảo vệ mắt Eye Care'),
-('TV15', N'Smart Tivi Samsung Neo QLED 8K 85 inch QA85QN900C', 'HSX02', 'KD01', 'M02', 'MH03', 'CO06', 'NSX03', 4, 95000000, 104500000, 36, 'samsung_85qn900c.jpg', N'Đỉnh cao 8K tràn viền vô cực Infinity One');
+('TV01', N'Google Tivi Sony 4K 55 inch KD-55X75K', 'HSX01', 'KD01', 'M01', 'MH05', 'CO03', 'NSX04', 19, 11500000, 12650000, 24, 'TV01.png', N'Bán chạy nhất phân khúc 55 inch'),
+('TV02', N'Smart Tivi Samsung Neo QLED 4K 65 inch QA65QN85C', 'HSX02', 'KD01', 'M02', 'MH03', 'CO04', 'NSX01', 15, 23000000, 25300000, 24, 'TV02.png', N'Âm thanh vòm Dolby Atmos đỉnh cao'),
+('TV03', N'Smart Tivi OLED LG 4K 55 inch 55C3PSA', 'HSX03', 'KD03', 'M01', 'MH01', 'CO03', 'NSX05', 16, 26000000, 28600000, 36, 'TV03.png', N'Màn hình OLED đen tuyệt đối'),
+('TV04', N'Google Tivi TCL QLED 4K 43 inch 43Q646', 'HSX04', 'KD04', 'M01', 'MH02', 'CO01', 'NSX01', 20, 6800000, 7480000, 24, 'TV04.png', N'Giá rẻ cho phòng ngủ'),
+('TV05', N'Smart Tivi Xiaomi A Pro 4K 65 inch', 'HSX05', 'KD01', 'M02', 'MH05', 'CO04', 'NSX01', 10, 10200000, 11220000, 24, 'TV05.png', N'Màn hình viền kim loại siêu mỏng'),
+('TV06', N'Smart Tivi Casper 4K 50 inch 50UGA610', 'HSX06', 'KD01', 'M01', 'MH05', 'CO02', 'NSX05', 18, 6200000, 6820000, 24, 'TV06.png', N'Bảo hành chính hãng 1 đổi 1 trong 1 năm'),
+('TV07', N'Smart Tivi Sharp 4K 65 inch 4T-C65FJ1X', 'HSX07', 'KD01', 'M02', 'MH05', 'CO04', 'NSX04', 14, 11800000, 12980000, 24, 'TV07.png', N'Công nghệ âm thanh Dolby Audio chân thực'),
+('TV08', N'Google Tivi Sony 4K 65 inch XR-65X90L', 'HSX01', 'KD01', 'M01', 'MH04', 'CO04', 'NSX02', 10, 28500000, 31350000, 24, 'TV08.png', N'Bộ xử lý nhận thức Cognitive XR tân tiến'),
+('TV09', N'Smart Tivi Samsung 4K 75 inch Crystal 75CU8000', 'HSX02', 'KD01', 'M02', 'MH05', 'CO05', 'NSX01', 8, 21500000, 23650000, 24, 'TV09.png', N'Màn hình lớn cho phòng khách hiện đại'),
+('TV10', N'Smart Tivi OLED LG 4K 65 inch OLED65G3PSA', 'HSX03', 'KD03', 'M02', 'MH01', 'CO04', 'NSX03', 6, 48000000, 52800000, 36, 'TV10.png', N'Thiết kế Gallery dán tường siêu mỏng tuyệt mỹ'),
+('TV11', N'Google Tivi TCL Mini-LED 4K 55 inch 55C745', 'HSX04', 'KD04', 'M01', 'MH04', 'CO03', 'NSX01', 16, 13500000, 14850000, 24, 'TV11.png', N'Tần số quét 144Hz Game Master đỉnh cao'),
+('TV12', N'Smart Tivi Xiaomi 4K 43 inch A Pro 43', 'HSX05', 'KD01', 'M01', 'MH05', 'CO01', 'NSX01', 25, 5600000, 6160000, 24, 'TV12.png', N'Khung kim loại nguyên khối, điều khiển giọng nói'),
+('TV13', N'Smart Tivi Panasonic 4K 55 inch TH-55LX800V', 'HSX09', 'KD01', 'M01', 'MH05', 'CO03', 'NSX04', 12, 12800000, 14080000, 24, 'TV13.png', N'Màn hình Super Bright Panel độ sáng vượt trội'),
+('TV14', N'Smart Tivi Coocaa 4K 70 inch 70C9', 'HSX08', 'KD01', 'M01', 'MH05', 'CO05', 'NSX01', 11, 10500000, 11550000, 24, 'TV14.png', N'Màn hình siêu lớn, công nghệ bảo vệ mắt Eye Care'),
+('TV15', N'Smart Tivi Samsung Neo QLED 8K 85 inch QA85QN900C', 'HSX02', 'KD01', 'M02', 'MH03', 'CO06', 'NSX03', 4, 95000000, 104500000, 36, 'TV15.png', N'Đỉnh cao 8K tràn viền vô cực Infinity One');
 
 -- 12. DỮ LIỆU HÓA ĐƠN NHẬP & CHI TIẾT
 INSERT INTO tblHoaDonNhap (SoHDN, MaNV, NgayNhap, MaNCC, TongTien) VALUES
